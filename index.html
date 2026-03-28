@@ -1,0 +1,545 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>CHOK'BETON — Rapport Chantier</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--y:#F5C400;--dk:#1E2D35;--bg:#f1f5f9;--card:#fff;--text:#0f172a;--mut:#64748b;--brd:#e2e8f0;--r:12px;--sh:0 1px 4px rgba(0,0,0,.1)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hdr{background:var(--dk);color:#fff;padding:12px 16px 0;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.hdr-row{display:flex;align-items:center;gap:10px;padding-bottom:10px}
+.hdr-info{flex:1}
+.hdr-title{font-size:16px;font-weight:900;letter-spacing:.02em;color:#fff}
+.hdr-step{font-size:11px;color:var(--y);font-weight:700}
+.steps-bar{display:flex;gap:5px;padding-bottom:9px}
+.sd{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.18);transition:background .3s}
+.sd.on{background:var(--y)}.sd.was{background:rgba(245,196,0,.55)}
+.body{flex:1;padding:14px;overflow-y:auto;padding-bottom:88px}
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:11px;box-shadow:var(--sh)}
+.ct{font-size:11px;font-weight:900;color:var(--dk);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.ct::after{content:'';flex:1;height:1px;background:var(--brd)}
+.f{margin-bottom:12px}.f:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--brd);border-radius:8px;font-size:16px;color:var(--text);background:#fff;-webkit-appearance:none;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dk);box-shadow:0 0 0 3px rgba(30,45,53,.1)}
+textarea{resize:vertical;min-height:70px}
+.row{display:flex;gap:9px}.row .f{flex:1}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 16px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .15s;min-height:50px}
+.btn-p{background:var(--dk);color:#fff}.btn-p:active{opacity:.85;transform:scale(.97)}
+.btn-y{background:var(--y);color:var(--dk)}.btn-y:active{opacity:.85}
+.btn-o{background:transparent;color:var(--dk);border:2px solid var(--dk)}
+.btn-g{background:#16a34a;color:#fff}.btn-g:disabled{opacity:.6;cursor:not-allowed}
+.btn-sm{padding:8px 13px;font-size:13px;min-height:36px;width:auto}
+.bot{padding:12px 14px;background:#fff;border-top:1px solid var(--brd);display:flex;gap:9px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:40}
+.pi{background:#fff;border:1.5px solid var(--brd);border-left:4px solid var(--y);border-radius:10px;padding:11px 13px;margin-bottom:9px;display:flex;align-items:flex-start;gap:9px}
+.pn{background:var(--dk);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.pb{flex:1;min-width:0}
+.pt{font-size:12px;font-weight:900;color:var(--dk);text-transform:uppercase;letter-spacing:.04em}
+.pd{font-size:13px;line-height:1.6;margin-top:3px;word-break:break-word}
+.pdel{background:none;border:none;color:var(--mut);cursor:pointer;padding:3px;font-size:17px;line-height:1;flex-shrink:0}
+.rgrid{display:flex;flex-direction:column;gap:9px}
+.rc{border:2px solid var(--brd);border-radius:10px;padding:13px 15px;cursor:pointer;background:#fff;transition:all .15s;display:flex;align-items:center;gap:12px}
+.rc.sel{border-color:var(--dk);background:#f0f4f5}
+.rc-av{width:40px;height:40px;border-radius:50%;background:var(--y);color:var(--dk);font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rc.sel .rc-av{background:var(--dk);color:#fff}
+.rc-info{flex:1}.rc-name{font-size:15px;font-weight:800;color:var(--dk)}.rc-mail{font-size:12px;color:var(--mut)}
+.ngrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.nb{padding:10px 4px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
+.nb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+.ov.show{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease}
+.ov.show .modal{transform:translateY(0)}
+.mhandle{width:34px;height:4px;background:#e2e8f0;border-radius:2px;margin:11px auto}
+.mtitle{font-size:17px;font-weight:900;padding:2px 18px 13px;border-bottom:1px solid var(--brd);margin-bottom:13px;color:var(--dk)}
+.mbody{padding:0 16px}
+.mftr{padding:13px 16px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:8px}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tc{border:2px solid var(--brd);border-radius:10px;padding:13px 8px;text-align:center;cursor:pointer;background:#fff;transition:all .15s}
+.tc.sel{border-color:var(--dk);background:#f0f4f5}
+.tc .ico{font-size:24px;margin-bottom:5px}
+.tc .lbl{font-size:11px;font-weight:700;color:var(--text);line-height:1.3}
+.tc.sel .lbl{color:var(--dk)}
+.dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.db{padding:9px 3px;border:2px solid var(--brd);border-radius:7px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
+.db.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
+.srow{display:flex;gap:9px}
+.sb{flex:1;padding:12px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
+.sb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
+#sigc{width:100%;height:160px;border:2px solid var(--brd);border-radius:8px;touch-action:none;background:#fafafa;display:block;cursor:crosshair}
+.empty{text-align:center;padding:36px 16px;color:var(--mut)}
+.empty .e-ico{font-size:44px;margin-bottom:10px}
+.info-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:11px 13px;font-size:13px;color:#92400e}
+.success-box{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 13px;font-size:13px;color:#166534;display:none}
+hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
+</style></head>
+<body>
+<div class="app" id="app"></div>
+<div class="ov" id="ov"><div class="modal" id="modal"></div></div>
+<script>
+// ── CONFIG ──
+const BREVO_KEY = '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';
+const SENDER_EMAIL = 'christopher@chok-beton.fr'; // ← email vérifié dans Brevo
+
+const EQUIPE=[
+  {id:'christopher',nom:'Christopher',mail:'christopher@chok-beton.fr'},
+  {id:'christian',  nom:'Christian',  mail:'christian@chok-beton.fr'},
+  {id:'ghislain',   nom:'Ghislain',   mail:'ghislain@chok-beton.fr'}
+];
+const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
+const DIAMS=[40,50,52,62,72,82,102,112,132,152,162,202,252,302,352,402,452,500];
+const TYPES=[
+  {id:'carottage',lbl:'Carottage',       ico:'🔩'},
+  {id:'sciage',   lbl:'Sciage',          ico:'🪚'},
+  {id:'carbone',  lbl:'Lamelles carbone',ico:'🏗️'}
+];
+const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
+
+const S={
+  step:1,
+  info:{date:new Date().toISOString().slice(0,10),num:'',addr:'',client:'',client_email:'',tech:''},
+  items:[],resp:'',
+  sig:{url:'',name:''},
+  m:{open:false,type:'',diam:'',nb:1,ep:'',supp:'',ml:'',prof:'',hauteur:'',niveau:'',nbl:'',ll:'',ori:'horizontal',obs:''}
+};
+let uid=1,sc,sx,drawing=false;
+
+function R(){document.getElementById('app').innerHTML=hdr()+content()+bot();events();renderModal();}
+
+function hdr(){
+  const labs=['','Infos Chantier','Travaux Réalisés','Signature & Envoi'];
+  return`<div class="hdr"><div class="hdr-row">
+    <div style="height:38px;display:flex;align-items:center">${LOGO(38)}</div>
+    <div class="hdr-info"><div class="hdr-title">Rapport de Chantier</div>
+    <div class="hdr-step">${labs[S.step]} — Étape ${S.step}/3</div></div>
+  </div>
+  <div class="steps-bar">${[1,2,3].map(i=>`<div class="sd ${i<S.step?'was':''} ${i===S.step?'on':''}"></div>`).join('')}</div></div>`;
+}
+function content(){return`<div class="body">${S.step===1?step1():S.step===2?step2():step3()}</div>`;}
+
+function step1(){
+  const c=S.info;
+  return`<div class="card"><div class="ct">📅 Informations générales</div>
+    <div class="f"><label>Date du chantier</label><input type="date" id="f-date" value="${c.date}"></div>
+    <div class="f"><label>N° de rapport</label><input type="text" id="f-num" value="${c.num}" placeholder="Ex : 2025-001"></div>
+  </div>
+  <div class="card"><div class="ct">📍 Chantier</div>
+    <div class="f"><label>Adresse / Nom du chantier</label><input type="text" id="f-addr" value="${c.addr}" placeholder="12 rue de la Paix, Paris"></div>
+    <div class="f"><label>Client</label><input type="text" id="f-client" value="${c.client}" placeholder="Nom du client"></div>
+  </div>
+  <div class="card"><div class="ct">👷 Intervenant</div>
+    <div class="f"><label>Nom du technicien</label><input type="text" id="f-tech" value="${c.tech}" placeholder="Prénom Nom"></div>
+  </div>`;
+}
+
+function step2(){
+  if(!S.items.length) return`<div class="empty"><div class="e-ico">🔧</div><p>Aucune prestation.<br>Appuyez sur <strong>+ Ajouter</strong> pour commencer.</p></div>`;
+  return S.items.map((p,i)=>pItem(p,i+1)).join('');
+}
+function pItem(p,n){
+  const t=TYPES.find(x=>x.id===p.type)||{lbl:p.type,ico:'⚙️'};
+  let lines=[];
+  if(p.niveau) lines.push(`📍 Niveau : <strong>${p.niveau}</strong>`);
+  if(p.type==='carottage'){
+    lines.push(`${p.nb} carottage${p.nb>1?'s':''} — Ø ${p.diam} mm — Ép. ${p.ep} cm`);
+    if(p.supp) lines.push(`Support : ${p.supp==='plancher'?'Plancher (dalle)':'Voile / Mur'}`);
+  } else if(p.type==='sciage'){
+    lines.push(`${p.ml} ml${p.prof?' — Prof. '+p.prof+' cm':''}`);
+    if(p.supp) lines.push(`Support : ${p.supp==='plancher'?'Plancher (dalle)':'Voile / Mur'}`);
+  } else if(p.type==='carbone'){
+    lines.push(`${p.nbl} lamelle(s) × ${p.ll} ml — ${p.ori}`);
+  }
+  if(p.hauteur) lines.push(`Hauteur travaux : ${p.hauteur} ml`);
+  if(p.obs) lines.push(`Obs. : ${p.obs}`);
+  return`<div class="pi"><div class="pn">${n}</div><div class="pb">
+    <div class="pt">${t.ico} ${t.lbl}</div>
+    <div class="pd">${lines.join('<br>')}</div>
+  </div><button class="pdel" onclick="delItem('${p.id}')">🗑</button></div>`;
+}
+
+function step3(){
+  const items=S.items;
+  const car=items.filter(x=>x.type==='carottage');
+  const sci=items.filter(x=>x.type==='sciage');
+  const cb =items.filter(x=>x.type==='carbone');
+  const rows=[];
+  if(car.length){const t=car.reduce((a,x)=>a+parseInt(x.nb||0),0);rows.push(`🔩 Carottage — ${t} carottage(s)`);}
+  if(sci.length){const t=sci.reduce((a,x)=>a+parseFloat(x.ml||0),0);rows.push(`🪚 Sciage — ${t} ml`);}
+  if(cb.length){const t=cb.reduce((a,x)=>a+parseInt(x.nbl||0),0);rows.push(`🏗️ ${t} lamelle(s) carbone`);}
+  const recap=rows.length
+    ?`<p style="font-size:13px;color:var(--mut);margin-bottom:9px">${items.length} prestation(s)</p>`+rows.map(r=>`<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">${r}</div>`).join('')
+    :'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
+  const respCards=EQUIPE.map(e=>`<div class="rc ${S.resp===e.id?'sel':''}" onclick="selResp('${e.id}')">
+    <div class="rc-av">${e.nom[0]}</div>
+    <div class="rc-info"><div class="rc-name">${e.nom}</div><div class="rc-mail">${e.mail}</div></div>
+    ${S.resp===e.id?'<span style="font-size:20px">✅</span>':''}
+  </div>`).join('');
+  const selR=EQUIPE.find(x=>x.id===S.resp);
+  const destInfo=selR
+    ?`📎 PDF envoyé à <strong>${selR.nom}</strong>${S.info.client_email?' + client <strong>'+S.info.client_email+'</strong>':''}`
+    :'⚠️ Sélectionnez un responsable pour activer l\'envoi.';
+  return`<div class="card"><div class="ct">📊 Récapitulatif</div>${recap}</div>
+  <div class="card"><div class="ct">👷 Responsable du rapport</div><div class="rgrid">${respCards}</div></div>
+  <div class="card"><div class="ct">✍️ Signature client</div>
+    <div class="f"><label>Nom du signataire</label><input type="text" id="f-signame" value="${S.sig.name}" placeholder="Prénom Nom"></div>
+    <div class="f"><label>Email du client <span style="font-weight:400;text-transform:none">(envoi auto du PDF)</span></label>
+      <input type="email" id="f-cemail" value="${S.info.client_email}" placeholder="client@exemple.fr"></div>
+    <div class="f"><label>Signature <span style="font-weight:400;font-size:11px;text-transform:none">(dessinez ci-dessous)</span></label>
+      <canvas id="sigc" width="800" height="300"></canvas>
+      <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button>
+    </div>
+  </div>
+  <div class="info-box" id="dest-info">${destInfo}</div>
+  <div class="success-box" id="success-box">✅ Rapport PDF envoyé avec succès !</div>`;
+}
+
+function selResp(id){
+  const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
+  const ce=document.getElementById('f-cemail');if(ce)S.info.client_email=ce.value;
+  if(sc)S.sig.url=sc.toDataURL();
+  S.resp=id;R();
+}
+
+function bot(){
+  if(S.step===1) return`<div class="bot"><button class="btn btn-p" style="flex:1" onclick="go(2)">Continuer → Saisir les travaux</button></div>`;
+  if(S.step===2) return`<div class="bot">
+    <button class="btn btn-o btn-sm" onclick="go(1)">← Retour</button>
+    <button class="btn btn-y" style="flex:1" onclick="openM()">➕ Ajouter une prestation</button>
+    <button class="btn btn-p btn-sm" onclick="go(3)">Valider →</button>
+  </div>`;
+  return`<div class="bot">
+    <button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button>
+    <button class="btn btn-g" id="btn-gen" style="flex:1" onclick="generate()">📄 Générer PDF & Envoyer</button>
+  </div>`;
+}
+
+/* ── MODAL ── */
+function renderModal(){
+  const m=S.m,ov=document.getElementById('ov');
+  ov.className='ov'+(m.open?' show':'');
+  const modal=document.getElementById('modal');
+  if(!m.open){modal.innerHTML='';return;}
+  modal.innerHTML=`<div class="mhandle"></div>
+    <div class="mtitle">➕ Nouvelle prestation</div>
+    <div class="mbody">
+      <div class="f"><label>Type de travaux</label>
+        <div class="tgrid">${TYPES.map(t=>`<div class="tc ${m.type===t.id?'sel':''}" onclick="selType('${t.id}')"><div class="ico">${t.ico}</div><div class="lbl">${t.lbl}</div></div>`).join('')}</div>
+      </div>
+      <div class="f"><label>Niveau</label>
+        <div class="ngrid">${NIVEAUX.map(nv=>`<div class="nb ${m.niveau===nv?'sel':''}" onclick="selNiveau('${nv}')">${nv}</div>`).join('')}</div>
+      </div>
+      ${m.type?mFields():''}
+      ${m.type?`<div class="f"><label>Observations (optionnel)</label><textarea id="m-obs" placeholder="Remarques...">${m.obs}</textarea></div>`:''}
+    </div>
+    <div class="mftr">
+      <button class="btn btn-o btn-sm" onclick="closeM()">Annuler</button>
+      <button class="btn btn-p" style="flex:1" onclick="saveItem()">✅ Enregistrer</button>
+    </div>`;
+  ov.onclick=e=>{if(e.target===ov)closeM();};
+}
+function mFields(){
+  const m=S.m;
+  const dg=`<div class="dgrid">${DIAMS.map(d=>`<div class="db ${m.diam==d?'sel':''}" onclick="selD(${d})">Ø${d}</div>`).join('')}</div>
+    <input type="number" id="m-dc" placeholder="Autre Ø mm..." value="${m.diam&&!DIAMS.includes(+m.diam)?m.diam:''}" style="margin-top:7px" oninput="S.m.diam=this.value">`;
+  const suppRow=`<div class="f"><label>Support</label><div class="srow">
+    <div class="sb ${m.supp==='plancher'?'sel':''}" onclick="selS('plancher')">🟫 Plancher</div>
+    <div class="sb ${m.supp==='voile'?'sel':''}" onclick="selS('voile')">🧱 Voile / Mur</div>
+  </div></div>`;
+  const hautRow=`<div class="f"><label>Hauteur des travaux (ml)</label><input type="number" id="m-haut" value="${m.hauteur}" placeholder="Ex : 2.80" step="0.1" min="0"></div>`;
+  if(m.type==='carottage') return`<hr>
+    <div class="f"><label>Nombre de carottages</label><input type="number" id="m-nb" value="${m.nb||1}" min="1" step="1"></div>
+    <div class="f"><label>Diamètre (mm)</label>${dg}</div>
+    <div class="f"><label>Épaisseur traversée (cm)</label><input type="number" id="m-ep" value="${m.ep}" placeholder="Ex : 20" min="0" step="0.5"></div>
+    ${suppRow}${hautRow}`;
+  if(m.type==='sciage') return`<hr>
+    <div class="f"><label>Longueur sciée (ml)</label><input type="number" id="m-ml" value="${m.ml}" placeholder="Ex : 3.50" step="0.1" min="0"></div>
+    <div class="f"><label>Profondeur de coupe (cm)</label><input type="number" id="m-pr" value="${m.prof}" placeholder="Ex : 20" step="0.5" min="0"></div>
+    ${suppRow}${hautRow}`;
+  if(m.type==='carbone') return`<hr>
+    <div class="row">
+      <div class="f"><label>Nb de lamelles</label><input type="number" id="m-nbl" value="${m.nbl}" placeholder="4" min="1"></div>
+      <div class="f"><label>Longueur/lamelle (ml)</label><input type="number" id="m-ll" value="${m.ll}" placeholder="2.50" step="0.1"></div>
+    </div>
+    <div class="f"><label>Orientation</label><div class="srow">
+      <div class="sb ${m.ori==='horizontal'?'sel':''}" onclick="selOri('horizontal')">↔ Horizontal</div>
+      <div class="sb ${m.ori==='vertical'?'sel':''}" onclick="selOri('vertical')">↕ Vertical</div>
+    </div></div>${hautRow}`;
+  return'';
+}
+function saveMFields(){
+  const g=id=>{const e=document.getElementById(id);return e?e.value:null};
+  const m=S.m;
+  if(g('m-nb')!==null) m.nb=parseInt(g('m-nb'))||1;
+  if(g('m-ep')!==null) m.ep=g('m-ep');
+  if(g('m-ml')!==null) m.ml=g('m-ml');
+  if(g('m-pr')!==null) m.prof=g('m-pr');
+  if(g('m-nbl')!==null) m.nbl=g('m-nbl');
+  if(g('m-ll')!==null) m.ll=g('m-ll');
+  if(g('m-haut')!==null) m.hauteur=g('m-haut');
+  if(g('m-obs')!==null) m.obs=g('m-obs');
+  if(g('m-dc')!==null&&g('m-dc')) m.diam=g('m-dc');
+}
+function selType(t){saveMFields();S.m.type=t;S.m.diam='';S.m.supp='';renderModal();}
+function selD(d){saveMFields();S.m.diam=d;renderModal();}
+function selS(s){saveMFields();S.m.supp=s;renderModal();}
+function selOri(o){saveMFields();S.m.ori=o;renderModal();}
+function selNiveau(n){saveMFields();S.m.niveau=(S.m.niveau===n?'':n);renderModal();}
+function openM(){S.m.open=true;Object.assign(S.m,{type:'',diam:'',nb:1,ep:'',supp:'',ml:'',prof:'',hauteur:'',niveau:'',nbl:'',ll:'',ori:'horizontal',obs:''});renderModal();}
+function closeM(){S.m.open=false;renderModal();}
+function saveItem(){
+  saveMFields();const m=S.m;
+  if(!m.type){alert('Choisissez un type de travaux.');return;}
+  const p={id:String(uid++),type:m.type,hauteur:m.hauteur,niveau:m.niveau,obs:m.obs};
+  if(m.type==='carottage'){
+    if(!m.diam){alert('Choisissez un diamètre.');return;}
+    if(!m.ep){alert('Saisissez l\'épaisseur traversée.');return;}
+    if(!m.supp){alert('Choisissez le support.');return;}
+    Object.assign(p,{nb:m.nb,diam:m.diam,ep:m.ep,supp:m.supp});
+  } else if(m.type==='sciage'){
+    if(!m.ml){alert('Saisissez la longueur.');return;}
+    if(!m.supp){alert('Choisissez le support.');return;}
+    Object.assign(p,{ml:m.ml,prof:m.prof,supp:m.supp});
+  } else if(m.type==='carbone'){
+    if(!m.nbl){alert('Saisissez le nombre de lamelles.');return;}
+    if(!m.ll){alert('Saisissez la longueur par lamelle.');return;}
+    Object.assign(p,{nbl:m.nbl,ll:m.ll,ori:m.ori});
+  }
+  S.items.push(p);closeM();R();
+}
+function delItem(id){if(!confirm('Supprimer ?'))return;S.items=S.items.filter(x=>x.id!==id);R();}
+
+/* ── SIGNATURE ── */
+function initSig(){
+  const c=document.getElementById('sigc');if(!c)return;
+  sc=c;sx=c.getContext('2d');
+  sx.strokeStyle='#1E2D35';sx.lineWidth=3;sx.lineCap='round';sx.lineJoin='round';
+  if(S.sig.url){const img=new Image();img.onload=()=>sx.drawImage(img,0,0,c.width,c.height);img.src=S.sig.url;}
+  const pos=e=>{const r=c.getBoundingClientRect(),sw=c.width/r.width,sh=c.height/r.height,s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*sw,y:(s.clientY-r.top)*sh};};
+  c.addEventListener('mousedown',e=>{e.preventDefault();drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);});
+  c.addEventListener('mousemove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();});
+  c.addEventListener('mouseup',()=>{drawing=false;if(sc)S.sig.url=sc.toDataURL();});
+  c.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);},{passive:false});
+  c.addEventListener('touchmove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();},{passive:false});
+  c.addEventListener('touchend',()=>{drawing=false;if(sc)S.sig.url=sc.toDataURL();});
+}
+function clearSig(){if(sc&&sx){sx.clearRect(0,0,sc.width,sc.height);S.sig.url='';}}
+
+function events(){
+  if(S.step===1){
+    [['date','date'],['num','num'],['addr','addr'],['client','client'],['tech','tech']].forEach(([id,k])=>{
+      const e=document.getElementById('f-'+id);if(e)e.addEventListener('input',ev=>S.info[k]=ev.target.value);
+    });
+  }
+  if(S.step===3){
+    const sn=document.getElementById('f-signame');if(sn)sn.addEventListener('input',e=>S.sig.name=e.target.value);
+    const ce=document.getElementById('f-cemail');if(ce)ce.addEventListener('input',e=>S.info.client_email=e.target.value);
+    setTimeout(initSig,50);
+  }
+}
+function go(step){
+  if(S.step===3){
+    const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
+    const ce=document.getElementById('f-cemail');if(ce)S.info.client_email=ce.value;
+    if(sc)S.sig.url=sc.toDataURL();
+  }
+  S.step=step;R();window.scrollTo(0,0);
+}
+
+/* ── GENERATE ── */
+async function generate(){
+  if(!S.resp){alert('Veuillez sélectionner le responsable du rapport.');return;}
+  const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
+  const ce=document.getElementById('f-cemail');if(ce)S.info.client_email=ce.value;
+  if(sc)S.sig.url=sc.toDataURL();
+  const btn=document.getElementById('btn-gen');
+  if(btn){btn.textContent='⏳ Génération en cours...';btn.disabled=true;}
+  try{
+    await buildAndSendPDF();
+    const sb=document.getElementById('success-box');
+    const db=document.getElementById('dest-info');
+    if(sb){sb.style.display='block';}
+    if(db){db.style.display='none';}
+  } catch(e){
+    alert('Erreur : '+e.message);
+    if(btn){btn.textContent='📄 Générer PDF & Envoyer';btn.disabled=false;}
+  }
+}
+
+/* ── PDF BUILDER ── */
+async function buildAndSendPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF('p','mm','a4');
+  const PW=210,PH=297,M=14;
+  let y=0;
+  const c=S.info,items=S.items,sig=S.sig;
+  const resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',mail:''};
+  const fd=d=>{if(!d)return'—';const[yy,mm,dd]=d.split('-');return`${dd}/${mm}/${yy}`;};
+  const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240];
+  const set=(fill,draw,tc)=>{if(fill)doc.setFillColor(...fill);if(draw)doc.setDrawColor(...draw);if(tc)doc.setTextColor(...tc);};
+
+  // HEADER
+  set(DRK);doc.rect(0,0,PW,30,'F');
+  set(YEL);doc.rect(0,28,PW,2,'F');
+  set(null,null,WHT);
+  doc.setFontSize(18);doc.setFont('helvetica','bold');doc.text("CHOK'BETON",M,12);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('Découpe béton · Sciage · Renforcement structures',M,18);
+  doc.setFontSize(14);doc.setFont('helvetica','bold');doc.text('RAPPORT DE CHANTIER',PW-M,12,{align:'right'});
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text(`N° ${c.num||'—'}`,PW-M,18,{align:'right'});
+  y=35;
+
+  // INFO GRID
+  const iw=(PW-2*M-3)/2;
+  const infoGrid=[
+    [{l:'DATE',v:fd(c.date)},{l:'RESPONSABLE',v:resp.nom}],
+    [{l:'TECHNICIEN',v:c.tech||'—'},{l:'CLIENT',v:c.client||'—'}],
+    [{l:'CHANTIER / ADRESSE',v:c.addr||'—',full:true}]
+  ];
+  infoGrid.forEach(row=>{
+    row.forEach((item,i)=>{
+      const x=M+i*(iw+3),w=item.full?(PW-2*M):iw;
+      set(LGT,BRD);doc.roundedRect(x,y,w,12,.5,.5,'FD');
+      doc.setFontSize(6.5);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(item.l,x+3,y+4.5);
+      doc.setFontSize(9);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(String(item.v||'—').substring(0,55),x+3,y+9.5);
+    });
+    y+=13.5;
+  });
+  y+=4;
+
+  const secTitle=title=>{
+    if(y>PH-30){doc.addPage();y=15;}
+    set(null,null,DRK);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(title,M,y);
+    set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;
+  };
+
+  // PRESTATIONS
+  secTitle('TRAVAUX RÉALISÉS');
+  const typeLabels={carottage:'CAROTTAGE',sciage:'SCIAGE',carbone:'LAMELLES CARBONE'};
+  if(!items.length){doc.setFontSize(9);doc.setFont('helvetica','italic');set(null,null,GRY);doc.text('Aucune prestation enregistrée',M,y+5);y+=12;}
+  items.forEach((p,i)=>{
+    const lines=[];
+    if(p.niveau) lines.push(`Niveau : ${p.niveau}`);
+    if(p.type==='carottage'){
+      lines.push(`${p.nb} carottage${p.nb>1?'s':''} — Ø ${p.diam} mm — Épaisseur : ${p.ep} cm`);
+      if(p.supp) lines.push(`Support : ${p.supp==='plancher'?'Plancher (dalle)':'Voile / Mur'}`);
+    } else if(p.type==='sciage'){
+      lines.push(`Longueur : ${p.ml} ml${p.prof?' — Profondeur : '+p.prof+' cm':''}`);
+      if(p.supp) lines.push(`Support : ${p.supp==='plancher'?'Plancher (dalle)':'Voile / Mur'}`);
+    } else if(p.type==='carbone'){
+      lines.push(`${p.nbl} lamelle(s) × ${p.ll} ml — Orientation : ${p.ori}`);
+    }
+    if(p.hauteur) lines.push(`Hauteur des travaux : ${p.hauteur} ml`);
+    if(p.obs) lines.push(`Observations : ${p.obs}`);
+    const boxH=8.5+lines.length*5.5+2;
+    if(y+boxH>PH-20){doc.addPage();y=15;}
+    set(YEL);doc.rect(M,y,2,boxH,'F');
+    set(WHT,BRD);doc.rect(M+2,y,PW-2*M-2,boxH,'FD');
+    set(LGT);doc.rect(M+2,y,PW-2*M-2,7.5,'F');
+    set(DRK);doc.circle(M+8.5,y+3.75,3,'F');
+    doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,WHT);doc.text(String(i+1),M+8.5,y+4.9,{align:'center'});
+    doc.setFontSize(8.5);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(typeLabels[p.type]||p.type.toUpperCase(),M+14,y+5);
+    doc.setFontSize(8.5);doc.setFont('helvetica','normal');set(null,null,[40,40,40]);
+    lines.forEach((l,li)=>{doc.text(l,M+6,y+10+li*5.5);});
+    y+=boxH+3;
+  });
+  y+=3;
+
+  // RECAP TABLE
+  secTitle('RÉCAPITULATIF');
+  const car=items.filter(x=>x.type==='carottage');
+  const sci=items.filter(x=>x.type==='sciage');
+  const cbn=items.filter(x=>x.type==='carbone');
+  const rr=[];
+  if(car.length) rr.push(['Carottage',`${car.length} série(s)`,`${car.reduce((a,x)=>a+parseInt(x.nb||0),0)} carottage(s)`]);
+  if(sci.length) rr.push(['Sciage',`${sci.length} opération(s)`,`${sci.reduce((a,x)=>a+parseFloat(x.ml||0),0)} ml`]);
+  if(cbn.length) rr.push(['Lamelles carbone',`${cbn.length} pose(s)`,`${cbn.reduce((a,x)=>a+parseInt(x.nbl||0),0)} lamelle(s)`]);
+  if(rr.length){
+    const cx=[M,M+75,M+145];
+    const hdrs=['Prestation','Opérations','Total'];
+    set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
+    hdrs.forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});
+    y+=7;
+    rr.forEach(row=>{
+      if(y>PH-25){doc.addPage();y=15;}
+      set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');
+      row.forEach((cell,i)=>{doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});
+      y+=8;
+    });
+    y+=5;
+  }
+
+  // SIGNATURE
+  if(y>PH-65){doc.addPage();y=15;}
+  secTitle('VALIDATION CLIENT — BON POUR ACCORD');
+  set(WHT,BRD);doc.roundedRect(M,y,PW-2*M,52,1,1,'FD');
+  doc.setFontSize(10);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(`Signataire : ${sig.name||'—'}`,PW/2,y+8,{align:'center'});
+  doc.setFontSize(8);doc.setFont('helvetica','normal');set(null,null,GRY);doc.text('Lu et approuvé — Bon pour accord des travaux réalisés',PW/2,y+14,{align:'center'});
+  if(sig.url){try{doc.addImage(sig.url,'PNG',PW/2-30,y+17,60,25);}catch(e){}}
+  else{set(null,BRD);doc.setLineDashPattern([2,2],0);doc.rect(PW/2-35,y+17,70,25,'S');doc.setLineDashPattern([],0);set(null,null,GRY);doc.setFontSize(8);doc.text('Signature non renseignée',PW/2,y+31,{align:'center'});}
+  set(null,null,GRY);doc.setFontSize(8);doc.text(`Date : ${fd(c.date)}`,PW/2,y+46,{align:'center'});
+  y+=56;
+
+  // FOOTER
+  const now=new Date();
+  set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');
+  doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);
+  doc.text(`Rapport généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} · CHOK'BETON · Responsable : ${resp.nom} · N°${c.num||'—'}`,PW/2,PH-8,{align:'center'});
+
+  // ── EXPORT BASE64 & ENVOI BREVO ──
+  const filename=`rapport-chok-beton-${c.date||'chantier'}-${(c.num||'001').replace(/[^a-zA-Z0-9-]/g,'_')}.pdf`;
+  const pdfBase64=doc.output('datauristring').split(',')[1];
+
+  const fd2=fd;
+  const toList=[{email:resp.mail,name:resp.nom}];
+  if(c.client_email) toList.push({email:c.client_email,name:c.client||'Client'});
+
+  const htmlContent=`
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+      <div style="background:#1E2D35;padding:20px;border-bottom:4px solid #F5C400">
+        <h1 style="color:#fff;margin:0;font-size:20px">CHOK'BETON</h1>
+        <p style="color:rgba(255,255,255,.7);margin:4px 0 0;font-size:13px">Découpe béton · Sciage · Renforcement structures</p>
+      </div>
+      <div style="padding:24px;background:#f8fafc">
+        <h2 style="color:#1E2D35;margin:0 0 16px">Rapport de chantier</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr><td style="padding:6px 0;color:#64748b;width:140px">Date</td><td style="font-weight:700">${fd2(c.date)}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b">N° rapport</td><td style="font-weight:700">${c.num||'—'}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b">Chantier</td><td style="font-weight:700">${c.addr||'—'}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b">Client</td><td style="font-weight:700">${c.client||'—'}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b">Technicien</td><td style="font-weight:700">${c.tech||'—'}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b">Responsable</td><td style="font-weight:700">${resp.nom}</td></tr>
+        </table>
+        <p style="margin:20px 0 8px;color:#475569;font-size:14px">Le rapport complet est disponible en pièce jointe au format PDF.</p>
+      </div>
+      <div style="padding:16px 24px;background:#1E2D35;text-align:center">
+        <p style="color:rgba(255,255,255,.6);font-size:12px;margin:0">CHOK'BETON — Rapport généré automatiquement</p>
+      </div>
+    </div>`;
+
+  const payload={
+    sender:{name:"CHOK'BETON",email:SENDER_EMAIL},
+    to:toList,
+    subject:`Rapport chantier CHOK'BETON — ${c.addr||'—'} — ${fd2(c.date)} — N°${c.num||'—'}`,
+    htmlContent,
+    attachment:[{name:filename,content:pdfBase64}]
+  };
+
+  const res=await fetch('https://api.brevo.com/v3/smtp/email',{
+    method:'POST',
+    headers:{'api-key':BREVO_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+
+  if(!res.ok){
+    const err=await res.json().catch(()=>({}));
+    throw new Error(err.message||`Erreur Brevo (${res.status})`);
+  }
+
+  // Téléchargement local en bonus
+  doc.save(filename);
+}
+
+R();
+</script>
+</body></html>

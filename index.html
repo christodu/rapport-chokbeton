@@ -56,7 +56,7 @@ textarea{resize:vertical;min-height:70px}
 .mtitle{font-size:17px;font-weight:900;padding:2px 18px 13px;border-bottom:1px solid var(--brd);margin-bottom:13px;color:var(--dk)}
 .mbody{padding:0 16px}
 .mftr{padding:13px 16px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:8px}
-.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
 .tc{border:2px solid var(--brd);border-radius:10px;padding:13px 8px;text-align:center;cursor:pointer;background:#fff;transition:all .15s}
 .tc.sel{border-color:var(--dk);background:#f0f4f5}
 .tc .ico{font-size:24px;margin-bottom:5px}
@@ -79,16 +79,16 @@ hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
 <script>
 const EQUIPE=[
-  {id:'christopher',nom:'Christopher',tel:'33624262105'},
-  {id:'christian',  nom:'Christian',  tel:'33614492589'},
-  {id:'ghislain',   nom:'Ghislain',   tel:'33612290865'}
+  {id:'christopher',nom:'Christopher',tel:'33XXXXXXXXX'},
+  {id:'christian',  nom:'Christian',  tel:'33XXXXXXXXX'},
+  {id:'ghislain',   nom:'Ghislain',   tel:'33XXXXXXXXX'}
 ];
 const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
-const DIAMS=[40,50,52,62,72,82,100,110,120,130,150,160,180,200,250,300,350,400,450];
+const DIAMS=[40,50,52,62,72,82,102,112,132,152,162,202,252,302,352,402,452,500];
 const TYPES=[
   {id:'carottage',lbl:'Carottage',       ico:'🔩'},
   {id:'sciage',   lbl:'Sciage',          ico:'🪚'},
-  {id:'carbone',  lbl:'Lamelles carbone',ico:'🏗️'}
+  {id:'carbone',  lbl:'Lamelles carbone',ico:'🏗️'},
   {id:'autres',   lbl:'Autres',          ico:'📝'}
 ];
 const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
@@ -146,6 +146,8 @@ function pItem(p,n){
     if(p.supp) lines.push(`Support : ${p.supp==='plancher'?'Plancher (dalle)':'Voile / Mur'}`);
   } else if(p.type==='carbone'){
     lines.push(`${p.nbl} lamelle(s) × ${p.ll} ml — ${p.ori}`);
+  } else if(p.type==='autres'){
+    lines.push(p.libre||'—');
   }
   if(p.hauteur) lines.push(`Hauteur travaux : ${p.hauteur} ml`);
   if(p.obs) lines.push(`Obs. : ${p.obs}`);
@@ -256,6 +258,9 @@ function mFields(){
       <div class="sb ${m.ori==='horizontal'?'sel':''}" onclick="selOri('horizontal')">↔ Horizontal</div>
       <div class="sb ${m.ori==='vertical'?'sel':''}" onclick="selOri('vertical')">↕ Vertical</div>
     </div></div>${hautRow}`;
+  if(m.type==='autres') return`<hr>
+    <div class="f"><label>Description libre</label><textarea id="m-libre" placeholder="Décrivez les travaux réalisés..." style="min-height:120px">${m.libre||''}</textarea></div>
+    ${hautRow}`;
   return'';
 }
 function saveMFields(){
@@ -268,6 +273,7 @@ function saveMFields(){
   if(g('m-nbl')!==null) m.nbl=g('m-nbl');
   if(g('m-ll')!==null) m.ll=g('m-ll');
   if(g('m-haut')!==null) m.hauteur=g('m-haut');
+  if(g('m-libre')!==null) m.libre=g('m-libre');
   if(g('m-obs')!==null) m.obs=g('m-obs');
   if(g('m-dc')!==null&&g('m-dc')) m.diam=g('m-dc');
 }
@@ -276,7 +282,7 @@ function selD(d){saveMFields();S.m.diam=d;renderModal();}
 function selS(s){saveMFields();S.m.supp=s;renderModal();}
 function selOri(o){saveMFields();S.m.ori=o;renderModal();}
 function selNiveau(n){saveMFields();S.m.niveau=(S.m.niveau===n?'':n);renderModal();}
-function openM(){S.m.open=true;Object.assign(S.m,{type:'',diam:'',nb:1,ep:'',supp:'',ml:'',prof:'',hauteur:'',niveau:'',nbl:'',ll:'',ori:'horizontal',obs:''});renderModal();}
+function openM(){S.m.open=true;Object.assign(S.m,{type:'',diam:'',nb:1,ep:'',supp:'',ml:'',prof:'',hauteur:'',niveau:'',nbl:'',ll:'',ori:'horizontal',libre:'',obs:''});renderModal();}
 function closeM(){S.m.open=false;renderModal();}
 function saveItem(){
   saveMFields();const m=S.m;
@@ -295,6 +301,9 @@ function saveItem(){
     if(!m.nbl){alert('Saisissez le nombre de lamelles.');return;}
     if(!m.ll){alert('Saisissez la longueur par lamelle.');return;}
     Object.assign(p,{nbl:m.nbl,ll:m.ll,ori:m.ori});
+  } else if(m.type==='autres'){
+    if(!m.libre){alert('Veuillez décrire les travaux.');return;}
+    Object.assign(p,{libre:m.libre});
   }
   S.items.push(p);closeM();R();
 }
@@ -390,7 +399,7 @@ async function buildAndSharePDF(){
   };
 
   secTitle('TRAVAUX RÉALISÉS');
-  const typeLabels={carottage:'CAROTTAGE',sciage:'SCIAGE',carbone:'LAMELLES CARBONE'};
+  const typeLabels={carottage:'CAROTTAGE',sciage:'SCIAGE',carbone:'LAMELLES CARBONE',autres:'AUTRES TRAVAUX'};
   if(!items.length){doc.setFontSize(9);doc.setFont('helvetica','italic');set(null,null,GRY);doc.text('Aucune prestation enregistrée',M,y+5);y+=12;}
   items.forEach((p,i)=>{
     const lines=[];
@@ -403,6 +412,8 @@ async function buildAndSharePDF(){
       if(p.supp) lines.push(`Support : ${p.supp==='plancher'?'Plancher (dalle)':'Voile / Mur'}`);
     } else if(p.type==='carbone'){
       lines.push(`${p.nbl} lamelle(s) × ${p.ll} ml — Orientation : ${p.ori}`);
+    } else if(p.type==='autres'){
+      lines.push(p.libre||'—');
     }
     if(p.hauteur) lines.push(`Hauteur des travaux : ${p.hauteur} ml`);
     if(p.obs) lines.push(`Observations : ${p.obs}`);

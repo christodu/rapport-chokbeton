@@ -212,7 +212,7 @@ function step3(){
   <div class="card"><div class="ct">📸 Photos du chantier <span style="font-weight:400;text-transform:none;font-size:10px">(optionnel — max 10)</span></div>
     ${photoGrid}
     ${S.photos.length<10?`<label class="photo-upload" id="photo-upload-label">
-      <input type="file" id="photo-input" accept="image/*" multiple capture="environment" onchange="addPhotos(this)">
+      <input type="file" id="photo-input" accept="image/*" multiple onchange="addPhotos(this)">
       <div class="pu-ico">📷</div>
       <div class="pu-txt">Appuyez pour ajouter des photos</div>
       <div class="pu-sub">Depuis la galerie ou l'appareil photo</div>

@@ -30,7 +30,7 @@ textarea{resize:vertical;min-height:70px}
 .btn-p{background:var(--dk);color:#fff}.btn-p:active{opacity:.85;transform:scale(.97)}
 .btn-y{background:var(--y);color:var(--dk)}.btn-y:active{opacity:.85}
 .btn-o{background:transparent;color:var(--dk);border:2px solid var(--dk)}
-.btn-g{background:#16a34a;color:#fff}.btn-g:disabled{opacity:.6;cursor:not-allowed}
+.btn-wa{background:#25D366;color:#fff}.btn-wa:disabled{opacity:.6;cursor:not-allowed}
 .btn-sm{padding:8px 13px;font-size:13px;min-height:36px;width:auto}
 .bot{padding:12px 14px;background:#fff;border-top:1px solid var(--brd);display:flex;gap:9px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:40}
 .pi{background:#fff;border:1.5px solid var(--brd);border-left:4px solid var(--y);border-radius:10px;padding:11px 13px;margin-bottom:9px;display:flex;align-items:flex-start;gap:9px}
@@ -71,22 +71,17 @@ textarea{resize:vertical;min-height:70px}
 #sigc{width:100%;height:160px;border:2px solid var(--brd);border-radius:8px;touch-action:none;background:#fafafa;display:block;cursor:crosshair}
 .empty{text-align:center;padding:36px 16px;color:var(--mut)}
 .empty .e-ico{font-size:44px;margin-bottom:10px}
-.info-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:11px 13px;font-size:13px;color:#92400e}
-.success-box{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 13px;font-size:13px;color:#166534;display:none}
+.info-box{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 13px;font-size:13px;color:#166534}
 hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
 </style></head>
 <body>
 <div class="app" id="app"></div>
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
 <script>
-// ── CONFIG ──
-const BREVO_KEY = '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';
-const SENDER_EMAIL = 'christopher.chokbeton@gmail.com'; // ← email vérifié dans Brevo
-
 const EQUIPE=[
-  {id:'christopher',nom:'Christopher',mail:'christopher@chok-beton.fr'},
-  {id:'christian',  nom:'Christian',  mail:'christian@chok-beton.fr'},
-  {id:'ghislain',   nom:'Ghislain',   mail:'ghislain@chok-beton.fr'}
+  {id:'christopher',nom:'Christopher',tel:'33624262105'},
+  {id:'christian',  nom:'Christian',  tel:'33614492589'},
+  {id:'ghislain',   nom:'Ghislain',   tel:'33612290865'}
 ];
 const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
 const DIAMS=[40,50,52,62,72,82,102,112,132,152,162,202,252,302,352,402,452,500];
@@ -99,7 +94,7 @@ const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240
 
 const S={
   step:1,
-  info:{date:new Date().toISOString().slice(0,10),num:'',addr:'',client:'',client_email:'',tech:''},
+  info:{date:new Date().toISOString().slice(0,10),num:'',addr:'',client:'',tech:''},
   items:[],resp:'',
   sig:{url:'',name:''},
   m:{open:false,type:'',diam:'',nb:1,ep:'',supp:'',ml:'',prof:'',hauteur:'',niveau:'',nbl:'',ll:'',ori:'horizontal',obs:''}
@@ -171,33 +166,27 @@ function step3(){
   const recap=rows.length
     ?`<p style="font-size:13px;color:var(--mut);margin-bottom:9px">${items.length} prestation(s)</p>`+rows.map(r=>`<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">${r}</div>`).join('')
     :'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
+
   const respCards=EQUIPE.map(e=>`<div class="rc ${S.resp===e.id?'sel':''}" onclick="selResp('${e.id}')">
     <div class="rc-av">${e.nom[0]}</div>
-    <div class="rc-info"><div class="rc-name">${e.nom}</div><div class="rc-mail">${e.mail}</div></div>
+    <div class="rc-info"><div class="rc-name">${e.nom}</div><div class="rc-mail" style="color:#25D366;font-weight:600">📱 WhatsApp</div></div>
     ${S.resp===e.id?'<span style="font-size:20px">✅</span>':''}
   </div>`).join('');
-  const selR=EQUIPE.find(x=>x.id===S.resp);
-  const destInfo=selR
-    ?`📎 PDF envoyé à <strong>${selR.nom}</strong>${S.info.client_email?' + client <strong>'+S.info.client_email+'</strong>':''}`
-    :'⚠️ Sélectionnez un responsable pour activer l\'envoi.';
+
   return`<div class="card"><div class="ct">📊 Récapitulatif</div>${recap}</div>
   <div class="card"><div class="ct">👷 Responsable du rapport</div><div class="rgrid">${respCards}</div></div>
   <div class="card"><div class="ct">✍️ Signature client</div>
     <div class="f"><label>Nom du signataire</label><input type="text" id="f-signame" value="${S.sig.name}" placeholder="Prénom Nom"></div>
-    <div class="f"><label>Email du client <span style="font-weight:400;text-transform:none">(envoi auto du PDF)</span></label>
-      <input type="email" id="f-cemail" value="${S.info.client_email}" placeholder="client@exemple.fr"></div>
     <div class="f"><label>Signature <span style="font-weight:400;font-size:11px;text-transform:none">(dessinez ci-dessous)</span></label>
       <canvas id="sigc" width="800" height="300"></canvas>
       <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button>
     </div>
   </div>
-  <div class="info-box" id="dest-info">${destInfo}</div>
-  <div class="success-box" id="success-box">✅ Rapport PDF envoyé avec succès !</div>`;
+  <div class="info-box">📱 Le PDF sera partagé via WhatsApp au responsable sélectionné</div>`;
 }
 
 function selResp(id){
   const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
-  const ce=document.getElementById('f-cemail');if(ce)S.info.client_email=ce.value;
   if(sc)S.sig.url=sc.toDataURL();
   S.resp=id;R();
 }
@@ -211,7 +200,7 @@ function bot(){
   </div>`;
   return`<div class="bot">
     <button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button>
-    <button class="btn btn-g" id="btn-gen" style="flex:1" onclick="generate()">📄 Générer PDF & Envoyer</button>
+    <button class="btn btn-wa" id="btn-gen" style="flex:1" onclick="generate()">📱 Générer & Envoyer WhatsApp</button>
   </div>`;
 }
 
@@ -334,14 +323,12 @@ function events(){
   }
   if(S.step===3){
     const sn=document.getElementById('f-signame');if(sn)sn.addEventListener('input',e=>S.sig.name=e.target.value);
-    const ce=document.getElementById('f-cemail');if(ce)ce.addEventListener('input',e=>S.info.client_email=e.target.value);
     setTimeout(initSig,50);
   }
 }
 function go(step){
   if(S.step===3){
     const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
-    const ce=document.getElementById('f-cemail');if(ce)S.info.client_email=ce.value;
     if(sc)S.sig.url=sc.toDataURL();
   }
   S.step=step;R();window.scrollTo(0,0);
@@ -351,35 +338,26 @@ function go(step){
 async function generate(){
   if(!S.resp){alert('Veuillez sélectionner le responsable du rapport.');return;}
   const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
-  const ce=document.getElementById('f-cemail');if(ce)S.info.client_email=ce.value;
   if(sc)S.sig.url=sc.toDataURL();
   const btn=document.getElementById('btn-gen');
-  if(btn){btn.textContent='⏳ Génération en cours...';btn.disabled=true;}
-  try{
-    await buildAndSendPDF();
-    const sb=document.getElementById('success-box');
-    const db=document.getElementById('dest-info');
-    if(sb){sb.style.display='block';}
-    if(db){db.style.display='none';}
-  } catch(e){
-    alert('Erreur : '+e.message);
-    if(btn){btn.textContent='📄 Générer PDF & Envoyer';btn.disabled=false;}
-  }
+  if(btn){btn.textContent='⏳ Génération PDF...';btn.disabled=true;}
+  try{await buildAndSharePDF();}
+  catch(e){alert('Erreur : '+e.message);}
+  finally{if(btn){btn.textContent='📱 Générer & Envoyer WhatsApp';btn.disabled=false;}}
 }
 
 /* ── PDF BUILDER ── */
-async function buildAndSendPDF(){
+async function buildAndSharePDF(){
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF('p','mm','a4');
   const PW=210,PH=297,M=14;
   let y=0;
   const c=S.info,items=S.items,sig=S.sig;
-  const resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',mail:''};
+  const resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',tel:''};
   const fd=d=>{if(!d)return'—';const[yy,mm,dd]=d.split('-');return`${dd}/${mm}/${yy}`;};
   const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240];
   const set=(fill,draw,tc)=>{if(fill)doc.setFillColor(...fill);if(draw)doc.setDrawColor(...draw);if(tc)doc.setTextColor(...tc);};
 
-  // HEADER
   set(DRK);doc.rect(0,0,PW,30,'F');
   set(YEL);doc.rect(0,28,PW,2,'F');
   set(null,null,WHT);
@@ -389,7 +367,6 @@ async function buildAndSendPDF(){
   doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text(`N° ${c.num||'—'}`,PW-M,18,{align:'right'});
   y=35;
 
-  // INFO GRID
   const iw=(PW-2*M-3)/2;
   const infoGrid=[
     [{l:'DATE',v:fd(c.date)},{l:'RESPONSABLE',v:resp.nom}],
@@ -402,10 +379,8 @@ async function buildAndSendPDF(){
       set(LGT,BRD);doc.roundedRect(x,y,w,12,.5,.5,'FD');
       doc.setFontSize(6.5);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(item.l,x+3,y+4.5);
       doc.setFontSize(9);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(String(item.v||'—').substring(0,55),x+3,y+9.5);
-    });
-    y+=13.5;
-  });
-  y+=4;
+    });y+=13.5;
+  });y+=4;
 
   const secTitle=title=>{
     if(y>PH-30){doc.addPage();y=15;}
@@ -413,7 +388,6 @@ async function buildAndSendPDF(){
     set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;
   };
 
-  // PRESTATIONS
   secTitle('TRAVAUX RÉALISÉS');
   const typeLabels={carottage:'CAROTTAGE',sciage:'SCIAGE',carbone:'LAMELLES CARBONE'};
   if(!items.length){doc.setFontSize(9);doc.setFont('helvetica','italic');set(null,null,GRY);doc.text('Aucune prestation enregistrée',M,y+5);y+=12;}
@@ -442,10 +416,8 @@ async function buildAndSendPDF(){
     doc.setFontSize(8.5);doc.setFont('helvetica','normal');set(null,null,[40,40,40]);
     lines.forEach((l,li)=>{doc.text(l,M+6,y+10+li*5.5);});
     y+=boxH+3;
-  });
-  y+=3;
+  });y+=3;
 
-  // RECAP TABLE
   secTitle('RÉCAPITULATIF');
   const car=items.filter(x=>x.type==='carottage');
   const sci=items.filter(x=>x.type==='sciage');
@@ -456,20 +428,17 @@ async function buildAndSendPDF(){
   if(cbn.length) rr.push(['Lamelles carbone',`${cbn.length} pose(s)`,`${cbn.reduce((a,x)=>a+parseInt(x.nbl||0),0)} lamelle(s)`]);
   if(rr.length){
     const cx=[M,M+75,M+145];
-    const hdrs=['Prestation','Opérations','Total'];
     set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
-    hdrs.forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});
+    ['Prestation','Opérations','Total'].forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});
     y+=7;
     rr.forEach(row=>{
       if(y>PH-25){doc.addPage();y=15;}
       set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');
       row.forEach((cell,i)=>{doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});
       y+=8;
-    });
-    y+=5;
+    });y+=5;
   }
 
-  // SIGNATURE
   if(y>PH-65){doc.addPage();y=15;}
   secTitle('VALIDATION CLIENT — BON POUR ACCORD');
   set(WHT,BRD);doc.roundedRect(M,y,PW-2*M,52,1,1,'FD');
@@ -478,66 +447,33 @@ async function buildAndSendPDF(){
   if(sig.url){try{doc.addImage(sig.url,'PNG',PW/2-30,y+17,60,25);}catch(e){}}
   else{set(null,BRD);doc.setLineDashPattern([2,2],0);doc.rect(PW/2-35,y+17,70,25,'S');doc.setLineDashPattern([],0);set(null,null,GRY);doc.setFontSize(8);doc.text('Signature non renseignée',PW/2,y+31,{align:'center'});}
   set(null,null,GRY);doc.setFontSize(8);doc.text(`Date : ${fd(c.date)}`,PW/2,y+46,{align:'center'});
-  y+=56;
 
-  // FOOTER
   const now=new Date();
   set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');
   doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);
   doc.text(`Rapport généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} · CHOK'BETON · Responsable : ${resp.nom} · N°${c.num||'—'}`,PW/2,PH-8,{align:'center'});
 
-  // ── EXPORT BASE64 & ENVOI BREVO ──
-  const filename=`rapport-chok-beton-${c.date||'chantier'}-${(c.num||'001').replace(/[^a-zA-Z0-9-]/g,'_')}.pdf`;
-  const pdfBase64=doc.output('datauristring').split(',')[1];
+  // ── PARTAGE ──
+  const filename=`rapport-chokbeton-${c.date||'chantier'}-${(c.num||'001').replace(/[^a-zA-Z0-9]/g,'_')}.pdf`;
+  const blob=doc.output('blob');
+  const file=new File([blob],filename,{type:'application/pdf'});
 
-  const fd2=fd;
-  const toList=[{email:resp.mail,name:resp.nom}];
-  if(c.client_email) toList.push({email:c.client_email,name:c.client||'Client'});
+  // Texte du message WhatsApp
+  const msg=`Rapport CHOK'BETON\nChantier : ${c.addr||'—'}\nDate : ${fd(c.date)}\nN° : ${c.num||'—'}\nTechnicien : ${c.tech||'—'}`;
 
-  const htmlContent=`
-    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-      <div style="background:#1E2D35;padding:20px;border-bottom:4px solid #F5C400">
-        <h1 style="color:#fff;margin:0;font-size:20px">CHOK'BETON</h1>
-        <p style="color:rgba(255,255,255,.7);margin:4px 0 0;font-size:13px">Découpe béton · Sciage · Renforcement structures</p>
-      </div>
-      <div style="padding:24px;background:#f8fafc">
-        <h2 style="color:#1E2D35;margin:0 0 16px">Rapport de chantier</h2>
-        <table style="width:100%;border-collapse:collapse;font-size:14px">
-          <tr><td style="padding:6px 0;color:#64748b;width:140px">Date</td><td style="font-weight:700">${fd2(c.date)}</td></tr>
-          <tr><td style="padding:6px 0;color:#64748b">N° rapport</td><td style="font-weight:700">${c.num||'—'}</td></tr>
-          <tr><td style="padding:6px 0;color:#64748b">Chantier</td><td style="font-weight:700">${c.addr||'—'}</td></tr>
-          <tr><td style="padding:6px 0;color:#64748b">Client</td><td style="font-weight:700">${c.client||'—'}</td></tr>
-          <tr><td style="padding:6px 0;color:#64748b">Technicien</td><td style="font-weight:700">${c.tech||'—'}</td></tr>
-          <tr><td style="padding:6px 0;color:#64748b">Responsable</td><td style="font-weight:700">${resp.nom}</td></tr>
-        </table>
-        <p style="margin:20px 0 8px;color:#475569;font-size:14px">Le rapport complet est disponible en pièce jointe au format PDF.</p>
-      </div>
-      <div style="padding:16px 24px;background:#1E2D35;text-align:center">
-        <p style="color:rgba(255,255,255,.6);font-size:12px;margin:0">CHOK'BETON — Rapport généré automatiquement</p>
-      </div>
-    </div>`;
-
-  const payload={
-    sender:{name:"CHOK'BETON",email:SENDER_EMAIL},
-    to:toList,
-    subject:`Rapport chantier CHOK'BETON — ${c.addr||'—'} — ${fd2(c.date)} — N°${c.num||'—'}`,
-    htmlContent,
-    attachment:[{name:filename,content:pdfBase64}]
-  };
-
-  const res=await fetch('https://api.brevo.com/v3/smtp/email',{
-    method:'POST',
-    headers:{'api-key':BREVO_KEY,'Content-Type':'application/json'},
-    body:JSON.stringify(payload)
-  });
-
-  if(!res.ok){
-    const err=await res.json().catch(()=>({}));
-    throw new Error(err.message||`Erreur Brevo (${res.status})`);
+  // Essai Web Share API (partage natif avec fichier — fonctionne sur mobile)
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    await navigator.share({files:[file],title:"Rapport CHOK'BETON",text:msg});
+    return;
   }
 
-  // Téléchargement local en bonus
+  // Fallback : téléchargement + ouverture WhatsApp avec le message
   doc.save(filename);
+  const waUrl=resp.tel&&resp.tel!=='33XXXXXXXXX'
+    ?`https://wa.me/${resp.tel}?text=${encodeURIComponent(msg+'\n\n(PDF téléchargé sur votre appareil)')}`
+    :`https://wa.me/?text=${encodeURIComponent(msg)}`;
+  setTimeout(()=>window.open(waUrl,'_blank'),800);
+  alert(`✅ PDF téléchargé !\n\nWhatsApp va s'ouvrir.\nJoignez le fichier "${filename}" dans la conversation.`);
 }
 
 R();

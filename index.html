@@ -123,7 +123,7 @@ const EQUIPE=[
   {id:'ghislain',   nom:'Ghislain',   tel:'33XXXXXXXXX'}
 ];
 const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
-const DIAMS=[40,50,60,70,80,100,110,120,130,150,160,200,250,300,350,400];
+const DIAMS=[40,50,60,70,80,100,110,120,130,150,160,200,220,250,300,320,350,400,'Autre'];
 const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
 
 // État global
@@ -185,7 +185,8 @@ function blocHtml(b){
       (b.carottages||[]).forEach(l=>{
     const supp=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
     const hautInfo=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕ ${l.haut}ml</span>`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><span class="work-txt"><b>${l.nb}×</b> Ø${l.diam}mm${l.ep?' — ép.'+l.ep+'cm':''}${hautInfo}</span>${supp}</div>`);
+    const diamLbl=l.diam==='Autre'?(l.diamCustom?`Ø${l.diamCustom}mm`:'Ø?mm'):`Ø${l.diam}mm`;
+    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><span class="work-txt"><b>${l.nb}×</b> ${diamLbl}${l.ep?' — ép.'+l.ep+'cm':''}${hautInfo}</span>${supp}</div>`);
   });
   (b.sciages||[]).forEach(l=>{
     const supp=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
@@ -298,8 +299,9 @@ function renderModal(){
     <div class="car-line">
       <div class="car-line-top">
         <select onchange="setCar(${i},'diam',this.value)">
-          ${DIAMS.map(d=>`<option value="${d}" ${l.diam==d?'selected':''}>Ø ${d} mm</option>`).join('')}
+          ${DIAMS.map(d=>`<option value="${d}" ${l.diam==d?'selected':''}>${d==='Autre'?'Autre...':d+' mm'}</option>`).join('')}
         </select>
+        ${l.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${l.diamCustom||''}" onchange="setCar(${i},'diamCustom',this.value)" style="width:80px;padding:8px;border:1.5px solid var(--y);border-radius:7px;font-size:14px;font-weight:700;flex-shrink:0">`:''}
         <div class="counter">
           <button type="button" onclick="chgCar(${i},-1)">−</button>
           <input type="number" min="1" value="${l.nb||1}" onchange="setCar(${i},'nb',this.value)">
@@ -415,7 +417,8 @@ function saveModalFields(){
     const nb=document.querySelector(`input[onchange*="setCar(${i},'nb'"]`);
     const ep=document.querySelector(`input[onchange*="setCar(${i},'ep'"]`);
     const haut=document.querySelector(`input[onchange*="setCar(${i},'haut'"]`);
-    if(s) l.diam=s.value; if(nb) l.nb=Math.max(1,parseInt(nb.value)||1); if(ep) l.ep=ep.value; if(haut) l.haut=haut.value;
+    const dc=document.querySelector(`input[onchange*="setCar(${i},'diamCustom'"]`);
+    if(s) l.diam=s.value; if(nb) l.nb=Math.max(1,parseInt(nb.value)||1); if(ep) l.ep=ep.value; if(haut) l.haut=haut.value; if(dc) l.diamCustom=dc.value;
   });
   // Sciages
   (m.sciages||[]).forEach((l,i)=>{
@@ -436,7 +439,11 @@ function saveModalFields(){
 function addCar(){saveModalFields();S.m.carottages.push({diam:100,nb:1,ep:'',supp:''});renderModal();}
 function delCar(i){saveModalFields();S.m.carottages.splice(i,1);renderModal();}
 function chgCar(i,d){saveModalFields();S.m.carottages[i].nb=Math.max(1,(S.m.carottages[i].nb||1)+d);renderModal();}
-function setCar(i,k,v){if(!S.m.carottages[i])return;S.m.carottages[i][k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='supp')renderModal();}
+function setCar(i,k,v){
+  if(!S.m.carottages[i])return;
+  S.m.carottages[i][k]=k==='nb'?Math.max(1,parseInt(v)||1):v;
+  if(k==='supp'||k==='diam') renderModal();
+}
 // Sciages
 function addSci(){saveModalFields();S.m.sciages.push({ml:'',prof:'',supp:''});renderModal();}
 function delSci(i){saveModalFields();S.m.sciages.splice(i,1);renderModal();}
@@ -564,7 +571,10 @@ async function buildAndSharePDF(){
   S.blocs.forEach((b,bi)=>{
     // Calculer les lignes
     const lines=[];
-    (b.carottages||[]).forEach(l=>{if(l.nb>0)lines.push({ico:'car',txt:`${l.nb} carottage${l.nb>1?'s':''} — Ø ${l.diam} mm${l.ep?' — Ép. '+l.ep+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});});
+    (b.carottages||[]).forEach(l=>{
+      const dLbl=l.diam==='Autre'?(l.diamCustom?`Ø ${l.diamCustom} mm`:'Ø ? mm'):`Ø ${l.diam} mm`;
+      if(l.nb>0)lines.push({ico:'car',txt:`${l.nb} carottage${l.nb>1?'s':''} — ${dLbl}${l.ep?' — Ép. '+l.ep+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});
+    });
     (b.sciages||[]).forEach(l=>{lines.push({ico:'sci',txt:`Sciage — ${l.ml} ml${l.prof?' — Prof. '+l.prof+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});});
     (b.carbones||[]).forEach(l=>{lines.push({ico:'cb',txt:`${l.nbl} lamelle(s) × ${l.ll} ml — ${l.ori}`});});
     if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-20).forEach(t=>lines.push({ico:'au',txt:t}));

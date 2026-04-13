@@ -402,14 +402,17 @@ function renderModal(){
   const cbHtml=(m.carbones||[]).map((l,i)=>`
     <div class="sci-line">
       <div class="sci-line-row">
-        <input class="sci-in" type="number" placeholder="Nb lamelles" value="${l.nbl||''}" onchange="setCb(${i},'nbl',this.value)" min="1">
-        <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ll||''}" onchange="setCb(${i},'ll',this.value)" step="0.1">
+        <select onchange="setCb(${i},'type',this.value)" style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd);background:#fff">
+          <option value="">— Type de lamelle —</option>
+          ${CB_TYPES.map(t=>`<option value="${t}" ${l.type===t?'selected':''}>${t}</option>`).join('')}
+        </select>
         <button class="del-btn" onclick="delCb(${i})">🗑</button>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-        ${CB_TYPES.map(t=>`<div onclick="setCb(${i},'type','${t}')" style="padding:6px 12px;border:2px solid ${l.type===t?'var(--dk)':'var(--brd)'};border-radius:8px;background:${l.type===t?'var(--y)':'#fff'};font-size:13px;font-weight:800;cursor:pointer;color:${l.type===t?'var(--dk)':'var(--text)'}">${t}</div>`).join('')}
+      <div class="sci-line-row">
+        <input class="sci-in" type="number" placeholder="Nb lamelles" value="${l.nbl||''}" onchange="setCb(${i},'nbl',this.value)" min="1">
+        <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ll||''}" onchange="setCb(${i},'ll',this.value)" step="0.1">
       </div>
-      <div style="display:flex;gap:7px;margin-top:6px">
+      <div style="display:flex;gap:7px;margin-top:4px">
         <div class="sb ${l.ori==='horizontal'?'sel':''}" onclick="setCb(${i},'ori','horizontal')">↔ Horizontal</div>
         <div class="sb ${l.ori==='vertical'?'sel':''}" onclick="setCb(${i},'ori','vertical')">↕ Vertical</div>
       </div>
@@ -492,7 +495,8 @@ function saveModalFields(){
   (m.carbones||[]).forEach((l,i)=>{
     const nb=document.querySelector(`input[onchange*="setCb(${i},'nbl'"]`);
     const ll=document.querySelector(`input[onchange*="setCb(${i},'ll'"]`);
-    if(nb) l.nbl=nb.value; if(ll) l.ll=ll.value;
+    const tp=document.querySelector(`select[onchange*="setCb(${i},'type'"]`);
+    if(nb) l.nbl=nb.value; if(ll) l.ll=ll.value; if(tp) l.type=tp.value;
   });
 }
 

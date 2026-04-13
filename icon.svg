@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fond -->
+  <rect width="512" height="512" rx="80" fill="#1E2D35"/>
+  <!-- Roue dentée -->
+  <g transform="translate(256,220)">
+    <circle cx="0" cy="0" r="145" fill="#F5C400"/>
+    <!-- Dents -->
+    <g fill="#F5C400">
+      <polygon points="-15,-145 15,-145 20,-175 -20,-175"/>
+      <polygon points="71,-124 96,-99 118,-118 93,-143"/>
+      <polygon points="124,-71 144,-46 169,-61 149,-86"/>
+      <polygon points="145,15 145,-15 175,-20 175,20"/>
+      <polygon points="124,71 99,96 118,118 143,93"/>
+      <polygon points="71,124 46,144 61,169 86,149"/>
+      <polygon points="-15,145 15,145 20,175 -20,175"/>
+      <polygon points="-71,124 -96,99 -118,118 -93,143"/>
+      <polygon points="-124,71 -144,46 -169,61 -149,86"/>
+      <polygon points="-145,-15 -145,15 -175,20 -175,-20"/>
+      <polygon points="-124,-71 -99,-96 -118,-118 -143,-93"/>
+      <polygon points="-71,-124 -46,-144 -61,-169 -86,-149"/>
+    </g>
+    <!-- Z -->
+    <rect x="-58" y="-68" width="116" height="136" rx="6" fill="#1E2D35"/>
+    <polygon points="-44,-54 44,-54 44,-28 -12,28 44,28 44,54 -44,54 -44,28 12,-28 -44,-28" fill="#fff"/>
+    <!-- Triangle sombre Z -->
+    <polygon points="0,-54 44,-54 44,-28 0,-28" fill="#1E2D35"/>
+    <polygon points="-44,28 0,28 0,54 -44,54" fill="#1E2D35"/>
+  </g>
+  <!-- Texte CHOK'BETON -->
+  <text x="256" y="415" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="52" fill="#fff" letter-spacing="2">CHOK'BETON</text>
+  <!-- Barre jaune -->
+  <rect x="60" y="435" width="392" height="10" rx="5" fill="#F5C400"/>
+</svg>

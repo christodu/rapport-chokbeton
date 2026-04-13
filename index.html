@@ -112,7 +112,14 @@ hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
 .photo-item .ph-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .photo-item .ph-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 5px}
 .photo-item .ph-cap input{background:transparent;border:none;color:#fff;font-size:10px;width:100%;padding:0;outline:none}
-</style></head>
+</style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1E2D35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CHOK'BETON">
+<link rel="apple-touch-icon" href="icon.svg">
+</head>
 <body>
 <div class="app" id="app"></div>
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
@@ -123,6 +130,7 @@ const EQUIPE=[
   {id:'ghislain',   nom:'Ghislain',   tel:'33XXXXXXXXX'}
 ];
 const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
+const CB_TYPES=['S512','S812','S1012','S1512','WRAP'];
 const DIAMS=[40,50,60,70,80,100,110,120,130,150,160,200,220,250,300,320,350,400,'Autre'];
 const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
 
@@ -141,14 +149,49 @@ const S={
 };
 let uid=1,sc,sx,drawing=false;
 
-function R(){document.getElementById('app').innerHTML=hdr()+content()+bot();events();renderModal();}
+// ── SAUVEGARDE AUTOMATIQUE ──
+function saveState(){
+  try{
+    localStorage.setItem('cb_rapport',JSON.stringify({
+      info:S.info, blocs:S.blocs, resp:S.resp,
+      sig:{name:S.sig.name}, step:S.step
+    }));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const d=localStorage.getItem('cb_rapport');
+    if(!d) return;
+    const p=JSON.parse(d);
+    if(p.info)  Object.assign(S.info, p.info);
+    if(p.blocs) S.blocs=p.blocs;
+    if(p.resp)  S.resp=p.resp;
+    if(p.sig&&p.sig.name) S.sig.name=p.sig.name;
+    if(p.step)  S.step=p.step;
+    // Restaurer uid
+    const maxId=S.blocs.reduce((a,b)=>Math.max(a,parseInt(b.id)||0),0);
+    uid=maxId+1;
+  }catch(e){}
+}
+function resetState(){
+  if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.')) return;
+  localStorage.removeItem('cb_rapport');
+  location.reload();
+}
+
+function R(){document.getElementById('app').innerHTML=hdr()+content()+bot();events();renderModal();saveState();}
 
 function hdr(){
   const labs=['','Infos Chantier','Travaux par niveau','Photos & Signature'];
   return`<div class="hdr"><div class="hdr-row">
     <div style="height:38px;display:flex;align-items:center">${LOGO(38)}</div>
-    <div class="hdr-info"><div class="hdr-title">Rapport de Chantier</div>
-    <div class="hdr-step">${labs[S.step]} — Étape ${S.step}/3</div></div>
+          <div class="hdr-info">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="hdr-title">Rapport de Chantier</div>
+          <button onclick="resetState()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">✚ Nouveau</button>
+        </div>
+        <div class="hdr-step">${labs[S.step]} — Étape ${S.step}/3</div>
+      </div>
   </div>
   <div class="steps-bar">${[1,2,3].map(i=>`<div class="sd ${i<S.step?'was':''} ${i===S.step?'on':''}"></div>`).join('')}</div></div>`;
 }
@@ -194,7 +237,8 @@ function blocHtml(b){
     rows.push(`<div class="work-row"><span class="work-ico">🪚</span><span class="work-txt"><b>${l.ml} ml</b>${l.prof?' — prof.'+l.prof+'cm':''}${hautInfo}</span>${supp}</div>`);
   });
   (b.carbones||[]).forEach(l=>{
-    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><span class="work-txt"><b>${l.nbl} lamelle(s)</b> × ${l.ll}ml — ${l.ori}</span></div>`);
+    const typeLbl=l.type?` — <b>${l.type}</b>`:'';
+    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><span class="work-txt"><b>${l.nbl} lamelle(s)</b> × ${l.ll}ml${typeLbl} — ${l.ori}</span></div>`);
   });
   if(b.autres) rows.push(`<div class="work-row"><span class="work-ico">📝</span><span class="work-txt">${b.autres}</span></div>`);
   if(b.hauteur) rows.push(`<div class="work-row"><span class="work-ico">↕️</span><span class="work-txt">Hauteur : ${b.hauteur} ml</span></div>`);
@@ -205,6 +249,7 @@ function blocHtml(b){
     <div class="bloc-hdr">
       <span class="bloc-niv">📍 ${b.niveau||'—'}</span>
       <span class="bloc-title">${total} travaux réalisé${total>1?'s':''}</span>
+      <button class="bloc-del" onclick="editBloc('${b.id}')" style="font-size:16px;margin-right:4px">✏️</button>
       <button class="bloc-del" onclick="delBloc('${b.id}')">🗑</button>
     </div>
     <div class="bloc-body">${rows.join('')||'<p style="color:var(--mut);font-size:13px">Aucun travail</p>'}</div>
@@ -257,7 +302,9 @@ function step3(){
 function addPhotos(input){
   const files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem);
   let loaded=0;
-  toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++loaded===toAdd.length)R();};r.readAsDataURL(f);});
+  toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++loaded===toAdd.length)loadState();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+R();};r.readAsDataURL(f);});
   if(files.length>rem) alert(`Max 10 photos. Seules ${rem} ont été ajoutées.`);
 }
 function delPhoto(i){S.photos.splice(i,1);R();}
@@ -281,8 +328,19 @@ function bot(){
    MODAL — SAISIE PAR NIVEAU
 ══════════════════════════════ */
 function openM(){
-  S.m={open:true,niveau:'',hauteur:'',obs:'',carottages:[],sciages:[],carbones:[],autres:''};
+  S.m={open:true,editId:null,niveau:'',hauteur:'',obs:'',carottages:[],sciages:[],carbones:[],autres:''};
   renderModal();
+}
+function editBloc(id){
+  const b=S.blocs.find(x=>x.id===id);if(!b)return;
+  S.m={open:true,editId:id,
+    niveau:b.niveau,hauteur:b.hauteur||'',obs:b.obs||'',autres:b.autres||'',
+    carottages:JSON.parse(JSON.stringify(b.carottages||[])),
+    sciages:JSON.parse(JSON.stringify(b.sciages||[])),
+    carbones:JSON.parse(JSON.stringify(b.carbones||[]))
+  };
+  renderModal();
+  document.getElementById('ov').scrollTop=0;
 }
 function closeM(){S.m.open=false;renderModal();}
 
@@ -348,7 +406,10 @@ function renderModal(){
         <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ll||''}" onchange="setCb(${i},'ll',this.value)" step="0.1">
         <button class="del-btn" onclick="delCb(${i})">🗑</button>
       </div>
-      <div class="srow">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+        ${CB_TYPES.map(t=>`<div onclick="setCb(${i},'type','${t}')" style="padding:6px 12px;border:2px solid ${l.type===t?'var(--dk)':'var(--brd)'};border-radius:8px;background:${l.type===t?'var(--y)':'#fff'};font-size:13px;font-weight:800;cursor:pointer;color:${l.type===t?'var(--dk)':'var(--text)'}">${t}</div>`).join('')}
+      </div>
+      <div style="display:flex;gap:7px;margin-top:6px">
         <div class="sb ${l.ori==='horizontal'?'sel':''}" onclick="setCb(${i},'ori','horizontal')">↔ Horizontal</div>
         <div class="sb ${l.ori==='vertical'?'sel':''}" onclick="setCb(${i},'ori','vertical')">↕ Vertical</div>
       </div>
@@ -356,7 +417,7 @@ function renderModal(){
 
   modal.innerHTML=`<div class="mhandle"></div>
     <div style="padding:0 14px 10px;border-bottom:2px solid var(--y)">
-      <div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">📍 Niveau</div>
+      <div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">${m.editId?'✏️ Modifier le niveau':'📍 Niveau'}</div>
       ${niveauGrid}
     </div>
 
@@ -398,7 +459,7 @@ function renderModal(){
 
     <div style="padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:10px">
       <button class="btn btn-o btn-sm" onclick="closeM()">Annuler</button>
-      <button class="btn btn-p" style="flex:1" onclick="saveBloc()">✅ Enregistrer ce niveau</button>
+      <button class="btn btn-p" style="flex:1" onclick="saveBloc()">${m.editId?'✅ Mettre à jour':'✅ Enregistrer ce niveau'}</button>
     </div>`;
   ov.onclick=e=>{if(e.target===ov)closeM();};
 }
@@ -457,26 +518,26 @@ function saveBloc(){
   saveModalFields();
   const m=S.m;
   const hasWork=(m.carottages||[]).length>0||(m.sciages||[]).length>0||(m.carbones||[]).length>0||m.autres;
-  if(!hasWork){alert('Ajoutez au moins un travail (carottage, sciage, lamelle ou autre).');return;}
-  // Validation carottages
-  for(const l of m.carottages||[]){
-    if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque carottage.');return;}
-  }
+  if(!hasWork){alert('Ajoutez au moins un travail.');return;}
+  for(const l of m.carottages||[]){if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque carottage.');return;}}
   for(const l of m.sciages||[]){
     if(!l.ml){alert('Saisissez la longueur pour chaque sciage.');return;}
     if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque sciage.');return;}
   }
-  for(const l of m.carbones||[]){
-    if(!l.nbl||!l.ll){alert('Renseignez le nombre et la longueur pour chaque lamelle carbone.');return;}
-  }
-  S.blocs.push({
-    id:String(uid++),niveau:m.niveau||'Non précisé',
-    hauteur:m.hauteur,obs:m.obs,
+  for(const l of m.carbones||[]){if(!l.nbl||!l.ll){alert('Renseignez le nombre et la longueur pour chaque lamelle.');return;}}
+  const data={
+    niveau:m.niveau||'Non précisé',hauteur:m.hauteur,obs:m.obs,
     carottages:JSON.parse(JSON.stringify(m.carottages)),
     sciages:JSON.parse(JSON.stringify(m.sciages)),
     carbones:JSON.parse(JSON.stringify(m.carbones)),
     autres:m.autres
-  });
+  };
+  if(m.editId){
+    const idx=S.blocs.findIndex(x=>x.id===m.editId);
+    if(idx>=0) S.blocs[idx]={...S.blocs[idx],...data};
+  } else {
+    S.blocs.push({id:String(uid++),...data});
+  }
   closeM();R();
 }
 
@@ -576,7 +637,7 @@ async function buildAndSharePDF(){
       if(l.nb>0)lines.push({ico:'car',txt:`${l.nb} carottage${l.nb>1?'s':''} — ${dLbl}${l.ep?' — Ép. '+l.ep+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});
     });
     (b.sciages||[]).forEach(l=>{lines.push({ico:'sci',txt:`Sciage — ${l.ml} ml${l.prof?' — Prof. '+l.prof+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});});
-    (b.carbones||[]).forEach(l=>{lines.push({ico:'cb',txt:`${l.nbl} lamelle(s) × ${l.ll} ml — ${l.ori}`});});
+    (b.carbones||[]).forEach(l=>{lines.push({ico:'cb',txt:`${l.nbl} lamelle(s) × ${l.ll} ml${l.type?' — '+l.type:''} — ${l.ori}`});});
     if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-20).forEach(t=>lines.push({ico:'au',txt:t}));
     if(b.hauteur) lines.push({ico:'h',txt:`Hauteur des travaux : ${b.hauteur} ml`});
     if(b.obs) lines.push({ico:'obs',txt:`Obs. : ${b.obs}`});

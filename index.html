@@ -3,8 +3,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>CHOK'BETON — Rapport Chantier</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1E2D35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CHOK'BETON">
+<link rel="apple-touch-icon" href="icon.svg">
 <style>
-:root{--y:#F5C400;--dk:#1E2D35;--bg:#f1f5f9;--card:#fff;--text:#0f172a;--mut:#64748b;--brd:#e2e8f0;--r:12px;--sh:0 1px 4px rgba(0,0,0,.1)}
+:root{--y:#F5C400;--dk:#1E2D35;--bg:#f1f5f9;--card:#fff;--text:#0f172a;--mut:#64748b;--brd:#e2e8f0;--r:12px;--sh:0 1px 4px rgba(0,0,0,.1);--ov:#7c3aed}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px}
 .app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
@@ -33,22 +39,20 @@ textarea{resize:vertical;min-height:70px}
 .btn-wa{background:#25D366;color:#fff}.btn-wa:disabled{opacity:.6;cursor:not-allowed}
 .btn-sm{padding:8px 13px;font-size:13px;min-height:36px;width:auto}
 .bot{padding:12px 14px;background:#fff;border-top:1px solid var(--brd);display:flex;gap:9px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:40}
-
-/* Bloc niveau */
+/* Blocs */
 .bloc{background:#fff;border:1.5px solid var(--brd);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:var(--sh)}
-.bloc-hdr{background:var(--dk);padding:10px 14px;display:flex;align-items:center;gap:10px}
-.bloc-niv{background:var(--y);color:var(--dk);font-size:13px;font-weight:900;padding:4px 12px;border-radius:20px}
+.bloc-hdr{background:var(--dk);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.bloc-niv{background:var(--y);color:var(--dk);font-size:13px;font-weight:900;padding:4px 12px;border-radius:20px;white-space:nowrap}
 .bloc-title{color:#fff;font-size:13px;font-weight:700;flex:1}
 .bloc-del{background:none;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:2px}
 .bloc-body{padding:12px 14px}
-.work-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--brd)}
+.work-row{display:flex;align-items:flex-start;gap:6px;padding:6px 0;border-bottom:1px solid var(--brd)}
 .work-row:last-child{border-bottom:none}
-.work-ico{font-size:15px;flex-shrink:0}
-.work-txt{font-size:13px;flex:1;line-height:1.45}
-.work-supp{font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0}
+.work-ico{font-size:15px;flex-shrink:0;margin-top:1px}
+.work-txt{font-size:13px;flex:1;line-height:1.5}
+.work-supp{font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;margin-top:1px}
 .supp-p{background:#fef3c7;color:#92400e}
 .supp-v{background:#e0f2fe;color:#0369a1}
-
 /* Responsables */
 .rgrid{display:flex;flex-direction:column;gap:9px}
 .rc{border:2px solid var(--brd);border-radius:10px;padding:13px 15px;cursor:pointer;background:#fff;transition:all .15s;display:flex;align-items:center;gap:12px}
@@ -56,7 +60,10 @@ textarea{resize:vertical;min-height:70px}
 .rc-av{width:40px;height:40px;border-radius:50%;background:var(--y);color:var(--dk);font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rc.sel .rc-av{background:var(--dk);color:#fff}
 .rc-info{flex:1}.rc-name{font-size:15px;font-weight:800;color:var(--dk)}.rc-sub{font-size:12px;color:#25D366;font-weight:600}
-
+/* Niveaux */
+.ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.nb{padding:9px 3px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
+.nb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
 /* Modal */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
 .ov.show{opacity:1;pointer-events:all}
@@ -67,17 +74,12 @@ textarea{resize:vertical;min-height:70px}
 .msection-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;border-bottom:2px solid var(--y);margin-bottom:10px}
 .msection-title{font-size:14px;font-weight:900;color:var(--dk)}
 .add-btn{background:var(--y);color:var(--dk);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
-
-/* Niveau grid */
-.ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
-.nb{padding:9px 3px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
-.nb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
-
-/* Ligne carottage */
+.add-btn-ov{background:#ede9fe;color:var(--ov);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
+/* Lignes carottage */
 .car-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
 .car-line-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
 .car-line-top select{flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)}
-.counter{display:flex;align-items:center;border:1.5px solid var(--brd);border-radius:8px;overflow:hidden}
+.counter{display:flex;align-items:center;border:1.5px solid var(--brd);border-radius:8px;overflow:hidden;flex-shrink:0}
 .counter button{width:34px;height:36px;border:none;background:#f0f0f0;font-size:20px;font-weight:700;cursor:pointer;color:var(--dk)}
 .counter button:active{background:var(--y)}
 .counter input{width:38px;border:none;text-align:center;font-size:15px;font-weight:800;padding:0}
@@ -88,21 +90,30 @@ textarea{resize:vertical;min-height:70px}
 .ms.sel-p{border-color:#d97706;background:#fef3c7;color:#92400e}
 .ms.sel-v{border-color:#0284c7;background:#e0f2fe;color:#0369a1}
 .del-btn{background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer;flex-shrink:0}
-
-/* Ligne sciage */
-.sci-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:7px}
-.sci-line-row{display:flex;align-items:center;gap:7px}
+/* Lignes sciage / carbone */
+.sci-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
+.sci-line-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 .sci-in{flex:1;padding:8px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px}
-
+/* Ouverture */
+.ouv-line{background:#faf5ff;border:1.5px solid #ddd6fe;border-left:4px solid var(--ov);border-radius:10px;padding:10px;margin-bottom:8px}
+.ouv-dim{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.ouv-dim input{width:72px;padding:7px 6px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px;text-align:center;flex-shrink:0}
+.ouv-dim input.haut{border-color:var(--ov);background:#ede9fe}
+.ouv-cars{margin-top:6px}
+.ouv-car-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ouv-car-row select{flex:1;padding:7px;font-size:13px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)}
+.ouv-add{background:#ede9fe;color:var(--ov);border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-top:3px}
+.ep-sm{width:62px;padding:6px;border:1.5px solid var(--brd);border-radius:7px;font-size:12px;text-align:center;flex-shrink:0}
+/* Support toggle */
+.srow{display:flex;gap:9px}
+.sb{flex:1;padding:11px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
+.sb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
 /* Signature */
 #sigc{width:100%;height:160px;border:2px solid var(--brd);border-radius:8px;touch-action:none;background:#fafafa;display:block;cursor:crosshair}
 .empty{text-align:center;padding:36px 16px;color:var(--mut)}
 .empty .e-ico{font-size:44px;margin-bottom:10px}
 .info-box{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 13px;font-size:13px;color:#166534}
 hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
-.srow{display:flex;gap:9px}
-.sb{flex:1;padding:11px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
-.sb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
 /* Photos */
 .photo-upload{border:2px dashed var(--brd);border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:#fafafa}
 .photo-upload input[type=file]{display:none}
@@ -112,92 +123,58 @@ hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
 .photo-item .ph-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .photo-item .ph-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 5px}
 .photo-item .ph-cap input{background:transparent;border:none;color:#fff;font-size:10px;width:100%;padding:0;outline:none}
-</style>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1E2D35">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="CHOK'BETON">
-<link rel="apple-touch-icon" href="icon.svg">
-</head>
+</style></head>
 <body>
 <div class="app" id="app"></div>
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
 <script>
+// ── CONFIG ──
 const EQUIPE=[
   {id:'christopher',nom:'Christopher',tel:'33XXXXXXXXX'},
   {id:'christian',  nom:'Christian',  tel:'33XXXXXXXXX'},
   {id:'ghislain',   nom:'Ghislain',   tel:'33XXXXXXXXX'}
 ];
 const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
-const CB_TYPES=['S512','S812','S1012','S1512','WRAP'];
 const DIAMS=[40,50,60,70,80,100,110,120,130,150,160,200,220,250,300,320,350,400,'Autre'];
+const CB_TYPES=['S512','S812','S1012','S1512','WRAP'];
 const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
 
-// État global
+// ── STATE ──
 const S={
   step:1,
   info:{date:new Date().toISOString().slice(0,10),num:'',addr:'',client:'',tech:'',date_debut:'',date_fin:''},
-  blocs:[],  // [{id, niveau, hauteur, obs, carottages:[{diam,nb,ep,supp}], sciages:[{ml,prof,supp}], carbones:[{nbl,ll,ori}], autres:''}]
-  resp:'',photos:[],
+  blocs:[],resp:'',photos:[],
   sig:{url:'',name:''},
-  m:{open:false, niveau:'',hauteur:'',obs:'',
-     carottages:[],  // {diam,nb,ep,supp}
-     sciages:[],     // {ml,prof,supp}
-     carbones:[],    // {nbl,ll,ori}
-     autres:''}
+  m:{open:false,editId:null,niveau:'',obs:'',
+     carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''}
 };
 let uid=1,sc,sx,drawing=false;
 
-// ── SAUVEGARDE AUTOMATIQUE ──
-function saveState(){
-  try{
-    localStorage.setItem('cb_rapport',JSON.stringify({
-      info:S.info, blocs:S.blocs, resp:S.resp,
-      sig:{name:S.sig.name}, step:S.step
-    }));
-  }catch(e){}
-}
-function loadState(){
-  try{
-    const d=localStorage.getItem('cb_rapport');
-    if(!d) return;
-    const p=JSON.parse(d);
-    if(p.info)  Object.assign(S.info, p.info);
-    if(p.blocs) S.blocs=p.blocs;
-    if(p.resp)  S.resp=p.resp;
-    if(p.sig&&p.sig.name) S.sig.name=p.sig.name;
-    if(p.step)  S.step=p.step;
-    // Restaurer uid
-    const maxId=S.blocs.reduce((a,b)=>Math.max(a,parseInt(b.id)||0),0);
-    uid=maxId+1;
-  }catch(e){}
-}
-function resetState(){
-  if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.')) return;
-  localStorage.removeItem('cb_rapport');
-  location.reload();
-}
+// ── PERSISTENCE ──
+function saveState(){try{localStorage.setItem('cb_rapport',JSON.stringify({info:S.info,blocs:S.blocs,resp:S.resp,sig:{name:S.sig.name},step:S.step}));}catch(e){}}
+function loadState(){try{const d=localStorage.getItem('cb_rapport');if(!d)return;const p=JSON.parse(d);if(p.info)Object.assign(S.info,p.info);if(p.blocs)S.blocs=p.blocs;if(p.resp)S.resp=p.resp;if(p.sig?.name)S.sig.name=p.sig.name;if(p.step)S.step=p.step;const mx=S.blocs.reduce((a,b)=>Math.max(a,parseInt(b.id)||0),0);uid=mx+1;}catch(e){}}
+function resetState(){if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.'))return;localStorage.removeItem('cb_rapport');location.reload();}
 
+// ── RENDER ──
 function R(){document.getElementById('app').innerHTML=hdr()+content()+bot();events();renderModal();saveState();}
 
 function hdr(){
   const labs=['','Infos Chantier','Travaux par niveau','Photos & Signature'];
   return`<div class="hdr"><div class="hdr-row">
     <div style="height:38px;display:flex;align-items:center">${LOGO(38)}</div>
-          <div class="hdr-info">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div class="hdr-title">Rapport de Chantier</div>
-          <button onclick="resetState()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">✚ Nouveau</button>
-        </div>
-        <div class="hdr-step">${labs[S.step]} — Étape ${S.step}/3</div>
+    <div class="hdr-info">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="hdr-title">Rapport de Chantier</div>
+        <button onclick="resetState()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">✚ Nouveau</button>
       </div>
+      <div class="hdr-step">${labs[S.step]} — Étape ${S.step}/3</div>
+    </div>
   </div>
   <div class="steps-bar">${[1,2,3].map(i=>`<div class="sd ${i<S.step?'was':''} ${i===S.step?'on':''}"></div>`).join('')}</div></div>`;
 }
 function content(){return`<div class="body">${S.step===1?step1():S.step===2?step2():step3()}</div>`;}
 
-/* ── ÉTAPE 1 ── */
+// ── ÉTAPE 1 ──
 function step1(){
   const c=S.info;
   return`<div class="card"><div class="ct">📅 Informations générales</div>
@@ -217,58 +194,65 @@ function step1(){
   </div>`;
 }
 
-/* ── ÉTAPE 2 ── */
+// ── ÉTAPE 2 ──
 function step2(){
   if(!S.blocs.length) return`<div class="empty"><div class="e-ico">🏗️</div><p>Aucun niveau saisi.<br>Appuyez sur <strong>+ Ajouter un niveau</strong> pour commencer.</p></div>`;
   return S.blocs.map(b=>blocHtml(b)).join('');
 }
 
+function diamLbl(d,dc){return d==='Autre'?(dc?`Ø${dc}mm`:'Ø?mm'):`Ø${d}mm`;}
+
 function blocHtml(b){
   const rows=[];
-      (b.carottages||[]).forEach(l=>{
-    const supp=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
-    const hautInfo=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕ ${l.haut}ml</span>`:'';
-    const diamLbl=l.diam==='Autre'?(l.diamCustom?`Ø${l.diamCustom}mm`:'Ø?mm'):`Ø${l.diam}mm`;
-    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><span class="work-txt"><b>${l.nb}×</b> ${diamLbl}${l.ep?' — ép.'+l.ep+'cm':''}${hautInfo}</span>${supp}</div>`);
+  (b.carottages||[]).forEach(l=>{
+    const sup=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
+    const hi=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕${l.haut}ml</span>`:'';
+    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><span class="work-txt"><b>${l.nb}×</b> ${diamLbl(l.diam,l.diamCustom)}${l.ep?' — ép.'+l.ep+'cm':''}${hi}</span>${sup}</div>`);
   });
   (b.sciages||[]).forEach(l=>{
-    const supp=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
-    const hautInfo=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕ ${l.haut}ml</span>`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🪚</span><span class="work-txt"><b>${l.ml} ml</b>${l.prof?' — prof.'+l.prof+'cm':''}${hautInfo}</span>${supp}</div>`);
+    const sup=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
+    const hi=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕${l.haut}ml</span>`:'';
+    rows.push(`<div class="work-row"><span class="work-ico">🪚</span><span class="work-txt"><b>${l.ml}ml</b>${l.prof?' — prof.'+l.prof+'cm':''}${hi}</span>${sup}</div>`);
   });
   (b.carbones||[]).forEach(l=>{
-    const typeLbl=l.type?` — <b>${l.type}</b>`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><span class="work-txt"><b>${l.nbl} lamelle(s)</b> × ${l.ll}ml${typeLbl} — ${l.ori}</span></div>`);
+    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><span class="work-txt"><b>${l.nbl} lamelle(s)</b> × ${l.ll}ml${l.type?' — <b>'+l.type+'</b>':''} — ${l.ori}</span></div>`);
+  });
+  (b.ouvertures||[]).forEach(o=>{
+    const dim=o.larg&&o.long?`${o.larg}×${o.long}cm`:'—';
+    const cars=(o.carottages||[]).filter(c=>c.nb>0).map(c=>`${c.nb}× ${diamLbl(c.diam,c.diamCustom)}${c.ep?' ép.'+c.ep+'cm':''}`).join(', ');
+    const hi=o.haut?` — ↕${o.haut}ml`:'';
+    rows.push(`<div class="work-row"><span class="work-ico">🔲</span><span class="work-txt" style="color:var(--ov)"><b>Ouverture ${dim}</b></span></div>`);
+    if(cars) rows.push(`<div class="work-row" style="padding-left:22px"><span class="work-ico" style="font-size:12px">↳</span><span class="work-txt">${cars}${hi}</span></div>`);
   });
   if(b.autres) rows.push(`<div class="work-row"><span class="work-ico">📝</span><span class="work-txt">${b.autres}</span></div>`);
-  if(b.hauteur) rows.push(`<div class="work-row"><span class="work-ico">↕️</span><span class="work-txt">Hauteur : ${b.hauteur} ml</span></div>`);
-  if(b.obs) rows.push(`<div class="work-row"><span class="work-ico">💬</span><span class="work-txt">${b.obs}</span></div>`);
-  const total=(b.carottages||[]).reduce((a,l)=>a+parseInt(l.nb||0),0)+
-    (b.sciages||[]).length+(b.carbones||[]).length+(b.autres?1:0);
+  if(b.obs)    rows.push(`<div class="work-row"><span class="work-ico">💬</span><span class="work-txt">${b.obs}</span></div>`);
+  const total=(b.carottages||[]).length+(b.sciages||[]).length+(b.carbones||[]).length+(b.ouvertures||[]).length+(b.autres?1:0);
   return`<div class="bloc">
     <div class="bloc-hdr">
       <span class="bloc-niv">📍 ${b.niveau||'—'}</span>
       <span class="bloc-title">${total} travaux réalisé${total>1?'s':''}</span>
-      <button class="bloc-del" onclick="editBloc('${b.id}')" style="font-size:16px;margin-right:4px">✏️</button>
+      <button class="bloc-del" onclick="editBloc('${b.id}')" style="font-size:16px;margin-right:2px">✏️</button>
       <button class="bloc-del" onclick="delBloc('${b.id}')">🗑</button>
     </div>
     <div class="bloc-body">${rows.join('')||'<p style="color:var(--mut);font-size:13px">Aucun travail</p>'}</div>
   </div>`;
 }
 
-/* ── ÉTAPE 3 ── */
+// ── ÉTAPE 3 ──
 function step3(){
   const blocs=S.blocs;
-  let totCar=0,totSci=0,totCb=0;
+  let totCar=0,totSci=0,totCb=0,totOuv=0;
   blocs.forEach(b=>{
     (b.carottages||[]).forEach(l=>totCar+=parseInt(l.nb||0));
     (b.sciages||[]).forEach(l=>totSci+=parseFloat(l.ml||0));
     (b.carbones||[]).forEach(l=>totCb+=parseInt(l.nbl||0));
+    totOuv+=(b.ouvertures||[]).length;
   });
   const rows=[];
-  if(totCar>0) rows.push(`🔩 Carottage — ${totCar} carottage(s)`);
-  if(totSci>0) rows.push(`🪚 Sciage — ${totSci} ml`);
-  if(totCb>0) rows.push(`🏗️ ${totCb} lamelle(s) carbone`);
+  if(totCar>0)  rows.push(`🔩 Carottage — ${totCar} carottage(s)`);
+  if(totSci>0)  rows.push(`🪚 Sciage — ${totSci} ml`);
+  if(totCb>0)   rows.push(`🏗️ ${totCb} lamelle(s) carbone`);
+  if(totOuv>0)  rows.push(`🔲 ${totOuv} ouverture(s) par carottages`);
   const recap=rows.length
     ?`<p style="font-size:13px;color:var(--mut);margin-bottom:9px">${blocs.length} niveau(x)</p>`+rows.map(r=>`<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">${r}</div>`).join('')
     :'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
@@ -278,69 +262,49 @@ function step3(){
     ${S.resp===e.id?'<span style="font-size:20px">✅</span>':''}
   </div>`).join('');
   const photoGrid=S.photos.length
-    ?`<div class="photo-grid">${S.photos.map((p,i)=>`<div class="photo-item">
-        <img src="${p.url}"><button class="ph-del" onclick="delPhoto(${i})">✕</button>
-        <div class="ph-cap"><input type="text" value="${p.caption||''}" placeholder="Légende..." oninput="S.photos[${i}].caption=this.value"></div>
-      </div>`).join('')}</div><p style="font-size:12px;color:var(--mut);margin-top:6px;text-align:center">${S.photos.length}/10 photo(s)</p>`:'';
+    ?`<div class="photo-grid">${S.photos.map((p,i)=>`<div class="photo-item"><img src="${p.url}"><button class="ph-del" onclick="delPhoto(${i})">✕</button><div class="ph-cap"><input type="text" value="${p.caption||''}" placeholder="Légende..." oninput="S.photos[${i}].caption=this.value"></div></div>`).join('')}</div><p style="font-size:12px;color:var(--mut);margin-top:6px;text-align:center">${S.photos.length}/10 photo(s)</p>`:''
   return`<div class="card"><div class="ct">📊 Récapitulatif</div>${recap}</div>
   <div class="card"><div class="ct">👷 Responsable du rapport</div><div class="rgrid">${respCards}</div></div>
   <div class="card"><div class="ct">📸 Photos <span style="font-weight:400;text-transform:none;font-size:10px">(optionnel — max 10)</span></div>
     ${photoGrid}
-    ${S.photos.length<10?`<label class="photo-upload"><input type="file" accept="image/*" multiple onchange="addPhotos(this)">
-      <div style="font-size:32px;margin-bottom:6px">📷</div><div style="font-size:13px;color:var(--mut);font-weight:600">Ajouter des photos</div></label>`:''}
+    ${S.photos.length<10?`<label class="photo-upload"><input type="file" accept="image/*" multiple onchange="addPhotos(this)"><div style="font-size:32px;margin-bottom:6px">📷</div><div style="font-size:13px;color:var(--mut);font-weight:600">Ajouter des photos</div></label>`:''}
   </div>
   <div class="card"><div class="ct">✍️ Signature client</div>
     <div class="f"><label>Nom du signataire</label><input type="text" id="f-signame" value="${S.sig.name}" placeholder="Prénom Nom"></div>
-    <div class="f"><label>Signature</label>
-      <canvas id="sigc" width="800" height="300"></canvas>
+    <div class="f"><label>Signature</label><canvas id="sigc" width="800" height="300"></canvas>
       <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button>
     </div>
   </div>
   <div class="info-box">📱 Le PDF sera partagé via WhatsApp au responsable sélectionné</div>`;
 }
 
-function addPhotos(input){
-  const files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem);
-  let loaded=0;
-  toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++loaded===toAdd.length)loadState();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-R();};r.readAsDataURL(f);});
-  if(files.length>rem) alert(`Max 10 photos. Seules ${rem} ont été ajoutées.`);
-}
+function addPhotos(input){const files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem);let loaded=0;toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++loaded===toAdd.length)R();};r.readAsDataURL(f);});if(files.length>rem)alert(`Max 10 photos.`);}
 function delPhoto(i){S.photos.splice(i,1);R();}
 function selResp(id){const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();S.resp=id;R();}
 function delBloc(id){if(!confirm('Supprimer ce niveau ?'))return;S.blocs=S.blocs.filter(x=>x.id!==id);R();}
 
 function bot(){
   if(S.step===1) return`<div class="bot"><button class="btn btn-p" style="flex:1" onclick="go(2)">Continuer → Saisir les travaux</button></div>`;
-  if(S.step===2) return`<div class="bot">
-    <button class="btn btn-o btn-sm" onclick="go(1)">← Retour</button>
-    <button class="btn btn-y" style="flex:1" onclick="openM()">➕ Ajouter un niveau</button>
-    <button class="btn btn-p btn-sm" onclick="go(3)">Valider →</button>
-  </div>`;
-  return`<div class="bot">
-    <button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button>
-    <button class="btn btn-wa" id="btn-gen" style="flex:1" onclick="generate()">📱 Générer & Envoyer WhatsApp</button>
-  </div>`;
+  if(S.step===2) return`<div class="bot"><button class="btn btn-o btn-sm" onclick="go(1)">← Retour</button><button class="btn btn-y" style="flex:1" onclick="openM()">➕ Ajouter un niveau</button><button class="btn btn-p btn-sm" onclick="go(3)">Valider →</button></div>`;
+  return`<div class="bot"><button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button><button class="btn btn-wa" id="btn-gen" style="flex:1" onclick="generate()">📱 Générer & Envoyer WhatsApp</button></div>`;
 }
 
-/* ══════════════════════════════
-   MODAL — SAISIE PAR NIVEAU
-══════════════════════════════ */
+// ══════════════════════════════
+// MODAL
+// ══════════════════════════════
 function openM(){
-  S.m={open:true,editId:null,niveau:'',hauteur:'',obs:'',carottages:[],sciages:[],carbones:[],autres:''};
+  S.m={open:true,editId:null,niveau:'',obs:'',carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''};
   renderModal();
 }
 function editBloc(id){
   const b=S.blocs.find(x=>x.id===id);if(!b)return;
-  S.m={open:true,editId:id,
-    niveau:b.niveau,hauteur:b.hauteur||'',obs:b.obs||'',autres:b.autres||'',
+  S.m={open:true,editId:id,niveau:b.niveau,obs:b.obs||'',autres:b.autres||'',
     carottages:JSON.parse(JSON.stringify(b.carottages||[])),
     sciages:JSON.parse(JSON.stringify(b.sciages||[])),
-    carbones:JSON.parse(JSON.stringify(b.carbones||[]))
+    carbones:JSON.parse(JSON.stringify(b.carbones||[])),
+    ouvertures:JSON.parse(JSON.stringify(b.ouvertures||[]))
   };
   renderModal();
-  document.getElementById('ov').scrollTop=0;
 }
 function closeM(){S.m.open=false;renderModal();}
 
@@ -350,21 +314,15 @@ function renderModal(){
   const modal=document.getElementById('modal');
   if(!m.open){modal.innerHTML='';return;}
 
-  const niveauGrid=`<div class="ngrid">${NIVEAUX.map(nv=>`<div class="nb ${m.niveau===nv?'sel':''}" onclick="selNiveau('${nv}')">${nv}</div>`).join('')}</div>`;
-
-  // Carottages
+  // Carottages HTML
   const carHtml=(m.carottages||[]).map((l,i)=>`
     <div class="car-line">
       <div class="car-line-top">
         <select onchange="setCar(${i},'diam',this.value)">
           ${DIAMS.map(d=>`<option value="${d}" ${l.diam==d?'selected':''}>${d==='Autre'?'Autre...':d+' mm'}</option>`).join('')}
         </select>
-        ${l.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${l.diamCustom||''}" onchange="setCar(${i},'diamCustom',this.value)" style="width:80px;padding:8px;border:1.5px solid var(--y);border-radius:7px;font-size:14px;font-weight:700;flex-shrink:0">`:''}
-        <div class="counter">
-          <button type="button" onclick="chgCar(${i},-1)">−</button>
-          <input type="number" min="1" value="${l.nb||1}" onchange="setCar(${i},'nb',this.value)">
-          <button type="button" onclick="chgCar(${i},1)">+</button>
-        </div>
+        ${l.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${l.diamCustom||''}" onchange="setCar(${i},'diamCustom',this.value)" style="width:72px;padding:8px;border:1.5px solid var(--y);border-radius:7px;font-size:13px;text-align:center;flex-shrink:0">`:''}
+        <div class="counter"><button type="button" onclick="chgCar(${i},-1)">−</button><input type="number" min="1" value="${l.nb||1}" onchange="setCar(${i},'nb',this.value)"><button type="button" onclick="chgCar(${i},1)">+</button></div>
         <button class="del-btn" onclick="delCar(${i})">🗑</button>
       </div>
       <div class="car-line-bot">
@@ -374,13 +332,10 @@ function renderModal(){
           <div class="ms ${l.supp==='voile'?'sel-v':''}" onclick="setCar(${i},'supp','voile')">🧱 Voile</div>
         </div>
       </div>
-      ${l.supp==='voile'?`<div style="margin-top:7px;display:flex;align-items:center;gap:7px">
-        <span style="font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap">↕ Hauteur voile (ml)</span>
-        <input type="number" placeholder="Ex : 2.80" value="${l.haut||''}" step="0.1" min="0" onchange="setCar(${i},'haut',this.value)" style="flex:1;padding:7px 10px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff">
-      </div>`:''}
+      ${l.supp==='voile'?`<div style="display:flex;align-items:center;gap:7px;margin-top:7px"><span style="font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap">↕ Hauteur (ml)</span><input type="number" placeholder="Ex:2.80" value="${l.haut||''}" step="0.1" min="0" onchange="setCar(${i},'haut',this.value)" style="flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff"></div>`:''}
     </div>`).join('');
 
-  // Sciages
+  // Sciages HTML
   const sciHtml=(m.sciages||[]).map((l,i)=>`
     <div class="sci-line">
       <div class="sci-line-row">
@@ -392,17 +347,14 @@ function renderModal(){
         <div class="ms ${l.supp==='plancher'?'sel-p':''}" onclick="setSci(${i},'supp','plancher')">🟫 Plancher</div>
         <div class="ms ${l.supp==='voile'?'sel-v':''}" onclick="setSci(${i},'supp','voile')">🧱 Voile</div>
       </div>
-      ${l.supp==='voile'?`<div style="display:flex;align-items:center;gap:7px;margin-top:7px">
-        <span style="font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap">↕ Hauteur voile (ml)</span>
-        <input type="number" placeholder="Ex : 2.80" value="${l.haut||''}" step="0.1" min="0" onchange="setSci(${i},'haut',this.value)" style="flex:1;padding:7px 10px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff">
-      </div>`:''}
+      ${l.supp==='voile'?`<div style="display:flex;align-items:center;gap:7px;margin-top:7px"><span style="font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap">↕ Hauteur (ml)</span><input type="number" placeholder="Ex:2.80" value="${l.haut||''}" step="0.1" min="0" onchange="setSci(${i},'haut',this.value)" style="flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff"></div>`:''}
     </div>`).join('');
 
-  // Carbones
+  // Carbones HTML
   const cbHtml=(m.carbones||[]).map((l,i)=>`
     <div class="sci-line">
       <div class="sci-line-row">
-        <select onchange="setCb(${i},'type',this.value)" style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd);background:#fff">
+        <select onchange="setCb(${i},'type',this.value)" style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)">
           <option value="">— Type de lamelle —</option>
           ${CB_TYPES.map(t=>`<option value="${t}" ${l.type===t?'selected':''}>${t}</option>`).join('')}
         </select>
@@ -418,6 +370,35 @@ function renderModal(){
       </div>
     </div>`).join('');
 
+  // Ouvertures HTML
+  const ouvHtml=(m.ouvertures||[]).map((o,i)=>`
+    <div class="ouv-line">
+      <div class="ouv-dim">
+        <span style="font-size:12px;font-weight:800;color:var(--ov);white-space:nowrap">📐 Dim. (cm)</span>
+        <input type="number" placeholder="Larg." value="${o.larg||''}" onchange="setOuv(${i},'larg',this.value)" class="">
+        <span style="font-weight:900;color:var(--mut);font-size:18px">×</span>
+        <input type="number" placeholder="Long." value="${o.long||''}" onchange="setOuv(${i},'long',this.value)" class="">
+        <input type="number" placeholder="H.ml" value="${o.haut||''}" onchange="setOuv(${i},'haut',this.value)" step="0.1" class="haut">
+        <button class="del-btn" onclick="delOuv(${i})">🗑</button>
+      </div>
+      <div class="ouv-cars">
+        <div style="font-size:11px;font-weight:800;color:var(--mut);text-transform:uppercase;margin-bottom:6px">Carottages réalisés</div>
+        ${(o.carottages||[]).map((c,ci)=>`
+          <div class="ouv-car-row">
+            <select onchange="setOuvCar(${i},${ci},'diam',this.value)">
+              ${DIAMS.map(d=>`<option value="${d}" ${c.diam==d?'selected':''}>${d==='Autre'?'Autre...':d+' mm'}</option>`).join('')}
+            </select>
+            ${c.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${c.diamCustom||''}" onchange="setOuvCar(${i},${ci},'diamCustom',this.value)" style="width:65px;padding:6px;border:1.5px solid var(--y);border-radius:7px;font-size:13px;text-align:center">`:''}
+            <div class="counter"><button type="button" onclick="chgOuvCar(${i},${ci},-1)">−</button><input type="number" min="1" value="${c.nb||1}" onchange="setOuvCar(${i},${ci},'nb',this.value)"><button type="button" onclick="chgOuvCar(${i},${ci},1)">+</button></div>
+            <input type="number" placeholder="ép.cm" value="${c.ep||''}" onchange="setOuvCar(${i},${ci},'ep',this.value)" class="ep-sm">
+            <button class="del-btn" onclick="delOuvCar(${i},${ci})">🗑</button>
+          </div>`).join('')}
+        <button class="ouv-add" onclick="addOuvCar(${i})">+ Carottage</button>
+      </div>
+    </div>`).join('');
+
+  const niveauGrid=`<div class="ngrid">${NIVEAUX.map(nv=>`<div class="nb ${m.niveau===nv?'sel':''}" onclick="selNiveau('${nv}')">${nv}</div>`).join('')}</div>`;
+
   modal.innerHTML=`<div class="mhandle"></div>
     <div style="padding:0 14px 10px;border-bottom:2px solid var(--y)">
       <div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">${m.editId?'✏️ Modifier le niveau':'📍 Niveau'}</div>
@@ -425,27 +406,23 @@ function renderModal(){
     </div>
 
     <div class="msection" style="margin-top:12px">
-      <div class="msection-hdr">
-        <span class="msection-title">🔩 Carottages</span>
-        <button class="add-btn" onclick="addCar()">+ Ajouter</button>
-      </div>
-      ${carHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun carottage — appuyez sur + Ajouter</p>`}
+      <div class="msection-hdr"><span class="msection-title">🔩 Carottages</span><button class="add-btn" onclick="addCar()">+ Ajouter</button></div>
+      ${carHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun carottage</p>`}
     </div>
 
     <div class="msection">
-      <div class="msection-hdr">
-        <span class="msection-title">🪚 Sciages</span>
-        <button class="add-btn" onclick="addSci()">+ Ajouter</button>
-      </div>
-      ${sciHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun sciage — appuyez sur + Ajouter</p>`}
+      <div class="msection-hdr"><span class="msection-title">🪚 Sciages</span><button class="add-btn" onclick="addSci()">+ Ajouter</button></div>
+      ${sciHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun sciage</p>`}
     </div>
 
     <div class="msection">
-      <div class="msection-hdr">
-        <span class="msection-title">🏗️ Lamelles carbone</span>
-        <button class="add-btn" onclick="addCb()">+ Ajouter</button>
-      </div>
-      ${cbHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune lamelle — appuyez sur + Ajouter</p>`}
+      <div class="msection-hdr"><span class="msection-title">🏗️ Lamelles carbone</span><button class="add-btn" onclick="addCb()">+ Ajouter</button></div>
+      ${cbHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune lamelle</p>`}
+    </div>
+
+    <div class="msection">
+      <div class="msection-hdr"><span class="msection-title" style="color:var(--ov)">🔲 Ouvertures par carottages</span><button class="add-btn-ov" onclick="addOuv()">+ Ajouter</button></div>
+      ${ouvHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune ouverture</p>`}
     </div>
 
     <div class="msection">
@@ -454,10 +431,7 @@ function renderModal(){
     </div>
 
     <div class="msection" style="margin-top:10px">
-      <div class="row">
-        <div class="f"><label>Hauteur travaux (ml)</label><input type="number" id="m-haut" value="${m.hauteur||''}" placeholder="Ex : 2.80" step="0.1" min="0"></div>
-        <div class="f"><label>Observations</label><input type="text" id="m-obs" value="${m.obs||''}" placeholder="Remarques..."></div>
-      </div>
+      <div class="f"><label>Observations</label><input type="text" id="m-obs" value="${m.obs||''}" placeholder="Remarques générales..."></div>
     </div>
 
     <div style="padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:10px">
@@ -472,8 +446,7 @@ function selNiveau(n){saveModalFields();S.m.niveau=(S.m.niveau===n?'':n);renderM
 function saveModalFields(){
   const m=S.m;
   const g=id=>{const e=document.getElementById(id);return e?e.value:null};
-  if(g('m-haut')!==null) m.hauteur=g('m-haut');
-  if(g('m-obs')!==null)  m.obs=g('m-obs');
+  if(g('m-obs')!==null)    m.obs=g('m-obs');
   if(g('m-autres')!==null) m.autres=g('m-autres');
   // Carottages
   (m.carottages||[]).forEach((l,i)=>{
@@ -482,7 +455,11 @@ function saveModalFields(){
     const ep=document.querySelector(`input[onchange*="setCar(${i},'ep'"]`);
     const haut=document.querySelector(`input[onchange*="setCar(${i},'haut'"]`);
     const dc=document.querySelector(`input[onchange*="setCar(${i},'diamCustom'"]`);
-    if(s) l.diam=s.value; if(nb) l.nb=Math.max(1,parseInt(nb.value)||1); if(ep) l.ep=ep.value; if(haut) l.haut=haut.value; if(dc) l.diamCustom=dc.value;
+    if(s)    l.diam=s.value;
+    if(nb)   l.nb=Math.max(1,parseInt(nb.value)||1);
+    if(ep)   l.ep=ep.value;
+    if(haut) l.haut=haut.value;
+    if(dc)   l.diamCustom=dc.value;
   });
   // Sciages
   (m.sciages||[]).forEach((l,i)=>{
@@ -498,54 +475,69 @@ function saveModalFields(){
     const tp=document.querySelector(`select[onchange*="setCb(${i},'type'"]`);
     if(nb) l.nbl=nb.value; if(ll) l.ll=ll.value; if(tp) l.type=tp.value;
   });
+  // Ouvertures
+  (m.ouvertures||[]).forEach((o,i)=>{
+    const larg=document.querySelector(`input[onchange*="setOuv(${i},'larg'"]`);
+    const long=document.querySelector(`input[onchange*="setOuv(${i},'long'"]`);
+    const haut=document.querySelector(`input[onchange*="setOuv(${i},'haut'"]`);
+    if(larg) o.larg=larg.value;
+    if(long) o.long=long.value;
+    if(haut) o.haut=haut.value;
+    (o.carottages||[]).forEach((c,ci)=>{
+      const s=document.querySelector(`select[onchange*="setOuvCar(${i},${ci},'diam'"]`);
+      const nb=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'nb'"]`);
+      const ep=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'ep'"]`);
+      const dc=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'diamCustom'"]`);
+      if(s)  c.diam=s.value;
+      if(nb) c.nb=Math.max(1,parseInt(nb.value)||1);
+      if(ep) c.ep=ep.value;
+      if(dc) c.diamCustom=dc.value;
+    });
+  });
 }
 
 // Carottages
-function addCar(){saveModalFields();S.m.carottages.push({diam:100,nb:1,ep:'',supp:''});renderModal();}
+function addCar(){saveModalFields();S.m.carottages.push({diam:100,nb:1,ep:'',supp:'',haut:'',diamCustom:''});renderModal();}
 function delCar(i){saveModalFields();S.m.carottages.splice(i,1);renderModal();}
 function chgCar(i,d){saveModalFields();S.m.carottages[i].nb=Math.max(1,(S.m.carottages[i].nb||1)+d);renderModal();}
-function setCar(i,k,v){
-  if(!S.m.carottages[i])return;
-  S.m.carottages[i][k]=k==='nb'?Math.max(1,parseInt(v)||1):v;
-  if(k==='supp'||k==='diam') renderModal();
-}
+function setCar(i,k,v){if(!S.m.carottages[i])return;S.m.carottages[i][k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='supp'||k==='diam')renderModal();}
 // Sciages
-function addSci(){saveModalFields();S.m.sciages.push({ml:'',prof:'',supp:''});renderModal();}
+function addSci(){saveModalFields();S.m.sciages.push({ml:'',prof:'',supp:'',haut:''});renderModal();}
 function delSci(i){saveModalFields();S.m.sciages.splice(i,1);renderModal();}
 function setSci(i,k,v){if(!S.m.sciages[i])return;S.m.sciages[i][k]=v;if(k==='supp')renderModal();}
 // Carbones
-function addCb(){saveModalFields();S.m.carbones.push({nbl:'',ll:'',ori:'horizontal'});renderModal();}
+function addCb(){saveModalFields();S.m.carbones.push({type:'',nbl:'',ll:'',ori:'horizontal'});renderModal();}
 function delCb(i){saveModalFields();S.m.carbones.splice(i,1);renderModal();}
 function setCb(i,k,v){if(!S.m.carbones[i])return;S.m.carbones[i][k]=v;if(k==='ori')renderModal();}
+// Ouvertures
+function addOuv(){saveModalFields();S.m.ouvertures.push({larg:'',long:'',haut:'',carottages:[{diam:200,nb:1,ep:'',diamCustom:''}]});renderModal();}
+function delOuv(i){saveModalFields();S.m.ouvertures.splice(i,1);renderModal();}
+function setOuv(i,k,v){if(!S.m.ouvertures[i])return;S.m.ouvertures[i][k]=v;}
+function addOuvCar(i){saveModalFields();(S.m.ouvertures[i].carottages=S.m.ouvertures[i].carottages||[]).push({diam:200,nb:1,ep:'',diamCustom:''});renderModal();}
+function delOuvCar(i,ci){saveModalFields();S.m.ouvertures[i].carottages.splice(ci,1);renderModal();}
+function setOuvCar(i,ci,k,v){const c=S.m.ouvertures[i]?.carottages[ci];if(!c)return;c[k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='diam')renderModal();}
+function chgOuvCar(i,ci,d){saveModalFields();const c=S.m.ouvertures[i]?.carottages[ci];if(c)c.nb=Math.max(1,(c.nb||1)+d);renderModal();}
 
 function saveBloc(){
-  saveModalFields();
-  const m=S.m;
-  const hasWork=(m.carottages||[]).length>0||(m.sciages||[]).length>0||(m.carbones||[]).length>0||m.autres;
+  saveModalFields();const m=S.m;
+  const hasWork=(m.carottages||[]).length>0||(m.sciages||[]).length>0||(m.carbones||[]).length>0||(m.ouvertures||[]).length>0||m.autres;
   if(!hasWork){alert('Ajoutez au moins un travail.');return;}
   for(const l of m.carottages||[]){if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque carottage.');return;}}
-  for(const l of m.sciages||[]){
-    if(!l.ml){alert('Saisissez la longueur pour chaque sciage.');return;}
-    if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque sciage.');return;}
-  }
+  for(const l of m.sciages||[]){if(!l.ml){alert('Saisissez la longueur pour chaque sciage.');return;}if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque sciage.');return;}}
   for(const l of m.carbones||[]){if(!l.nbl||!l.ll){alert('Renseignez le nombre et la longueur pour chaque lamelle.');return;}}
-  const data={
-    niveau:m.niveau||'Non précisé',hauteur:m.hauteur,obs:m.obs,
+  for(const o of m.ouvertures||[]){if(!o.larg||!o.long){alert('Saisissez les dimensions de chaque ouverture.');return;}if(!(o.carottages||[]).length){alert('Ajoutez au moins un carottage par ouverture.');return;}}
+  const data={niveau:m.niveau||'Non précisé',obs:m.obs,autres:m.autres,
     carottages:JSON.parse(JSON.stringify(m.carottages)),
     sciages:JSON.parse(JSON.stringify(m.sciages)),
     carbones:JSON.parse(JSON.stringify(m.carbones)),
-    autres:m.autres
+    ouvertures:JSON.parse(JSON.stringify(m.ouvertures))
   };
-  if(m.editId){
-    const idx=S.blocs.findIndex(x=>x.id===m.editId);
-    if(idx>=0) S.blocs[idx]={...S.blocs[idx],...data};
-  } else {
-    S.blocs.push({id:String(uid++),...data});
-  }
+  if(m.editId){const idx=S.blocs.findIndex(x=>x.id===m.editId);if(idx>=0)S.blocs[idx]={...S.blocs[idx],...data};}
+  else S.blocs.push({id:String(uid++),...data});
   closeM();R();
 }
 
-/* ── SIGNATURE ── */
+// ── SIGNATURE ──
 function initSig(){
   const c=document.getElementById('sigc');if(!c)return;
   sc=c;sx=c.getContext('2d');sx.strokeStyle='#1E2D35';sx.lineWidth=3;sx.lineCap='round';sx.lineJoin='round';
@@ -576,7 +568,7 @@ function go(step){
   S.step=step;R();window.scrollTo(0,0);
 }
 
-/* ── GENERATE ── */
+// ── GENERATE ──
 async function generate(){
   if(!S.resp){alert('Veuillez sélectionner le responsable du rapport.');return;}
   const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
@@ -588,7 +580,7 @@ async function generate(){
   finally{if(btn){btn.textContent='📱 Générer & Envoyer WhatsApp';btn.disabled=false;}}
 }
 
-/* ── PDF ── */
+// ── PDF ──
 async function buildAndSharePDF(){
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF('p','mm','a4');
@@ -596,7 +588,7 @@ async function buildAndSharePDF(){
   const c=S.info,sig=S.sig;
   const resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',tel:''};
   const fd=d=>{if(!d)return'—';const[yy,mm,dd]=d.split('-');return`${dd}/${mm}/${yy}`;};
-  const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],ORG=[251,191,36],BLU=[186,230,253];
+  const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],OV=[124,58,237];
   const set=(fill,draw,tc)=>{if(fill)doc.setFillColor(...fill);if(draw)doc.setDrawColor(...draw);if(tc)doc.setTextColor(...tc);};
 
   // HEADER
@@ -628,67 +620,68 @@ async function buildAndSharePDF(){
   };
 
   secTitle('TRAVAUX RÉALISÉS PAR NIVEAU');
-
-  if(!S.blocs.length){
-    doc.setFontSize(9);doc.setFont('helvetica','italic');set(null,null,GRY);doc.text('Aucune prestation enregistrée',M,y+5);y+=12;
-  }
+  if(!S.blocs.length){set(null,null,GRY);doc.setFontSize(9);doc.setFont('helvetica','italic');doc.text('Aucune prestation enregistrée',M,y+5);y+=12;}
 
   S.blocs.forEach((b,bi)=>{
-    // Calculer les lignes
     const lines=[];
     (b.carottages||[]).forEach(l=>{
       const dLbl=l.diam==='Autre'?(l.diamCustom?`Ø ${l.diamCustom} mm`:'Ø ? mm'):`Ø ${l.diam} mm`;
-      if(l.nb>0)lines.push({ico:'car',txt:`${l.nb} carottage${l.nb>1?'s':''} — ${dLbl}${l.ep?' — Ép. '+l.ep+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});
+      if(l.nb>0) lines.push({txt:`${l.nb} carottage${l.nb>1?'s':''} — ${dLbl}${l.ep?' — Ép. '+l.ep+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});
     });
-    (b.sciages||[]).forEach(l=>{lines.push({ico:'sci',txt:`Sciage — ${l.ml} ml${l.prof?' — Prof. '+l.prof+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});});
-    (b.carbones||[]).forEach(l=>{lines.push({ico:'cb',txt:`${l.nbl} lamelle(s) × ${l.ll} ml${l.type?' — '+l.type:''} — ${l.ori}`});});
-    if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-20).forEach(t=>lines.push({ico:'au',txt:t}));
-    if(b.hauteur) lines.push({ico:'h',txt:`Hauteur des travaux : ${b.hauteur} ml`});
-    if(b.obs) lines.push({ico:'obs',txt:`Obs. : ${b.obs}`});
+    (b.sciages||[]).forEach(l=>{lines.push({txt:`Sciage — ${l.ml} ml${l.prof?' — Prof. '+l.prof+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});});
+    (b.carbones||[]).forEach(l=>{lines.push({txt:`${l.nbl} lamelle(s) × ${l.ll} ml${l.type?' — '+l.type:''} — ${l.ori}`});});
+    (b.ouvertures||[]).forEach(o=>{
+      lines.push({txt:`OUVERTURE ${o.larg||'?'}×${o.long||'?'} cm${o.haut?' — H. '+o.haut+' ml':''}`,ouv:true});
+      (o.carottages||[]).filter(c=>c.nb>0).forEach(c=>{
+        const dLbl=c.diam==='Autre'?(c.diamCustom?`Ø ${c.diamCustom} mm`:'Ø ? mm'):`Ø ${c.diam} mm`;
+        lines.push({txt:`   ↳ ${c.nb} carottage${c.nb>1?'s':''} — ${dLbl}${c.ep?' — Ép. '+c.ep+' cm':''}`,sub:true});
+      });
+    });
+    if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-16).forEach(t=>lines.push({txt:t}));
+    if(b.obs)   lines.push({txt:`Obs. : ${b.obs}`,obs:true});
 
     const boxH=9+lines.length*6+3;
     if(y+boxH>PH-20){doc.addPage();y=15;}
-
-    // Bloc header
     set(DRK);doc.roundedRect(M,y,PW-2*M,9,1,1,'F');
     set(YEL);doc.roundedRect(M+2,y+1.5,22,6,1,1,'F');
     doc.setFontSize(8);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(b.niveau||'—',M+13,y+6,{align:'center'});
-    set(null,null,WHT);doc.setFontSize(8);doc.text(`${bi+1}. Niveau ${b.niveau||'—'}`,M+27,y+6);
+    set(null,null,WHT);doc.text(`${bi+1}. Niveau ${b.niveau||'—'}`,M+27,y+6);
     y+=9;
-
-    // Lignes travaux
     set(WHT,BRD);doc.rect(M,y,PW-2*M,lines.length*6+3,'FD');
     lines.forEach((l,li)=>{
       const tx=y+3+li*6+4;
-      // Badge support
       if(l.supp){
-        const sc2=l.supp==='plancher'?[254,243,199]:l.supp==='voile'?[224,242,254]:[240,240,240];
-        const tc2=l.supp==='plancher'?[146,64,14]:l.supp==='voile'?[3,105,161]:[100,100,100];
-        set(sc2,null);doc.roundedRect(PW-M-20,tx-3.5,18,5,.5,.5,'F');
-        doc.setFontSize(6);doc.setFont('helvetica','bold');set(null,null,tc2);
-        doc.text(l.supp==='plancher'?'Plancher':'Voile',PW-M-11,tx,{align:'center'});
+        const bg=l.supp==='plancher'?[254,243,199]:[224,242,254];
+        const tc=l.supp==='plancher'?[146,64,14]:[3,105,161];
+        set(bg,null);doc.roundedRect(PW-M-22,tx-3.5,20,5,.5,.5,'F');
+        doc.setFontSize(6);doc.setFont('helvetica','bold');set(null,null,tc);
+        doc.text(l.supp==='plancher'?'Plancher':'Voile',PW-M-12,tx,{align:'center'});
       }
-      doc.setFontSize(8);doc.setFont('helvetica','normal');set(null,null,[40,40,40]);
-      doc.text(l.txt,M+4,tx);
+      if(l.ouv){set(null,null,OV);doc.setFont('helvetica','bold');}
+      else if(l.sub){set(null,null,GRY);doc.setFont('helvetica','normal');}
+      else if(l.obs){set(null,null,GRY);doc.setFont('helvetica','italic');}
+      else{set(null,null,[40,40,40]);doc.setFont('helvetica','normal');}
+      doc.setFontSize(8);doc.text(l.txt,M+4,tx);
     });
     y+=lines.length*6+3+4;
-  });
-  y+=3;
+  });y+=3;
 
   // RECAP
   secTitle('RÉCAPITULATIF');
-  let totCar=0,totSci=0,totCb=0;
+  let totCar=0,totSci=0,totCb=0,totOuv=0;
   S.blocs.forEach(b=>{
     (b.carottages||[]).forEach(l=>totCar+=parseInt(l.nb||0));
     (b.sciages||[]).forEach(l=>totSci+=parseFloat(l.ml||0));
     (b.carbones||[]).forEach(l=>totCb+=parseInt(l.nbl||0));
+    totOuv+=(b.ouvertures||[]).length;
   });
   const rr=[];
   if(totCar>0) rr.push(['Carottage',`${S.blocs.filter(b=>(b.carottages||[]).length>0).length} niveau(x)`,`${totCar} carottage(s)`]);
   if(totSci>0) rr.push(['Sciage',`${S.blocs.filter(b=>(b.sciages||[]).length>0).length} niveau(x)`,`${totSci} ml`]);
-  if(totCb>0) rr.push(['Lamelles carbone',`${S.blocs.filter(b=>(b.carbones||[]).length>0).length} niveau(x)`,`${totCb} lamelle(s)`]);
+  if(totCb>0)  rr.push(['Lamelles carbone',`${S.blocs.filter(b=>(b.carbones||[]).length>0).length} niveau(x)`,`${totCb} lamelle(s)`]);
+  if(totOuv>0) rr.push(['Ouvertures par carottages',`${S.blocs.filter(b=>(b.ouvertures||[]).length>0).length} niveau(x)`,`${totOuv} ouverture(s)`]);
   if(rr.length){
-    const cx=[M,M+75,M+145];
+    const cx=[M,M+80,M+155];
     set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
     ['Prestation','Niveaux','Total'].forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});
     y+=7;
@@ -710,8 +703,7 @@ async function buildAndSharePDF(){
         if(S.photos[i].caption){set(LGT);doc.rect(x,y+ih-6,iw2,6,'F');doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(S.photos[i].caption.substring(0,40),x+2,y+ih-1.5);}
       }catch(e){}
       col++;if(col>=2){col=0;y+=ih+8;}
-    }
-    if(col>0)y+=ih+8;y+=4;
+    }if(col>0)y+=ih+8;y+=4;
   }
 
   // SIGNATURE
@@ -741,6 +733,9 @@ async function buildAndSharePDF(){
   alert(`✅ PDF téléchargé !\nWhatsApp va s'ouvrir.\nJoignez le fichier "${filename}".`);
 }
 
+// ── INIT ──
+loadState();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 R();
 </script>
 </body></html>

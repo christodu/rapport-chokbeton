@@ -1,0 +1,18 @@
+{
+  "name": "CHOK'BETON — Rapport Chantier",
+  "short_name": "CHOK'BETON",
+  "description": "Application de rapport de chantier CHOK'BETON",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1E2D35",
+  "theme_color": "#1E2D35",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

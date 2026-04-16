@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="CHOK'BETON">
 <link rel="apple-touch-icon" href="icon.svg">
 <style>
-:root{--y:#F5C400;--dk:#1E2D35;--bg:#f1f5f9;--card:#fff;--text:#0f172a;--mut:#64748b;--brd:#e2e8f0;--r:12px;--sh:0 1px 4px rgba(0,0,0,.1);--ov:#7c3aed}
+:root{--y:#F5C400;--dk:#1E2D35;--bg:#f1f5f9;--card:#fff;--text:#0f172a;--mut:#64748b;--brd:#e2e8f0;--r:12px;--sh:0 1px 4px rgba(0,0,0,.1);--ov:#7c3aed;--grn:#16a34a}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px}
 .app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
@@ -46,20 +46,20 @@ textarea{resize:vertical;min-height:70px}
 .bloc-title{color:#fff;font-size:13px;font-weight:700;flex:1}
 .bloc-del{background:none;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:2px}
 .bloc-body{padding:12px 14px}
-.work-row{display:flex;align-items:flex-start;gap:6px;padding:6px 0;border-bottom:1px solid var(--brd)}
+.work-row{display:flex;align-items:flex-start;gap:6px;padding:5px 0;border-bottom:1px solid var(--brd)}
 .work-row:last-child{border-bottom:none}
-.work-ico{font-size:15px;flex-shrink:0;margin-top:1px}
+.work-ico{font-size:14px;flex-shrink:0;margin-top:1px}
 .work-txt{font-size:13px;flex:1;line-height:1.5}
-.work-supp{font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;margin-top:1px}
-.supp-p{background:#fef3c7;color:#92400e}
-.supp-v{background:#e0f2fe;color:#0369a1}
+.badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;flex-shrink:0;margin-top:2px;white-space:nowrap}
+.bp{background:#fef3c7;color:#92400e}.bv{background:#e0f2fe;color:#0369a1}
+.bg{background:#f0fdf4;color:#166534}.bo{background:#ede9fe;color:#7c3aed}
 /* Responsables */
 .rgrid{display:flex;flex-direction:column;gap:9px}
 .rc{border:2px solid var(--brd);border-radius:10px;padding:13px 15px;cursor:pointer;background:#fff;transition:all .15s;display:flex;align-items:center;gap:12px}
 .rc.sel{border-color:var(--dk);background:#f0f4f5}
 .rc-av{width:40px;height:40px;border-radius:50%;background:var(--y);color:var(--dk);font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rc.sel .rc-av{background:var(--dk);color:#fff}
-.rc-info{flex:1}.rc-name{font-size:15px;font-weight:800;color:var(--dk)}.rc-sub{font-size:12px;color:#25D366;font-weight:600}
+.rc-info{flex:1}.rc-name{font-size:15px;font-weight:800}.rc-sub{font-size:12px;color:#25D366;font-weight:600}
 /* Niveaux */
 .ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .nb{padding:9px 3px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
@@ -75,7 +75,7 @@ textarea{resize:vertical;min-height:70px}
 .msection-title{font-size:14px;font-weight:900;color:var(--dk)}
 .add-btn{background:var(--y);color:var(--dk);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
 .add-btn-ov{background:#ede9fe;color:var(--ov);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
-/* Lignes carottage */
+/* Lignes de travaux */
 .car-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
 .car-line-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
 .car-line-top select{flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)}
@@ -83,27 +83,35 @@ textarea{resize:vertical;min-height:70px}
 .counter button{width:34px;height:36px;border:none;background:#f0f0f0;font-size:20px;font-weight:700;cursor:pointer;color:var(--dk)}
 .counter button:active{background:var(--y)}
 .counter input{width:38px;border:none;text-align:center;font-size:15px;font-weight:800;padding:0}
-.car-line-bot{display:flex;align-items:center;gap:7px}
+.car-bot{display:flex;align-items:center;gap:7px;margin-top:7px}
 .ep-in{width:80px;padding:7px 8px;border:1.5px solid var(--brd);border-radius:7px;font-size:13px;text-align:center;flex-shrink:0}
 .mini-supp{display:flex;gap:6px;flex:1}
 .ms{flex:1;padding:7px 4px;border:2px solid var(--brd);border-radius:7px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .1s}
 .ms.sel-p{border-color:#d97706;background:#fef3c7;color:#92400e}
 .ms.sel-v{border-color:#0284c7;background:#e0f2fe;color:#0369a1}
 .del-btn{background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer;flex-shrink:0}
-/* Lignes sciage / carbone */
 .sci-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
-.sci-line-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.sci-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 .sci-in{flex:1;padding:8px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px}
 /* Ouverture */
 .ouv-line{background:#faf5ff;border:1.5px solid #ddd6fe;border-left:4px solid var(--ov);border-radius:10px;padding:10px;margin-bottom:8px}
-.ouv-dim{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-.ouv-dim input{width:72px;padding:7px 6px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px;text-align:center;flex-shrink:0}
-.ouv-dim input.haut{border-color:var(--ov);background:#ede9fe}
-.ouv-cars{margin-top:6px}
+.ouv-dim{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.ouv-dim input{padding:7px 6px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px;text-align:center}
+.ouv-cars{margin-top:8px;border-top:1px dashed #ddd6fe;padding-top:8px}
 .ouv-car-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
 .ouv-car-row select{flex:1;padding:7px;font-size:13px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)}
-.ouv-add{background:#ede9fe;color:var(--ov);border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-top:3px}
 .ep-sm{width:62px;padding:6px;border:1.5px solid var(--brd);border-radius:7px;font-size:12px;text-align:center;flex-shrink:0}
+.ouv-add{background:#ede9fe;color:var(--ov);border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-top:3px}
+/* Toggles options */
+.trow{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.topt{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;background:#fff;font-size:12px;font-weight:700;color:var(--mut);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.topt.on{border-color:var(--grn);background:#f0fdf4;color:var(--grn)}
+.topt .tck{width:14px;height:14px;border:2px solid currentColor;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;line-height:1}
+.topt.poly.on{border-color:#0369a1;background:#e0f2fe;color:#0369a1}
+/* Hauteur voile */
+.haut-row{display:flex;align-items:center;gap:7px;margin-top:7px}
+.haut-row input{flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff}
+.haut-lbl{font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap}
 /* Support toggle */
 .srow{display:flex;gap:9px}
 .sb{flex:1;padding:11px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
@@ -128,7 +136,6 @@ hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
 <div class="app" id="app"></div>
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
 <script>
-// ── CONFIG ──
 const EQUIPE=[
   {id:'christopher',nom:'Christopher',tel:'33XXXXXXXXX'},
   {id:'christian',  nom:'Christian',  tel:'33XXXXXXXXX'},
@@ -139,23 +146,24 @@ const DIAMS=[40,50,60,70,80,100,110,120,130,150,160,200,220,250,300,320,350,400,
 const CB_TYPES=['S512','S812','S1012','S1512','WRAP'];
 const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
 
-// ── STATE ──
+const newCar=()=>({diam:100,nb:1,ep:'',supp:'',haut:'',diamCustom:'',etai:false,cpferm:false,polyane:false});
+const newSci=()=>({ml:'',prof:'',supp:'',haut:'',polyane:false});
+const newCb=()=>({type:'',nbl:'',ll:'',ori:'horizontal',polyane:false});
+const newOuv=()=>({larg:'',long:'',supp:'',haut:'',etai:false,cpferm:false,polyane:false,carottages:[{diam:200,nb:1,ep:'',diamCustom:''}]});
+
 const S={
   step:1,
   info:{date:new Date().toISOString().slice(0,10),num:'',addr:'',client:'',tech:'',date_debut:'',date_fin:''},
   blocs:[],resp:'',photos:[],
   sig:{url:'',name:''},
-  m:{open:false,editId:null,niveau:'',obs:'',
-     carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''}
+  m:{open:false,editId:null,niveau:'',obs:'',carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''}
 };
 let uid=1,sc,sx,drawing=false;
 
-// ── PERSISTENCE ──
 function saveState(){try{localStorage.setItem('cb_rapport',JSON.stringify({info:S.info,blocs:S.blocs,resp:S.resp,sig:{name:S.sig.name},step:S.step}));}catch(e){}}
 function loadState(){try{const d=localStorage.getItem('cb_rapport');if(!d)return;const p=JSON.parse(d);if(p.info)Object.assign(S.info,p.info);if(p.blocs)S.blocs=p.blocs;if(p.resp)S.resp=p.resp;if(p.sig?.name)S.sig.name=p.sig.name;if(p.step)S.step=p.step;const mx=S.blocs.reduce((a,b)=>Math.max(a,parseInt(b.id)||0),0);uid=mx+1;}catch(e){}}
 function resetState(){if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.'))return;localStorage.removeItem('cb_rapport');location.reload();}
 
-// ── RENDER ──
 function R(){document.getElementById('app').innerHTML=hdr()+content()+bot();events();renderModal();saveState();}
 
 function hdr(){
@@ -174,16 +182,13 @@ function hdr(){
 }
 function content(){return`<div class="body">${S.step===1?step1():S.step===2?step2():step3()}</div>`;}
 
-// ── ÉTAPE 1 ──
 function step1(){
   const c=S.info;
   return`<div class="card"><div class="ct">📅 Informations générales</div>
     <div class="f"><label>Date du rapport</label><input type="date" id="f-date" value="${c.date}"></div>
     <div class="f"><label>N° de rapport</label><input type="text" id="f-num" value="${c.num}" placeholder="Ex : 2025-001"></div>
-    <div class="row">
-      <div class="f"><label>Début chantier</label><input type="date" id="f-date-debut" value="${c.date_debut}"></div>
-      <div class="f"><label>Fin chantier</label><input type="date" id="f-date-fin" value="${c.date_fin}"></div>
-    </div>
+    <div class="row"><div class="f"><label>Début chantier</label><input type="date" id="f-date-debut" value="${c.date_debut}"></div>
+    <div class="f"><label>Fin chantier</label><input type="date" id="f-date-fin" value="${c.date_fin}"></div></div>
   </div>
   <div class="card"><div class="ct">📍 Chantier</div>
     <div class="f"><label>Adresse / Nom du chantier</label><input type="text" id="f-addr" value="${c.addr}" placeholder="12 rue de la Paix, Paris"></div>
@@ -194,38 +199,45 @@ function step1(){
   </div>`;
 }
 
-// ── ÉTAPE 2 ──
 function step2(){
-  if(!S.blocs.length) return`<div class="empty"><div class="e-ico">🏗️</div><p>Aucun niveau saisi.<br>Appuyez sur <strong>+ Ajouter un niveau</strong> pour commencer.</p></div>`;
+  if(!S.blocs.length) return`<div class="empty"><div class="e-ico">🏗️</div><p>Aucun niveau saisi.<br>Appuyez sur <strong>+ Ajouter un niveau</strong>.</p></div>`;
   return S.blocs.map(b=>blocHtml(b)).join('');
 }
 
-function diamLbl(d,dc){return d==='Autre'?(dc?`Ø${dc}mm`:'Ø?mm'):`Ø${d}mm`;}
+const dLbl=(d,dc)=>d==='Autre'?(dc?`Ø${dc}mm`:'Ø?mm'):`Ø${d}mm`;
+
+function optBadges(item){
+  const b=[];
+  if(item.etai)  b.push(`<span class="badge bg">🪵 Étai</span>`);
+  if(item.cpferm)b.push(`<span class="badge bg">🪵 Ferm.CP</span>`);
+  if(item.polyane)b.push(`<span class="badge" style="background:#e0f2fe;color:#0369a1">🛡️ Polyane</span>`);
+  return b.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${b.join('')}</div>`:'';
+}
 
 function blocHtml(b){
   const rows=[];
   (b.carottages||[]).forEach(l=>{
-    const sup=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
-    const hi=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕${l.haut}ml</span>`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><span class="work-txt"><b>${l.nb}×</b> ${diamLbl(l.diam,l.diamCustom)}${l.ep?' — ép.'+l.ep+'cm':''}${hi}</span>${sup}</div>`);
+    const sup=l.supp==='plancher'?'<span class="badge bp">Plancher</span>':'<span class="badge bv">Voile</span>';
+    const hi=l.supp==='voile'&&l.haut?` ↕${l.haut}ml`:'';
+    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><div class="work-txt"><b>${l.nb}×</b> ${dLbl(l.diam,l.diamCustom)}${l.ep?' ép.'+l.ep+'cm':''}${hi} ${sup}${optBadges(l)}</div></div>`);
   });
   (b.sciages||[]).forEach(l=>{
-    const sup=l.supp==='plancher'?'<span class="work-supp supp-p">Plancher</span>':'<span class="work-supp supp-v">Voile</span>';
-    const hi=l.supp==='voile'&&l.haut?` <span style="font-size:11px;color:#0369a1">↕${l.haut}ml</span>`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🪚</span><span class="work-txt"><b>${l.ml}ml</b>${l.prof?' — prof.'+l.prof+'cm':''}${hi}</span>${sup}</div>`);
+    const sup=l.supp==='plancher'?'<span class="badge bp">Plancher</span>':'<span class="badge bv">Voile</span>';
+    const hi=l.supp==='voile'&&l.haut?` ↕${l.haut}ml`:'';
+    rows.push(`<div class="work-row"><span class="work-ico">🪚</span><div class="work-txt"><b>${l.ml}ml</b>${l.prof?' prof.'+l.prof+'cm':''}${hi} ${sup}${optBadges(l)}</div></div>`);
   });
   (b.carbones||[]).forEach(l=>{
-    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><span class="work-txt"><b>${l.nbl} lamelle(s)</b> × ${l.ll}ml${l.type?' — <b>'+l.type+'</b>':''} — ${l.ori}</span></div>`);
+    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><div class="work-txt"><b>${l.nbl} lam.</b> ×${l.ll}ml${l.type?' '+l.type:''} ${l.ori}${optBadges(l)}</div></div>`);
   });
   (b.ouvertures||[]).forEach(o=>{
+    const sup=o.supp==='plancher'?'<span class="badge bp">Plancher</span>':o.supp==='voile'?'<span class="badge bv">Voile</span>':'';
+    const hi=o.supp==='voile'&&o.haut?` ↕${o.haut}ml`:'';
     const dim=o.larg&&o.long?`${o.larg}×${o.long}cm`:'—';
-    const cars=(o.carottages||[]).filter(c=>c.nb>0).map(c=>`${c.nb}× ${diamLbl(c.diam,c.diamCustom)}${c.ep?' ép.'+c.ep+'cm':''}`).join(', ');
-    const hi=o.haut?` — ↕${o.haut}ml`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🔲</span><span class="work-txt" style="color:var(--ov)"><b>Ouverture ${dim}</b></span></div>`);
-    if(cars) rows.push(`<div class="work-row" style="padding-left:22px"><span class="work-ico" style="font-size:12px">↳</span><span class="work-txt">${cars}${hi}</span></div>`);
+    const cars=(o.carottages||[]).filter(c=>c.nb>0).map(c=>`${c.nb}×${dLbl(c.diam,c.diamCustom)}${c.ep?' ép.'+c.ep+'cm':''}`).join(' / ');
+    rows.push(`<div class="work-row"><span class="work-ico">🔲</span><div class="work-txt" style="color:var(--ov)"><b>Ouverture ${dim}</b>${hi} ${sup}<br><span style="color:var(--text);font-size:12px">${cars}</span>${optBadges(o)}</div></div>`);
   });
-  if(b.autres) rows.push(`<div class="work-row"><span class="work-ico">📝</span><span class="work-txt">${b.autres}</span></div>`);
-  if(b.obs)    rows.push(`<div class="work-row"><span class="work-ico">💬</span><span class="work-txt">${b.obs}</span></div>`);
+  if(b.autres) rows.push(`<div class="work-row"><span class="work-ico">📝</span><div class="work-txt">${b.autres}</div></div>`);
+  if(b.obs)    rows.push(`<div class="work-row"><span class="work-ico">💬</span><div class="work-txt" style="color:var(--mut)">${b.obs}</div></div>`);
   const total=(b.carottages||[]).length+(b.sciages||[]).length+(b.carbones||[]).length+(b.ouvertures||[]).length+(b.autres?1:0);
   return`<div class="bloc">
     <div class="bloc-hdr">
@@ -238,7 +250,6 @@ function blocHtml(b){
   </div>`;
 }
 
-// ── ÉTAPE 3 ──
 function step3(){
   const blocs=S.blocs;
   let totCar=0,totSci=0,totCb=0,totOuv=0;
@@ -249,20 +260,17 @@ function step3(){
     totOuv+=(b.ouvertures||[]).length;
   });
   const rows=[];
-  if(totCar>0)  rows.push(`🔩 Carottage — ${totCar} carottage(s)`);
-  if(totSci>0)  rows.push(`🪚 Sciage — ${totSci} ml`);
-  if(totCb>0)   rows.push(`🏗️ ${totCb} lamelle(s) carbone`);
-  if(totOuv>0)  rows.push(`🔲 ${totOuv} ouverture(s) par carottages`);
-  const recap=rows.length
-    ?`<p style="font-size:13px;color:var(--mut);margin-bottom:9px">${blocs.length} niveau(x)</p>`+rows.map(r=>`<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">${r}</div>`).join('')
-    :'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
+  if(totCar>0) rows.push(`🔩 Carottage — ${totCar} carottage(s)`);
+  if(totSci>0) rows.push(`🪚 Sciage — ${totSci} ml`);
+  if(totCb>0)  rows.push(`🏗️ ${totCb} lamelle(s) carbone`);
+  if(totOuv>0) rows.push(`🔲 ${totOuv} ouverture(s) par carottages`);
+  const recap=rows.length?`<p style="font-size:13px;color:var(--mut);margin-bottom:9px">${blocs.length} niveau(x)</p>`+rows.map(r=>`<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">${r}</div>`).join(''):'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
   const respCards=EQUIPE.map(e=>`<div class="rc ${S.resp===e.id?'sel':''}" onclick="selResp('${e.id}')">
     <div class="rc-av">${e.nom[0]}</div>
     <div class="rc-info"><div class="rc-name">${e.nom}</div><div class="rc-sub">📱 WhatsApp</div></div>
     ${S.resp===e.id?'<span style="font-size:20px">✅</span>':''}
   </div>`).join('');
-  const photoGrid=S.photos.length
-    ?`<div class="photo-grid">${S.photos.map((p,i)=>`<div class="photo-item"><img src="${p.url}"><button class="ph-del" onclick="delPhoto(${i})">✕</button><div class="ph-cap"><input type="text" value="${p.caption||''}" placeholder="Légende..." oninput="S.photos[${i}].caption=this.value"></div></div>`).join('')}</div><p style="font-size:12px;color:var(--mut);margin-top:6px;text-align:center">${S.photos.length}/10 photo(s)</p>`:''
+  const photoGrid=S.photos.length?`<div class="photo-grid">${S.photos.map((p,i)=>`<div class="photo-item"><img src="${p.url}"><button class="ph-del" onclick="delPhoto(${i})">✕</button><div class="ph-cap"><input type="text" value="${p.caption||''}" placeholder="Légende..." oninput="S.photos[${i}].caption=this.value"></div></div>`).join('')}</div><p style="font-size:12px;color:var(--mut);margin-top:6px;text-align:center">${S.photos.length}/10 photo(s)</p>`:'';
   return`<div class="card"><div class="ct">📊 Récapitulatif</div>${recap}</div>
   <div class="card"><div class="ct">👷 Responsable du rapport</div><div class="rgrid">${respCards}</div></div>
   <div class="card"><div class="ct">📸 Photos <span style="font-weight:400;text-transform:none;font-size:10px">(optionnel — max 10)</span></div>
@@ -272,13 +280,12 @@ function step3(){
   <div class="card"><div class="ct">✍️ Signature client</div>
     <div class="f"><label>Nom du signataire</label><input type="text" id="f-signame" value="${S.sig.name}" placeholder="Prénom Nom"></div>
     <div class="f"><label>Signature</label><canvas id="sigc" width="800" height="300"></canvas>
-      <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button>
-    </div>
+      <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button></div>
   </div>
   <div class="info-box">📱 Le PDF sera partagé via WhatsApp au responsable sélectionné</div>`;
 }
 
-function addPhotos(input){const files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem);let loaded=0;toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++loaded===toAdd.length)R();};r.readAsDataURL(f);});if(files.length>rem)alert(`Max 10 photos.`);}
+function addPhotos(input){const files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem);let ld=0;toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++ld===toAdd.length)R();};r.readAsDataURL(f);});}
 function delPhoto(i){S.photos.splice(i,1);R();}
 function selResp(id){const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();S.resp=id;R();}
 function delBloc(id){if(!confirm('Supprimer ce niveau ?'))return;S.blocs=S.blocs.filter(x=>x.id!==id);R();}
@@ -289,13 +296,28 @@ function bot(){
   return`<div class="bot"><button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button><button class="btn btn-wa" id="btn-gen" style="flex:1" onclick="generate()">📱 Générer & Envoyer WhatsApp</button></div>`;
 }
 
-// ══════════════════════════════
-// MODAL
-// ══════════════════════════════
-function openM(){
-  S.m={open:true,editId:null,niveau:'',obs:'',carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''};
-  renderModal();
+// ── TOGGLE HELPERS ──
+function topt(label,on,fn,poly=false){
+  return`<div class="topt${on?' on':''}${poly?' poly':''}" onclick="${fn}"><div class="tck">${on?'✓':''}</div>${label}</div>`;
 }
+function plancherOpts(item,setFn){
+  if(item.supp!=='plancher') return '';
+  return`<div class="trow">
+    ${topt('🪵 Mise en place d\'un étai',item.etai,`${setFn}('etai')`)}
+    ${topt('🪵 Fermeture CP',item.cpferm,`${setFn}('cpferm')`)}
+  </div>`;
+}
+function voileHaut(item,i,setFn){
+  if(item.supp!=='voile') return '';
+  return`<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span>
+    <input type="number" placeholder="Ex:2.80" value="${item.haut||''}" step="0.1" min="0" onchange="${setFn}('haut',this.value)"></div>`;
+}
+function polyaneOpt(item,setFn){
+  return`<div class="trow">${topt('🛡️ Protection polyane',item.polyane,`${setFn}('polyane')`,true)}</div>`;
+}
+
+// ── MODAL ──
+function openM(){S.m={open:true,editId:null,niveau:'',obs:'',carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''};renderModal();}
 function editBloc(id){
   const b=S.blocs.find(x=>x.id===id);if(!b)return;
   S.m={open:true,editId:id,niveau:b.niveau,obs:b.obs||'',autres:b.autres||'',
@@ -314,7 +336,7 @@ function renderModal(){
   const modal=document.getElementById('modal');
   if(!m.open){modal.innerHTML='';return;}
 
-  // Carottages HTML
+  // ── Carottages ──
   const carHtml=(m.carottages||[]).map((l,i)=>`
     <div class="car-line">
       <div class="car-line-top">
@@ -325,20 +347,22 @@ function renderModal(){
         <div class="counter"><button type="button" onclick="chgCar(${i},-1)">−</button><input type="number" min="1" value="${l.nb||1}" onchange="setCar(${i},'nb',this.value)"><button type="button" onclick="chgCar(${i},1)">+</button></div>
         <button class="del-btn" onclick="delCar(${i})">🗑</button>
       </div>
-      <div class="car-line-bot">
+      <div class="car-bot">
         <input class="ep-in" type="number" placeholder="ép. cm" value="${l.ep||''}" onchange="setCar(${i},'ep',this.value)">
         <div class="mini-supp">
           <div class="ms ${l.supp==='plancher'?'sel-p':''}" onclick="setCar(${i},'supp','plancher')">🟫 Plancher</div>
           <div class="ms ${l.supp==='voile'?'sel-v':''}" onclick="setCar(${i},'supp','voile')">🧱 Voile</div>
         </div>
       </div>
-      ${l.supp==='voile'?`<div style="display:flex;align-items:center;gap:7px;margin-top:7px"><span style="font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap">↕ Hauteur (ml)</span><input type="number" placeholder="Ex:2.80" value="${l.haut||''}" step="0.1" min="0" onchange="setCar(${i},'haut',this.value)" style="flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff"></div>`:''}
+      ${voileHaut(l,i,'setCar')}
+      ${plancherOpts(l,i,0)}
+      ${polyaneOpt(l,i,0)}
     </div>`).join('');
 
-  // Sciages HTML
+  // ── Sciages ──
   const sciHtml=(m.sciages||[]).map((l,i)=>`
     <div class="sci-line">
-      <div class="sci-line-row">
+      <div class="sci-row">
         <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ml||''}" onchange="setSci(${i},'ml',this.value)" step="0.1" min="0">
         <input class="sci-in" type="number" placeholder="Prof. cm" value="${l.prof||''}" onchange="setSci(${i},'prof',this.value)" step="0.5" min="0">
         <button class="del-btn" onclick="delSci(${i})">🗑</button>
@@ -347,48 +371,56 @@ function renderModal(){
         <div class="ms ${l.supp==='plancher'?'sel-p':''}" onclick="setSci(${i},'supp','plancher')">🟫 Plancher</div>
         <div class="ms ${l.supp==='voile'?'sel-v':''}" onclick="setSci(${i},'supp','voile')">🧱 Voile</div>
       </div>
-      ${l.supp==='voile'?`<div style="display:flex;align-items:center;gap:7px;margin-top:7px"><span style="font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap">↕ Hauteur (ml)</span><input type="number" placeholder="Ex:2.80" value="${l.haut||''}" step="0.1" min="0" onchange="setSci(${i},'haut',this.value)" style="flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff"></div>`:''}
+      ${voileHaut(l,i,'setSci')}
+      ${polyaneOpt(l,i,1)}
     </div>`).join('');
 
-  // Carbones HTML
+  // ── Carbones ──
   const cbHtml=(m.carbones||[]).map((l,i)=>`
     <div class="sci-line">
-      <div class="sci-line-row">
+      <div class="sci-row">
         <select onchange="setCb(${i},'type',this.value)" style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)">
           <option value="">— Type de lamelle —</option>
           ${CB_TYPES.map(t=>`<option value="${t}" ${l.type===t?'selected':''}>${t}</option>`).join('')}
         </select>
         <button class="del-btn" onclick="delCb(${i})">🗑</button>
       </div>
-      <div class="sci-line-row">
+      <div class="sci-row">
         <input class="sci-in" type="number" placeholder="Nb lamelles" value="${l.nbl||''}" onchange="setCb(${i},'nbl',this.value)" min="1">
         <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ll||''}" onchange="setCb(${i},'ll',this.value)" step="0.1">
       </div>
-      <div style="display:flex;gap:7px;margin-top:4px">
+      <div style="display:flex;gap:7px;margin-bottom:4px">
         <div class="sb ${l.ori==='horizontal'?'sel':''}" onclick="setCb(${i},'ori','horizontal')">↔ Horizontal</div>
         <div class="sb ${l.ori==='vertical'?'sel':''}" onclick="setCb(${i},'ori','vertical')">↕ Vertical</div>
       </div>
+      ${polyaneOpt(l,i,2)}
     </div>`).join('');
 
-  // Ouvertures HTML
+  // ── Ouvertures ──
   const ouvHtml=(m.ouvertures||[]).map((o,i)=>`
     <div class="ouv-line">
       <div class="ouv-dim">
-        <span style="font-size:12px;font-weight:800;color:var(--ov);white-space:nowrap">📐 Dim. (cm)</span>
-        <input type="number" placeholder="Larg." value="${o.larg||''}" onchange="setOuv(${i},'larg',this.value)" class="">
+        <span style="font-size:12px;font-weight:800;color:var(--ov);white-space:nowrap">📐 cm</span>
+        <input type="number" placeholder="Larg." value="${o.larg||''}" onchange="setOuv(${i},'larg',this.value)" style="width:72px">
         <span style="font-weight:900;color:var(--mut);font-size:18px">×</span>
-        <input type="number" placeholder="Long." value="${o.long||''}" onchange="setOuv(${i},'long',this.value)" class="">
-        <input type="number" placeholder="H.ml" value="${o.haut||''}" onchange="setOuv(${i},'haut',this.value)" step="0.1" class="haut">
-        <button class="del-btn" onclick="delOuv(${i})">🗑</button>
+        <input type="number" placeholder="Long." value="${o.long||''}" onchange="setOuv(${i},'long',this.value)" style="width:72px">
+        <button class="del-btn" style="margin-left:auto" onclick="delOuv(${i})">🗑</button>
       </div>
+      <div class="mini-supp" style="margin-bottom:7px">
+        <div class="ms ${o.supp==='plancher'?'sel-p':''}" onclick="setOuv(${i},'supp','plancher')">🟫 Plancher</div>
+        <div class="ms ${o.supp==='voile'?'sel-v':''}" onclick="setOuv(${i},'supp','voile')">🧱 Voile</div>
+      </div>
+      ${o.supp==='voile'?`<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span><input type="number" placeholder="Ex:2.80" value="${o.haut||''}" step="0.1" min="0" onchange="setOuv(${i},'haut',this.value)"></div>`:''}
+      ${o.supp==='plancher'?`<div class="trow">${topt('🪵 Mise en place d\'un étai',o.etai,`3,${i},0`)}${topt('🪵 Fermeture CP',o.cpferm,`3,${i},1`)}</div>`:''}
+      ${polyaneOpt(o,i,3)}
       <div class="ouv-cars">
-        <div style="font-size:11px;font-weight:800;color:var(--mut);text-transform:uppercase;margin-bottom:6px">Carottages réalisés</div>
+        <div style="font-size:11px;font-weight:800;color:var(--ov);text-transform:uppercase;margin-bottom:6px">Carottages réalisés</div>
         ${(o.carottages||[]).map((c,ci)=>`
           <div class="ouv-car-row">
             <select onchange="setOuvCar(${i},${ci},'diam',this.value)">
               ${DIAMS.map(d=>`<option value="${d}" ${c.diam==d?'selected':''}>${d==='Autre'?'Autre...':d+' mm'}</option>`).join('')}
             </select>
-            ${c.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${c.diamCustom||''}" onchange="setOuvCar(${i},${ci},'diamCustom',this.value)" style="width:65px;padding:6px;border:1.5px solid var(--y);border-radius:7px;font-size:13px;text-align:center">`:''}
+            ${c.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${c.diamCustom||''}" onchange="setOuvCar(${i},${ci},'diamCustom',this.value)" style="width:62px;padding:6px;border:1.5px solid var(--y);border-radius:7px;font-size:12px;text-align:center">`:''}
             <div class="counter"><button type="button" onclick="chgOuvCar(${i},${ci},-1)">−</button><input type="number" min="1" value="${c.nb||1}" onchange="setOuvCar(${i},${ci},'nb',this.value)"><button type="button" onclick="chgOuvCar(${i},${ci},1)">+</button></div>
             <input type="number" placeholder="ép.cm" value="${c.ep||''}" onchange="setOuvCar(${i},${ci},'ep',this.value)" class="ep-sm">
             <button class="del-btn" onclick="delOuvCar(${i},${ci})">🗑</button>
@@ -397,47 +429,51 @@ function renderModal(){
       </div>
     </div>`).join('');
 
-  const niveauGrid=`<div class="ngrid">${NIVEAUX.map(nv=>`<div class="nb ${m.niveau===nv?'sel':''}" onclick="selNiveau('${nv}')">${nv}</div>`).join('')}</div>`;
+  const nGrid=`<div class="ngrid">${NIVEAUX.map(nv=>`<div class="nb ${m.niveau===nv?'sel':''}" onclick="selNiveau('${nv}')">${nv}</div>`).join('')}</div>`;
 
   modal.innerHTML=`<div class="mhandle"></div>
     <div style="padding:0 14px 10px;border-bottom:2px solid var(--y)">
-      <div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">${m.editId?'✏️ Modifier le niveau':'📍 Niveau'}</div>
-      ${niveauGrid}
+      <div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">${m.editId?'✏️ Modifier':'📍 Niveau'}</div>
+      ${nGrid}
     </div>
-
     <div class="msection" style="margin-top:12px">
       <div class="msection-hdr"><span class="msection-title">🔩 Carottages</span><button class="add-btn" onclick="addCar()">+ Ajouter</button></div>
       ${carHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun carottage</p>`}
     </div>
-
     <div class="msection">
       <div class="msection-hdr"><span class="msection-title">🪚 Sciages</span><button class="add-btn" onclick="addSci()">+ Ajouter</button></div>
       ${sciHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun sciage</p>`}
     </div>
-
     <div class="msection">
       <div class="msection-hdr"><span class="msection-title">🏗️ Lamelles carbone</span><button class="add-btn" onclick="addCb()">+ Ajouter</button></div>
       ${cbHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune lamelle</p>`}
     </div>
-
     <div class="msection">
       <div class="msection-hdr"><span class="msection-title" style="color:var(--ov)">🔲 Ouvertures par carottages</span><button class="add-btn-ov" onclick="addOuv()">+ Ajouter</button></div>
       ${ouvHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune ouverture</p>`}
     </div>
-
     <div class="msection">
       <div class="msection-hdr"><span class="msection-title">📝 Autres travaux</span></div>
       <textarea id="m-autres" placeholder="Description libre..." style="min-height:80px">${m.autres||''}</textarea>
     </div>
-
     <div class="msection" style="margin-top:10px">
-      <div class="f"><label>Observations</label><input type="text" id="m-obs" value="${m.obs||''}" placeholder="Remarques générales..."></div>
+      <div class="f"><label>Observations</label><input type="text" id="m-obs" value="${m.obs||''}" placeholder="Remarques..."></div>
     </div>
-
     <div style="padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:10px">
       <button class="btn btn-o btn-sm" onclick="closeM()">Annuler</button>
       <button class="btn btn-p" style="flex:1" onclick="saveBloc()">${m.editId?'✅ Mettre à jour':'✅ Enregistrer ce niveau'}</button>
     </div>`;
+  // Attacher les toggles via event delegation (évite les problèmes de portée)
+  modal.querySelectorAll('[data-tog]').forEach(el=>{
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      saveModalFields();
+      const[t,i,k]=this.dataset.tog.split(',').map(Number);
+      const arr=[S.m.carottages,S.m.sciages,S.m.carbones,S.m.ouvertures][t];
+      if(arr&&arr[i]!=null) arr[i][TOGKEYS[k]]=!arr[i][TOGKEYS[k]];
+      renderModal();
+    });
+  });
   ov.onclick=e=>{if(e.target===ov)closeM();};
 }
 
@@ -446,73 +482,59 @@ function selNiveau(n){saveModalFields();S.m.niveau=(S.m.niveau===n?'':n);renderM
 function saveModalFields(){
   const m=S.m;
   const g=id=>{const e=document.getElementById(id);return e?e.value:null};
-  if(g('m-obs')!==null)    m.obs=g('m-obs');
+  if(g('m-obs')!==null) m.obs=g('m-obs');
   if(g('m-autres')!==null) m.autres=g('m-autres');
-  // Carottages
   (m.carottages||[]).forEach((l,i)=>{
     const s=document.querySelector(`select[onchange*="setCar(${i},'diam'"]`);
     const nb=document.querySelector(`input[onchange*="setCar(${i},'nb'"]`);
     const ep=document.querySelector(`input[onchange*="setCar(${i},'ep'"]`);
     const haut=document.querySelector(`input[onchange*="setCar(${i},'haut'"]`);
     const dc=document.querySelector(`input[onchange*="setCar(${i},'diamCustom'"]`);
-    if(s)    l.diam=s.value;
-    if(nb)   l.nb=Math.max(1,parseInt(nb.value)||1);
-    if(ep)   l.ep=ep.value;
-    if(haut) l.haut=haut.value;
-    if(dc)   l.diamCustom=dc.value;
+    if(s)l.diam=s.value;if(nb)l.nb=Math.max(1,parseInt(nb.value)||1);if(ep)l.ep=ep.value;if(haut)l.haut=haut.value;if(dc)l.diamCustom=dc.value;
   });
-  // Sciages
   (m.sciages||[]).forEach((l,i)=>{
     const ml=document.querySelector(`input[onchange*="setSci(${i},'ml'"]`);
     const pr=document.querySelector(`input[onchange*="setSci(${i},'prof'"]`);
     const hs=document.querySelector(`input[onchange*="setSci(${i},'haut'"]`);
-    if(ml) l.ml=ml.value; if(pr) l.prof=pr.value; if(hs) l.haut=hs.value;
+    if(ml)l.ml=ml.value;if(pr)l.prof=pr.value;if(hs)l.haut=hs.value;
   });
-  // Carbones
   (m.carbones||[]).forEach((l,i)=>{
     const nb=document.querySelector(`input[onchange*="setCb(${i},'nbl'"]`);
     const ll=document.querySelector(`input[onchange*="setCb(${i},'ll'"]`);
     const tp=document.querySelector(`select[onchange*="setCb(${i},'type'"]`);
-    if(nb) l.nbl=nb.value; if(ll) l.ll=ll.value; if(tp) l.type=tp.value;
+    if(nb)l.nbl=nb.value;if(ll)l.ll=ll.value;if(tp)l.type=tp.value;
   });
-  // Ouvertures
   (m.ouvertures||[]).forEach((o,i)=>{
     const larg=document.querySelector(`input[onchange*="setOuv(${i},'larg'"]`);
     const long=document.querySelector(`input[onchange*="setOuv(${i},'long'"]`);
     const haut=document.querySelector(`input[onchange*="setOuv(${i},'haut'"]`);
-    if(larg) o.larg=larg.value;
-    if(long) o.long=long.value;
-    if(haut) o.haut=haut.value;
+    if(larg)o.larg=larg.value;if(long)o.long=long.value;if(haut)o.haut=haut.value;
     (o.carottages||[]).forEach((c,ci)=>{
       const s=document.querySelector(`select[onchange*="setOuvCar(${i},${ci},'diam'"]`);
       const nb=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'nb'"]`);
       const ep=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'ep'"]`);
       const dc=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'diamCustom'"]`);
-      if(s)  c.diam=s.value;
-      if(nb) c.nb=Math.max(1,parseInt(nb.value)||1);
-      if(ep) c.ep=ep.value;
-      if(dc) c.diamCustom=dc.value;
+      if(s)c.diam=s.value;if(nb)c.nb=Math.max(1,parseInt(nb.value)||1);if(ep)c.ep=ep.value;if(dc)c.diamCustom=dc.value;
     });
   });
 }
 
-// Carottages
-function addCar(){saveModalFields();S.m.carottages.push({diam:100,nb:1,ep:'',supp:'',haut:'',diamCustom:''});renderModal();}
-function delCar(i){saveModalFields();S.m.carottages.splice(i,1);renderModal();}
+function setCar(i,k,v){const l=S.m.carottages[i];if(!l)return;l[k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='supp'||k==='diam')renderModal();}
 function chgCar(i,d){saveModalFields();S.m.carottages[i].nb=Math.max(1,(S.m.carottages[i].nb||1)+d);renderModal();}
-function setCar(i,k,v){if(!S.m.carottages[i])return;S.m.carottages[i][k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='supp'||k==='diam')renderModal();}
-// Sciages
-function addSci(){saveModalFields();S.m.sciages.push({ml:'',prof:'',supp:'',haut:''});renderModal();}
+function addCar(){saveModalFields();S.m.carottages.push(newCar());renderModal();}
+function delCar(i){saveModalFields();S.m.carottages.splice(i,1);renderModal();}
+
+function setSci(i,k,v){const l=S.m.sciages[i];if(!l)return;l[k]=v;if(k==='supp')renderModal();}
+function addSci(){saveModalFields();S.m.sciages.push(newSci());renderModal();}
 function delSci(i){saveModalFields();S.m.sciages.splice(i,1);renderModal();}
-function setSci(i,k,v){if(!S.m.sciages[i])return;S.m.sciages[i][k]=v;if(k==='supp')renderModal();}
-// Carbones
-function addCb(){saveModalFields();S.m.carbones.push({type:'',nbl:'',ll:'',ori:'horizontal'});renderModal();}
+
+function setCb(i,k,v){const l=S.m.carbones[i];if(!l)return;l[k]=v;if(k==='ori')renderModal();}
+function addCb(){saveModalFields();S.m.carbones.push(newCb());renderModal();}
 function delCb(i){saveModalFields();S.m.carbones.splice(i,1);renderModal();}
-function setCb(i,k,v){if(!S.m.carbones[i])return;S.m.carbones[i][k]=v;if(k==='ori')renderModal();}
-// Ouvertures
-function addOuv(){saveModalFields();S.m.ouvertures.push({larg:'',long:'',haut:'',carottages:[{diam:200,nb:1,ep:'',diamCustom:''}]});renderModal();}
+
+function setOuv(i,k,v){const o=S.m.ouvertures[i];if(!o)return;o[k]=v;if(k==='supp')renderModal();}
+function addOuv(){saveModalFields();S.m.ouvertures.push(newOuv());renderModal();}
 function delOuv(i){saveModalFields();S.m.ouvertures.splice(i,1);renderModal();}
-function setOuv(i,k,v){if(!S.m.ouvertures[i])return;S.m.ouvertures[i][k]=v;}
 function addOuvCar(i){saveModalFields();(S.m.ouvertures[i].carottages=S.m.ouvertures[i].carottages||[]).push({diam:200,nb:1,ep:'',diamCustom:''});renderModal();}
 function delOuvCar(i,ci){saveModalFields();S.m.ouvertures[i].carottages.splice(ci,1);renderModal();}
 function setOuvCar(i,ci,k,v){const c=S.m.ouvertures[i]?.carottages[ci];if(!c)return;c[k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='diam')renderModal();}
@@ -524,8 +546,8 @@ function saveBloc(){
   if(!hasWork){alert('Ajoutez au moins un travail.');return;}
   for(const l of m.carottages||[]){if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque carottage.');return;}}
   for(const l of m.sciages||[]){if(!l.ml){alert('Saisissez la longueur pour chaque sciage.');return;}if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque sciage.');return;}}
-  for(const l of m.carbones||[]){if(!l.nbl||!l.ll){alert('Renseignez le nombre et la longueur pour chaque lamelle.');return;}}
-  for(const o of m.ouvertures||[]){if(!o.larg||!o.long){alert('Saisissez les dimensions de chaque ouverture.');return;}if(!(o.carottages||[]).length){alert('Ajoutez au moins un carottage par ouverture.');return;}}
+  for(const l of m.carbones||[]){if(!l.nbl||!l.ll){alert('Renseignez nb et longueur pour chaque lamelle.');return;}}
+  for(const o of m.ouvertures||[]){if(!o.larg||!o.long){alert('Saisissez les dimensions de chaque ouverture.');return;}if(!o.supp){alert('Choisissez Plancher ou Voile pour chaque ouverture.');return;}}
   const data={niveau:m.niveau||'Non précisé',obs:m.obs,autres:m.autres,
     carottages:JSON.parse(JSON.stringify(m.carottages)),
     sciages:JSON.parse(JSON.stringify(m.sciages)),
@@ -537,7 +559,6 @@ function saveBloc(){
   closeM();R();
 }
 
-// ── SIGNATURE ──
 function initSig(){
   const c=document.getElementById('sigc');if(!c)return;
   sc=c;sx=c.getContext('2d');sx.strokeStyle='#1E2D35';sx.lineWidth=3;sx.lineCap='round';sx.lineJoin='round';
@@ -553,45 +574,27 @@ function initSig(){
 function clearSig(){if(sc&&sx){sx.clearRect(0,0,sc.width,sc.height);S.sig.url='';}}
 
 function events(){
-  if(S.step===1){
-    [['date','date'],['num','num'],['addr','addr'],['client','client'],['tech','tech'],['date-debut','date_debut'],['date-fin','date_fin']].forEach(([id,k])=>{
-      const e=document.getElementById('f-'+id);if(e)e.addEventListener('input',ev=>S.info[k]=ev.target.value);
-    });
-  }
-  if(S.step===3){
-    const sn=document.getElementById('f-signame');if(sn)sn.addEventListener('input',e=>S.sig.name=e.target.value);
-    setTimeout(initSig,50);
-  }
+  if(S.step===1){[['date','date'],['num','num'],['addr','addr'],['client','client'],['tech','tech'],['date-debut','date_debut'],['date-fin','date_fin']].forEach(([id,k])=>{const e=document.getElementById('f-'+id);if(e)e.addEventListener('input',ev=>S.info[k]=ev.target.value);});}
+  if(S.step===3){const sn=document.getElementById('f-signame');if(sn)sn.addEventListener('input',e=>S.sig.name=e.target.value);setTimeout(initSig,50);}
 }
-function go(step){
-  if(S.step===3){const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();}
-  S.step=step;R();window.scrollTo(0,0);
-}
+function go(step){if(S.step===3){const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();}S.step=step;R();window.scrollTo(0,0);}
 
-// ── GENERATE ──
 async function generate(){
   if(!S.resp){alert('Veuillez sélectionner le responsable du rapport.');return;}
-  const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;
-  if(sc)S.sig.url=sc.toDataURL();
-  const btn=document.getElementById('btn-gen');
-  if(btn){btn.textContent='⏳ Génération PDF...';btn.disabled=true;}
-  try{await buildAndSharePDF();}
-  catch(e){alert('Erreur : '+e.message);}
+  const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();
+  const btn=document.getElementById('btn-gen');if(btn){btn.textContent='⏳ Génération PDF...';btn.disabled=true;}
+  try{await buildAndSharePDF();}catch(e){alert('Erreur : '+e.message);}
   finally{if(btn){btn.textContent='📱 Générer & Envoyer WhatsApp';btn.disabled=false;}}
 }
 
-// ── PDF ──
 async function buildAndSharePDF(){
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF('p','mm','a4');
+  const {jsPDF}=window.jspdf;const doc=new jsPDF('p','mm','a4');
   const PW=210,PH=297,M=14;let y=0;
-  const c=S.info,sig=S.sig;
-  const resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',tel:''};
+  const c=S.info,sig=S.sig,resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',tel:''};
   const fd=d=>{if(!d)return'—';const[yy,mm,dd]=d.split('-');return`${dd}/${mm}/${yy}`;};
-  const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],OV=[124,58,237];
+  const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],OV=[124,58,237],GRN=[22,163,74],BLU=[3,105,161];
   const set=(fill,draw,tc)=>{if(fill)doc.setFillColor(...fill);if(draw)doc.setDrawColor(...draw);if(tc)doc.setTextColor(...tc);};
 
-  // HEADER
   set(DRK);doc.rect(0,0,PW,30,'F');set(YEL);doc.rect(0,28,PW,2,'F');set(null,null,WHT);
   doc.setFontSize(18);doc.setFont('helvetica','bold');doc.text("CHOK'BETON",M,12);
   doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('Découpe béton · Sciage · Renforcement structures',M,18);
@@ -613,11 +616,9 @@ async function buildAndSharePDF(){
     });y+=13.5;
   });y+=4;
 
-  const secTitle=title=>{
-    if(y>PH-30){doc.addPage();y=15;}
-    set(null,null,DRK);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(title,M,y);
-    set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;
-  };
+  const secTitle=title=>{if(y>PH-30){doc.addPage();y=15;}set(null,null,DRK);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(title,M,y);set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;};
+
+  const pdfOpts=(item)=>{const o=[];if(item.etai)o.push('Étai');if(item.cpferm)o.push('Fermeture CP');if(item.polyane)o.push('Protection polyane');return o.length?' ['+o.join(' · ')+']':'';};
 
   secTitle('TRAVAUX RÉALISÉS PAR NIVEAU');
   if(!S.blocs.length){set(null,null,GRY);doc.setFontSize(9);doc.setFont('helvetica','italic');doc.text('Aucune prestation enregistrée',M,y+5);y+=12;}
@@ -625,88 +626,59 @@ async function buildAndSharePDF(){
   S.blocs.forEach((b,bi)=>{
     const lines=[];
     (b.carottages||[]).forEach(l=>{
-      const dLbl=l.diam==='Autre'?(l.diamCustom?`Ø ${l.diamCustom} mm`:'Ø ? mm'):`Ø ${l.diam} mm`;
-      if(l.nb>0) lines.push({txt:`${l.nb} carottage${l.nb>1?'s':''} — ${dLbl}${l.ep?' — Ép. '+l.ep+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});
+      const dl=l.diam==='Autre'?(l.diamCustom?`Ø ${l.diamCustom} mm`:'Ø?mm'):`Ø ${l.diam} mm`;
+      if(l.nb>0) lines.push({t:`${l.nb} carottage${l.nb>1?'s':''} — ${dl}${l.ep?' — Ép.'+l.ep+'cm':''}${l.supp==='voile'&&l.haut?' — H.'+l.haut+'ml':''}${pdfOpts(l)}`,sup:l.supp});
     });
-    (b.sciages||[]).forEach(l=>{lines.push({txt:`Sciage — ${l.ml} ml${l.prof?' — Prof. '+l.prof+' cm':''}${l.supp==='voile'&&l.haut?' — H. '+l.haut+' ml':''}`,supp:l.supp});});
-    (b.carbones||[]).forEach(l=>{lines.push({txt:`${l.nbl} lamelle(s) × ${l.ll} ml${l.type?' — '+l.type:''} — ${l.ori}`});});
+    (b.sciages||[]).forEach(l=>{lines.push({t:`Sciage — ${l.ml}ml${l.prof?' — Prof.'+l.prof+'cm':''}${l.supp==='voile'&&l.haut?' — H.'+l.haut+'ml':''}${pdfOpts(l)}`,sup:l.supp});});
+    (b.carbones||[]).forEach(l=>{lines.push({t:`${l.nbl} lamelle(s) × ${l.ll}ml${l.type?' — '+l.type:''} — ${l.ori}${pdfOpts(l)}`});});
     (b.ouvertures||[]).forEach(o=>{
-      lines.push({txt:`OUVERTURE ${o.larg||'?'}×${o.long||'?'} cm${o.haut?' — H. '+o.haut+' ml':''}`,ouv:true});
-      (o.carottages||[]).filter(c=>c.nb>0).forEach(c=>{
-        const dLbl=c.diam==='Autre'?(c.diamCustom?`Ø ${c.diamCustom} mm`:'Ø ? mm'):`Ø ${c.diam} mm`;
-        lines.push({txt:`   ↳ ${c.nb} carottage${c.nb>1?'s':''} — ${dLbl}${c.ep?' — Ép. '+c.ep+' cm':''}`,sub:true});
-      });
+      const dim=`${o.larg||'?'}×${o.long||'?'}cm`;
+      lines.push({t:`OUVERTURE ${dim}${o.supp==='voile'&&o.haut?' — H.'+o.haut+'ml':''}${pdfOpts(o)}`,ouv:true,sup:o.supp});
+      (o.carottages||[]).filter(c=>c.nb>0).forEach(c=>{const dl=c.diam==='Autre'?(c.diamCustom?`Ø ${c.diamCustom}mm`:'Ø?mm'):`Ø ${c.diam}mm`;lines.push({t:`   ↳ ${c.nb}× ${dl}${c.ep?' ép.'+c.ep+'cm':''}`,sub:true});});
     });
-    if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-16).forEach(t=>lines.push({txt:t}));
-    if(b.obs)   lines.push({txt:`Obs. : ${b.obs}`,obs:true});
-
+    if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-16).forEach(t=>lines.push({t}));
+    if(b.obs) lines.push({t:`Obs.: ${b.obs}`,obs:true});
     const boxH=9+lines.length*6+3;
     if(y+boxH>PH-20){doc.addPage();y=15;}
     set(DRK);doc.roundedRect(M,y,PW-2*M,9,1,1,'F');
     set(YEL);doc.roundedRect(M+2,y+1.5,22,6,1,1,'F');
     doc.setFontSize(8);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(b.niveau||'—',M+13,y+6,{align:'center'});
     set(null,null,WHT);doc.text(`${bi+1}. Niveau ${b.niveau||'—'}`,M+27,y+6);
-    y+=9;
-    set(WHT,BRD);doc.rect(M,y,PW-2*M,lines.length*6+3,'FD');
+    y+=9;set(WHT,BRD);doc.rect(M,y,PW-2*M,lines.length*6+3,'FD');
     lines.forEach((l,li)=>{
       const tx=y+3+li*6+4;
-      if(l.supp){
-        const bg=l.supp==='plancher'?[254,243,199]:[224,242,254];
-        const tc=l.supp==='plancher'?[146,64,14]:[3,105,161];
-        set(bg,null);doc.roundedRect(PW-M-22,tx-3.5,20,5,.5,.5,'F');
-        doc.setFontSize(6);doc.setFont('helvetica','bold');set(null,null,tc);
-        doc.text(l.supp==='plancher'?'Plancher':'Voile',PW-M-12,tx,{align:'center'});
-      }
-      if(l.ouv){set(null,null,OV);doc.setFont('helvetica','bold');}
-      else if(l.sub){set(null,null,GRY);doc.setFont('helvetica','normal');}
-      else if(l.obs){set(null,null,GRY);doc.setFont('helvetica','italic');}
-      else{set(null,null,[40,40,40]);doc.setFont('helvetica','normal');}
-      doc.setFontSize(8);doc.text(l.txt,M+4,tx);
+      if(l.sup){const bg=l.sup==='plancher'?[254,243,199]:[224,242,254];const tc=l.sup==='plancher'?[146,64,14]:[3,105,161];set(bg,null);doc.roundedRect(PW-M-22,tx-3.5,20,5,.5,.5,'F');doc.setFontSize(6);doc.setFont('helvetica','bold');set(null,null,tc);doc.text(l.sup==='plancher'?'Plancher':'Voile',PW-M-12,tx,{align:'center'});}
+      if(l.ouv){set(null,null,OV);doc.setFont('helvetica','bold');}else if(l.sub){set(null,null,GRY);doc.setFont('helvetica','normal');}else if(l.obs){set(null,null,GRY);doc.setFont('helvetica','italic');}else{set(null,null,[40,40,40]);doc.setFont('helvetica','normal');}
+      doc.setFontSize(8);doc.text(l.t,M+4,tx);
     });
     y+=lines.length*6+3+4;
   });y+=3;
 
-  // RECAP
   secTitle('RÉCAPITULATIF');
   let totCar=0,totSci=0,totCb=0,totOuv=0;
-  S.blocs.forEach(b=>{
-    (b.carottages||[]).forEach(l=>totCar+=parseInt(l.nb||0));
-    (b.sciages||[]).forEach(l=>totSci+=parseFloat(l.ml||0));
-    (b.carbones||[]).forEach(l=>totCb+=parseInt(l.nbl||0));
-    totOuv+=(b.ouvertures||[]).length;
-  });
+  S.blocs.forEach(b=>{(b.carottages||[]).forEach(l=>totCar+=parseInt(l.nb||0));(b.sciages||[]).forEach(l=>totSci+=parseFloat(l.ml||0));(b.carbones||[]).forEach(l=>totCb+=parseInt(l.nbl||0));totOuv+=(b.ouvertures||[]).length;});
   const rr=[];
   if(totCar>0) rr.push(['Carottage',`${S.blocs.filter(b=>(b.carottages||[]).length>0).length} niveau(x)`,`${totCar} carottage(s)`]);
   if(totSci>0) rr.push(['Sciage',`${S.blocs.filter(b=>(b.sciages||[]).length>0).length} niveau(x)`,`${totSci} ml`]);
   if(totCb>0)  rr.push(['Lamelles carbone',`${S.blocs.filter(b=>(b.carbones||[]).length>0).length} niveau(x)`,`${totCb} lamelle(s)`]);
-  if(totOuv>0) rr.push(['Ouvertures par carottages',`${S.blocs.filter(b=>(b.ouvertures||[]).length>0).length} niveau(x)`,`${totOuv} ouverture(s)`]);
+  if(totOuv>0) rr.push(['Ouvertures carottages',`${S.blocs.filter(b=>(b.ouvertures||[]).length>0).length} niveau(x)`,`${totOuv} ouverture(s)`]);
   if(rr.length){
-    const cx=[M,M+80,M+155];
-    set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
-    ['Prestation','Niveaux','Total'].forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});
-    y+=7;
-    rr.forEach(row=>{
-      if(y>PH-25){doc.addPage();y=15;}
-      set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');
-      row.forEach((cell,i)=>{doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});y+=8;
-    });y+=5;
+    const cx=[M,M+80,M+155];set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
+    ['Prestation','Niveaux','Total'].forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});y+=7;
+    rr.forEach(row=>{if(y>PH-25){doc.addPage();y=15;}set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');row.forEach((cell,i)=>{doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});y+=8;});y+=5;
   }
 
-  // PHOTOS
   if(S.photos.length>0){
     doc.addPage();y=15;secTitle('PHOTOS DU CHANTIER');
     const iw2=(PW-2*M-5)/2,ih=iw2*0.7;let col=0;
     for(let i=0;i<S.photos.length;i++){
       if(y+ih+10>PH-20){doc.addPage();y=15;}
       const x=M+col*(iw2+5);
-      try{doc.addImage(S.photos[i].url,'JPEG',x,y,iw2,ih);set(null,BRD);doc.rect(x,y,iw2,ih,'S');
-        if(S.photos[i].caption){set(LGT);doc.rect(x,y+ih-6,iw2,6,'F');doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(S.photos[i].caption.substring(0,40),x+2,y+ih-1.5);}
-      }catch(e){}
+      try{doc.addImage(S.photos[i].url,'JPEG',x,y,iw2,ih);set(null,BRD);doc.rect(x,y,iw2,ih,'S');if(S.photos[i].caption){set(LGT);doc.rect(x,y+ih-6,iw2,6,'F');doc.setFontSize(7);set(null,null,DRK);doc.text(S.photos[i].caption.substring(0,40),x+2,y+ih-1.5);}}catch(e){}
       col++;if(col>=2){col=0;y+=ih+8;}
     }if(col>0)y+=ih+8;y+=4;
   }
 
-  // SIGNATURE
   if(y>PH-65){doc.addPage();y=15;}
   secTitle('VALIDATION CLIENT — BON POUR ACCORD');
   set(WHT,BRD);doc.roundedRect(M,y,PW-2*M,52,1,1,'FD');
@@ -717,11 +689,7 @@ async function buildAndSharePDF(){
   set(null,null,GRY);doc.setFontSize(8);doc.text(`Date : ${fd(c.date)}`,PW/2,y+46,{align:'center'});
 
   const total=doc.getNumberOfPages();const now=new Date();
-  for(let p=1;p<=total;p++){
-    doc.setPage(p);set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');
-    doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);
-    doc.text(`Rapport généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} · CHOK'BETON · Responsable : ${resp.nom} · N°${c.num||'—'} · Page ${p}/${total}`,PW/2,PH-8,{align:'center'});
-  }
+  for(let p=1;p<=total;p++){doc.setPage(p);set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);doc.text(`Rapport généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} · CHOK'BETON · Responsable : ${resp.nom} · N°${c.num||'—'} · Page ${p}/${total}`,PW/2,PH-8,{align:'center'});}
 
   const filename=`rapport-chokbeton-${c.date||'chantier'}-${(c.num||'001').replace(/[^a-zA-Z0-9]/g,'_')}.pdf`;
   const blob=doc.output('blob');const file=new File([blob],filename,{type:'application/pdf'});
@@ -733,7 +701,6 @@ async function buildAndSharePDF(){
   alert(`✅ PDF téléchargé !\nWhatsApp va s'ouvrir.\nJoignez le fichier "${filename}".`);
 }
 
-// ── INIT ──
 loadState();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 R();

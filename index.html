@@ -8,7 +8,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CHOK'BETON">
-<link rel="apple-touch-icon" href="icon.svg">
 <style>
 :root{--y:#F5C400;--dk:#1E2D35;--bg:#f1f5f9;--card:#fff;--text:#0f172a;--mut:#64748b;--brd:#e2e8f0;--r:12px;--sh:0 1px 4px rgba(0,0,0,.1);--ov:#7c3aed;--grn:#16a34a}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -33,13 +32,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dk);box-
 textarea{resize:vertical;min-height:70px}
 .row{display:flex;gap:9px}.row .f{flex:1}
 .btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 16px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .15s;min-height:50px}
-.btn-p{background:var(--dk);color:#fff}.btn-p:active{opacity:.85;transform:scale(.97)}
+.btn-p{background:var(--dk);color:#fff}.btn-p:active{opacity:.85}
 .btn-y{background:var(--y);color:var(--dk)}.btn-y:active{opacity:.85}
 .btn-o{background:transparent;color:var(--dk);border:2px solid var(--dk)}
 .btn-wa{background:#25D366;color:#fff}.btn-wa:disabled{opacity:.6;cursor:not-allowed}
 .btn-sm{padding:8px 13px;font-size:13px;min-height:36px;width:auto}
 .bot{padding:12px 14px;background:#fff;border-top:1px solid var(--brd);display:flex;gap:9px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:40}
-/* Blocs */
 .bloc{background:#fff;border:1.5px solid var(--brd);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:var(--sh)}
 .bloc-hdr{background:var(--dk);padding:10px 14px;display:flex;align-items:center;gap:8px}
 .bloc-niv{background:var(--y);color:var(--dk);font-size:13px;font-weight:900;padding:4px 12px;border-radius:20px;white-space:nowrap}
@@ -50,91 +48,68 @@ textarea{resize:vertical;min-height:70px}
 .work-row:last-child{border-bottom:none}
 .work-ico{font-size:14px;flex-shrink:0;margin-top:1px}
 .work-txt{font-size:13px;flex:1;line-height:1.5}
-.badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;flex-shrink:0;margin-top:2px;white-space:nowrap}
+.badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;white-space:nowrap;display:inline-block;margin:1px}
 .bp{background:#fef3c7;color:#92400e}.bv{background:#e0f2fe;color:#0369a1}
-.bg{background:#f0fdf4;color:#166534}.bo{background:#ede9fe;color:#7c3aed}
-/* Responsables */
+.bg{background:#f0fdf4;color:#166534}.bpoly{background:#ede9fe;color:#7c3aed}
 .rgrid{display:flex;flex-direction:column;gap:9px}
-.rc{border:2px solid var(--brd);border-radius:10px;padding:13px 15px;cursor:pointer;background:#fff;transition:all .15s;display:flex;align-items:center;gap:12px}
+.rc{border:2px solid var(--brd);border-radius:10px;padding:13px 15px;cursor:pointer;background:#fff;display:flex;align-items:center;gap:12px}
 .rc.sel{border-color:var(--dk);background:#f0f4f5}
 .rc-av{width:40px;height:40px;border-radius:50%;background:var(--y);color:var(--dk);font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rc.sel .rc-av{background:var(--dk);color:#fff}
 .rc-info{flex:1}.rc-name{font-size:15px;font-weight:800}.rc-sub{font-size:12px;color:#25D366;font-weight:600}
-/* Niveaux */
+.ov-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+.ov-bg.show{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:95vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease}
+.ov-bg.show .modal{transform:translateY(0)}
+.mhandle{width:34px;height:4px;background:#e2e8f0;border-radius:2px;margin:11px auto}
+.msection{padding:0 14px;margin-bottom:4px}
+.msec-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;border-bottom:2px solid var(--y);margin-bottom:10px}
+.msec-title{font-size:14px;font-weight:900;color:var(--dk)}
+.add-btn{background:var(--y);color:var(--dk);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
+.add-btn-ov{background:#ede9fe;color:var(--ov);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
 .ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .nb{padding:9px 3px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
 .nb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
-/* Modal */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
-.ov.show{opacity:1;pointer-events:all}
-.modal{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:95vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease}
-.ov.show .modal{transform:translateY(0)}
-.mhandle{width:34px;height:4px;background:#e2e8f0;border-radius:2px;margin:11px auto}
-.msection{padding:0 14px;margin-bottom:4px}
-.msection-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;border-bottom:2px solid var(--y);margin-bottom:10px}
-.msection-title{font-size:14px;font-weight:900;color:var(--dk)}
-.add-btn{background:var(--y);color:var(--dk);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
-.add-btn-ov{background:#ede9fe;color:var(--ov);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer}
-/* Lignes de travaux */
-.car-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
-.car-line-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
-.car-line-top select{flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)}
+.work-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
+.line-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.line-row:last-child{margin-bottom:0}
 .counter{display:flex;align-items:center;border:1.5px solid var(--brd);border-radius:8px;overflow:hidden;flex-shrink:0}
-.counter button{width:34px;height:36px;border:none;background:#f0f0f0;font-size:20px;font-weight:700;cursor:pointer;color:var(--dk)}
-.counter button:active{background:var(--y)}
-.counter input{width:38px;border:none;text-align:center;font-size:15px;font-weight:800;padding:0}
-.car-bot{display:flex;align-items:center;gap:7px;margin-top:7px}
-.ep-in{width:80px;padding:7px 8px;border:1.5px solid var(--brd);border-radius:7px;font-size:13px;text-align:center;flex-shrink:0}
-.mini-supp{display:flex;gap:6px;flex:1}
+.cbtn{width:34px;height:36px;border:none;background:#f0f0f0;font-size:20px;font-weight:700;cursor:pointer;color:var(--dk)}
+.cbtn:active{background:var(--y)}
+.cinp{width:38px;border:none;text-align:center;font-size:15px;font-weight:800;padding:0}
+.mini-supp{display:flex;gap:6px}
 .ms{flex:1;padding:7px 4px;border:2px solid var(--brd);border-radius:7px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .1s}
 .ms.sel-p{border-color:#d97706;background:#fef3c7;color:#92400e}
 .ms.sel-v{border-color:#0284c7;background:#e0f2fe;color:#0369a1}
-.del-btn{background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer;flex-shrink:0}
-.sci-line{background:#f8fafc;border:1.5px solid var(--brd);border-radius:10px;padding:10px;margin-bottom:8px}
-.sci-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
-.sci-in{flex:1;padding:8px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px}
-/* Ouverture */
-.ouv-line{background:#faf5ff;border:1.5px solid #ddd6fe;border-left:4px solid var(--ov);border-radius:10px;padding:10px;margin-bottom:8px}
-.ouv-dim{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.ouv-dim input{padding:7px 6px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px;text-align:center}
-.ouv-cars{margin-top:8px;border-top:1px dashed #ddd6fe;padding-top:8px}
-.ouv-car-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.ouv-car-row select{flex:1;padding:7px;font-size:13px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)}
-.ep-sm{width:62px;padding:6px;border:1.5px solid var(--brd);border-radius:7px;font-size:12px;text-align:center;flex-shrink:0}
-.ouv-add{background:#ede9fe;color:var(--ov);border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;margin-top:3px}
-/* Toggles options */
-.trow{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.topt{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border:1.5px solid var(--brd);border-radius:8px;cursor:pointer;background:#fff;font-size:12px;font-weight:700;color:var(--mut);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.topt.on{border-color:var(--grn);background:#f0fdf4;color:var(--grn)}
-.topt .tck{width:14px;height:14px;border:2px solid currentColor;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;line-height:1}
-.topt.poly.on{border-color:#0369a1;background:#e0f2fe;color:#0369a1}
-/* Hauteur voile */
+.del-btn{background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer;flex-shrink:0;padding:2px}
+.inp-sm{padding:8px;border:1.5px solid var(--brd);border-radius:7px;font-size:14px}
 .haut-row{display:flex;align-items:center;gap:7px;margin-top:7px}
-.haut-row input{flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff}
 .haut-lbl{font-size:12px;font-weight:700;color:var(--mut);white-space:nowrap}
-/* Support toggle */
+.haut-inp{flex:1;padding:7px;border:1.5px solid #0284c7;border-radius:7px;font-size:14px;background:#f0f9ff}
+.ouv-line{background:#faf5ff;border:1.5px solid #ddd6fe;border-left:4px solid var(--ov);border-radius:10px;padding:10px;margin-bottom:8px}
+.ouvc-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.chk-box{width:22px;height:22px;cursor:pointer;flex-shrink:0}
+.chk-grp{margin-top:10px;padding:10px;background:#f8fafc;border-radius:8px;border:1px solid var(--brd);display:flex;flex-direction:column;gap:10px}
+.chk-lbl{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text)}
 .srow{display:flex;gap:9px}
 .sb{flex:1;padding:11px;border:2px solid var(--brd);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
 .sb.sel{border-color:var(--dk);background:var(--y);color:var(--dk)}
-/* Signature */
 #sigc{width:100%;height:160px;border:2px solid var(--brd);border-radius:8px;touch-action:none;background:#fafafa;display:block;cursor:crosshair}
 .empty{text-align:center;padding:36px 16px;color:var(--mut)}
 .empty .e-ico{font-size:44px;margin-bottom:10px}
 .info-box{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:11px 13px;font-size:13px;color:#166534}
-hr{border:none;border-top:1px solid var(--brd);margin:12px 0}
-/* Photos */
 .photo-upload{border:2px dashed var(--brd);border-radius:10px;padding:18px;text-align:center;cursor:pointer;background:#fafafa}
 .photo-upload input[type=file]{display:none}
 .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .photo-item{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#f1f5f9}
 .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
-.photo-item .ph-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.photo-item .ph-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 5px}
-.photo-item .ph-cap input{background:transparent;border:none;color:#fff;font-size:10px;width:100%;padding:0;outline:none}
+.ph-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ph-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);padding:3px 5px}
+.ph-cap input{background:transparent;border:none;color:#fff;font-size:10px;width:100%;padding:0;outline:none}
 </style></head>
 <body>
 <div class="app" id="app"></div>
-<div class="ov" id="ov"><div class="modal" id="modal"></div></div>
+<div class="ov-bg" id="ov"><div class="modal" id="modal"></div></div>
 <script>
 const EQUIPE=[
   {id:'christopher',nom:'Christopher',tel:'33XXXXXXXXX'},
@@ -144,565 +119,638 @@ const EQUIPE=[
 const NIVEAUX=['SS3','SS2','SS1','RDC','RDJ','R+1','R+2','R+3','R+4','R+5','R+6','R+7','R+8','R+9','R+10','Toiture'];
 const DIAMS=[40,50,60,70,80,100,110,120,130,150,160,200,220,250,300,320,350,400,'Autre'];
 const CB_TYPES=['S512','S812','S1012','S1512','WRAP'];
-const LOGO=(h=42)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="${h}"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>${Array.from({length:28},(_,i)=>{const a=i*360/28,c=x=>Math.cos(x*Math.PI/180),s=y=>Math.sin(y*Math.PI/180);return`<polygon points="${76*c(a-4)},${76*s(a-4)} ${88*c(a)},${88*s(a)} ${76*c(a+4)},${76*s(a+4)}" fill="#F5C400"/>`;}).join('')}<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>`;
+const LOGO=(h=42)=>'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" height="'+h+'"><g transform="translate(110,100)"><circle cx="0" cy="0" r="76" fill="#F5C400"/>'+Array.from({length:28},function(_,i){var a=i*360/28,c=function(x){return Math.cos(x*Math.PI/180);},s=function(y){return Math.sin(y*Math.PI/180);};return'<polygon points="'+76*c(a-4)+','+76*s(a-4)+' '+88*c(a)+','+88*s(a)+' '+76*c(a+4)+','+76*s(a+4)+'" fill="#F5C400"/>';}).join('')+'<rect x="-28" y="-32" width="56" height="64" rx="3" fill="#1E2D35"/><polygon points="-20,-24 20,-24 20,-14 -8,14 20,14 20,24 -20,24 -20,14 8,-14 -20,-14" fill="white"/><polygon points="0,-24 20,-24 20,-14 0,-14" fill="#1E2D35"/><polygon points="-20,14 0,14 0,24 -20,24" fill="#1E2D35"/></g><text x="110" y="200" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="26" fill="#1E2D35" letter-spacing="1">CHOK\'BETON</text><rect x="20" y="212" width="180" height="4" rx="2" fill="#F5C400"/></svg>';
 
-const newCar=()=>({diam:100,nb:1,ep:'',supp:'',haut:'',diamCustom:'',etai:false,cpferm:false,polyane:false});
-const newSci=()=>({ml:'',prof:'',supp:'',haut:'',polyane:false});
-const newCb=()=>({type:'',nbl:'',ll:'',ori:'horizontal',polyane:false});
-const newOuv=()=>({larg:'',long:'',supp:'',haut:'',etai:false,cpferm:false,polyane:false,carottages:[{diam:200,nb:1,ep:'',diamCustom:''}]});
+function newCar(){return {diam:100,nb:1,ep:'',supp:'',haut:'',diamCustom:'',etai:false,cp:false,polyane:false};}
+function newSci(){return {ml:'',prof:'',supp:'',haut:'',polyane:false};}
+function newCb(){return {type:'',nbl:'',ll:'',ori:'horizontal',polyane:false};}
+function newOuv(){return {larg:'',long:'',supp:'',haut:'',etai:false,cp:false,polyane:false,carottages:[{diam:200,nb:1,ep:'',diamCustom:''}]};}
 
-const S={
+var S={
   step:1,
   info:{date:new Date().toISOString().slice(0,10),num:'',addr:'',client:'',tech:'',date_debut:'',date_fin:''},
   blocs:[],resp:'',photos:[],
   sig:{url:'',name:''},
   m:{open:false,editId:null,niveau:'',obs:'',carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''}
 };
-let uid=1,sc,sx,drawing=false;
+var uid=1,sc,sx,drawing=false;
 
 function saveState(){try{localStorage.setItem('cb_rapport',JSON.stringify({info:S.info,blocs:S.blocs,resp:S.resp,sig:{name:S.sig.name},step:S.step}));}catch(e){}}
-function loadState(){try{const d=localStorage.getItem('cb_rapport');if(!d)return;const p=JSON.parse(d);if(p.info)Object.assign(S.info,p.info);if(p.blocs)S.blocs=p.blocs;if(p.resp)S.resp=p.resp;if(p.sig?.name)S.sig.name=p.sig.name;if(p.step)S.step=p.step;const mx=S.blocs.reduce((a,b)=>Math.max(a,parseInt(b.id)||0),0);uid=mx+1;}catch(e){}}
-function resetState(){if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.'))return;localStorage.removeItem('cb_rapport');location.reload();}
+function loadState(){
+  try{
+    var d=localStorage.getItem('cb_rapport');
+    if(!d)return;
+    var p=JSON.parse(d);
+    if(p.info)Object.assign(S.info,p.info);
+    if(p.blocs)S.blocs=p.blocs;
+    if(p.resp)S.resp=p.resp;
+    if(p.sig&&p.sig.name)S.sig.name=p.sig.name;
+    if(p.step)S.step=p.step;
+    var mx=S.blocs.reduce(function(a,b){return Math.max(a,parseInt(b.id)||0);},0);
+    uid=mx+1;
+  }catch(e){}
+}
+function resetState(){
+  if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.'))return;
+  localStorage.removeItem('cb_rapport');
+  location.reload();
+}
 
-function R(){document.getElementById('app').innerHTML=hdr()+content()+bot();events();renderModal();saveState();}
+function R(){
+  document.getElementById('app').innerHTML=hdr()+content()+bot();
+  events();
+  saveState();
+}
 
 function hdr(){
-  const labs=['','Infos Chantier','Travaux par niveau','Photos & Signature'];
-  return`<div class="hdr"><div class="hdr-row">
-    <div style="height:38px;display:flex;align-items:center">${LOGO(38)}</div>
-    <div class="hdr-info">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="hdr-title">Rapport de Chantier</div>
-        <button onclick="resetState()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">✚ Nouveau</button>
-      </div>
-      <div class="hdr-step">${labs[S.step]} — Étape ${S.step}/3</div>
-    </div>
-  </div>
-  <div class="steps-bar">${[1,2,3].map(i=>`<div class="sd ${i<S.step?'was':''} ${i===S.step?'on':''}"></div>`).join('')}</div></div>`;
+  var labs=['','Infos Chantier','Travaux par niveau','Photos & Signature'];
+  return '<div class="hdr"><div class="hdr-row">'
+    +'<div style="height:38px;display:flex;align-items:center">'+LOGO(38)+'</div>'
+    +'<div class="hdr-info"><div style="display:flex;align-items:center;justify-content:space-between">'
+    +'<div class="hdr-title">Rapport de Chantier</div>'
+    +'<button onclick="resetState()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">✚ Nouveau</button>'
+    +'</div><div class="hdr-step">'+labs[S.step]+' — Étape '+S.step+'/3</div></div>'
+    +'</div><div class="steps-bar">'
+    +[1,2,3].map(function(i){return '<div class="sd '+(i<S.step?'was':'')+(i===S.step?' on':'')+'"></div>';}).join('')
+    +'</div></div>';
 }
-function content(){return`<div class="body">${S.step===1?step1():S.step===2?step2():step3()}</div>`;}
+
+function content(){return '<div class="body">'+(S.step===1?step1():S.step===2?step2():step3())+'</div>';}
 
 function step1(){
-  const c=S.info;
-  return`<div class="card"><div class="ct">📅 Informations générales</div>
-    <div class="f"><label>Date du rapport</label><input type="date" id="f-date" value="${c.date}"></div>
-    <div class="f"><label>N° de rapport</label><input type="text" id="f-num" value="${c.num}" placeholder="Ex : 2025-001"></div>
-    <div class="row"><div class="f"><label>Début chantier</label><input type="date" id="f-date-debut" value="${c.date_debut}"></div>
-    <div class="f"><label>Fin chantier</label><input type="date" id="f-date-fin" value="${c.date_fin}"></div></div>
-  </div>
-  <div class="card"><div class="ct">📍 Chantier</div>
-    <div class="f"><label>Adresse / Nom du chantier</label><input type="text" id="f-addr" value="${c.addr}" placeholder="12 rue de la Paix, Paris"></div>
-    <div class="f"><label>Client</label><input type="text" id="f-client" value="${c.client}" placeholder="Nom du client"></div>
-  </div>
-  <div class="card"><div class="ct">👷 Intervenant</div>
-    <div class="f"><label>Nom du technicien</label><input type="text" id="f-tech" value="${c.tech}" placeholder="Prénom Nom"></div>
-  </div>`;
+  var c=S.info;
+  return '<div class="card"><div class="ct">📅 Informations générales</div>'
+    +'<div class="f"><label>Date du rapport</label><input type="date" id="f-date" value="'+c.date+'"></div>'
+    +'<div class="f"><label>N° de rapport</label><input type="text" id="f-num" value="'+c.num+'" placeholder="Ex : 2025-001"></div>'
+    +'<div class="row"><div class="f"><label>Début chantier</label><input type="date" id="f-date-debut" value="'+c.date_debut+'"></div>'
+    +'<div class="f"><label>Fin chantier</label><input type="date" id="f-date-fin" value="'+c.date_fin+'"></div></div>'
+    +'</div><div class="card"><div class="ct">📍 Chantier</div>'
+    +'<div class="f"><label>Adresse / Nom du chantier</label><input type="text" id="f-addr" value="'+c.addr+'" placeholder="12 rue de la Paix, Paris"></div>'
+    +'<div class="f"><label>Client</label><input type="text" id="f-client" value="'+c.client+'" placeholder="Nom du client"></div>'
+    +'</div><div class="card"><div class="ct">👷 Intervenant</div>'
+    +'<div class="f"><label>Nom du technicien</label><input type="text" id="f-tech" value="'+c.tech+'" placeholder="Prénom Nom"></div>'
+    +'</div>';
 }
+
+function dLbl(d,dc){return d==='Autre'?(dc?'Ø'+dc+'mm':'Ø?mm'):'Ø'+d+'mm';}
 
 function step2(){
-  if(!S.blocs.length) return`<div class="empty"><div class="e-ico">🏗️</div><p>Aucun niveau saisi.<br>Appuyez sur <strong>+ Ajouter un niveau</strong>.</p></div>`;
-  return S.blocs.map(b=>blocHtml(b)).join('');
+  if(!S.blocs.length)return '<div class="empty"><div class="e-ico">🏗️</div><p>Aucun niveau saisi.<br>Appuyez sur <strong>+ Ajouter un niveau</strong>.</p></div>';
+  return S.blocs.map(function(b){return blocHtml(b);}).join('');
 }
 
-const dLbl=(d,dc)=>d==='Autre'?(dc?`Ø${dc}mm`:'Ø?mm'):`Ø${d}mm`;
-
-function optBadges(item){
-  const b=[];
-  if(item.etai)  b.push(`<span class="badge bg">🪵 Étai</span>`);
-  if(item.cpferm)b.push(`<span class="badge bg">🪵 Ferm.CP</span>`);
-  if(item.polyane)b.push(`<span class="badge" style="background:#e0f2fe;color:#0369a1">🛡️ Polyane</span>`);
-  return b.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${b.join('')}</div>`:'';
+function protBadges(item){
+  var b='';
+  if(item.etai)b+=' <span class="badge bg">🪵 Étai</span>';
+  if(item.cp)b+=' <span class="badge bg">🪵 Ferm.CP</span>';
+  if(item.polyane)b+=' <span class="badge bpoly">🛡️ Polyane</span>';
+  return b;
 }
 
 function blocHtml(b){
-  const rows=[];
-  (b.carottages||[]).forEach(l=>{
-    const sup=l.supp==='plancher'?'<span class="badge bp">Plancher</span>':'<span class="badge bv">Voile</span>';
-    const hi=l.supp==='voile'&&l.haut?` ↕${l.haut}ml`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🔩</span><div class="work-txt"><b>${l.nb}×</b> ${dLbl(l.diam,l.diamCustom)}${l.ep?' ép.'+l.ep+'cm':''}${hi} ${sup}${optBadges(l)}</div></div>`);
+  var rows=[];
+  (b.carottages||[]).forEach(function(l){
+    var sup=l.supp==='plancher'?'<span class="badge bp">Plancher</span>':'<span class="badge bv">Voile</span>';
+    var hi=l.supp==='voile'&&l.haut?' ↕'+l.haut+'ml':'';
+    rows.push('<div class="work-row"><span class="work-ico">🔩</span><div class="work-txt"><b>'+l.nb+'×</b> '+dLbl(l.diam,l.diamCustom)+(l.ep?' ép.'+l.ep+'cm':'')+hi+' '+sup+protBadges(l)+'</div></div>');
   });
-  (b.sciages||[]).forEach(l=>{
-    const sup=l.supp==='plancher'?'<span class="badge bp">Plancher</span>':'<span class="badge bv">Voile</span>';
-    const hi=l.supp==='voile'&&l.haut?` ↕${l.haut}ml`:'';
-    rows.push(`<div class="work-row"><span class="work-ico">🪚</span><div class="work-txt"><b>${l.ml}ml</b>${l.prof?' prof.'+l.prof+'cm':''}${hi} ${sup}${optBadges(l)}</div></div>`);
+  (b.sciages||[]).forEach(function(l){
+    var sup=l.supp==='plancher'?'<span class="badge bp">Plancher</span>':'<span class="badge bv">Voile</span>';
+    var hi=l.supp==='voile'&&l.haut?' ↕'+l.haut+'ml':'';
+    rows.push('<div class="work-row"><span class="work-ico">🪚</span><div class="work-txt"><b>'+l.ml+'ml</b>'+(l.prof?' prof.'+l.prof+'cm':'')+hi+' '+sup+(l.polyane?' <span class="badge bpoly">🛡️ Polyane</span>':'')+'</div></div>');
   });
-  (b.carbones||[]).forEach(l=>{
-    rows.push(`<div class="work-row"><span class="work-ico">🏗️</span><div class="work-txt"><b>${l.nbl} lam.</b> ×${l.ll}ml${l.type?' '+l.type:''} ${l.ori}${optBadges(l)}</div></div>`);
+  (b.carbones||[]).forEach(function(l){
+    rows.push('<div class="work-row"><span class="work-ico">🏗️</span><div class="work-txt"><b>'+l.nbl+' lam.</b> ×'+l.ll+'ml'+(l.type?' '+l.type:'')+' '+l.ori+(l.polyane?' <span class="badge bpoly">🛡️ Polyane</span>':'')+'</div></div>');
   });
-  (b.ouvertures||[]).forEach(o=>{
-    const sup=o.supp==='plancher'?'<span class="badge bp">Plancher</span>':o.supp==='voile'?'<span class="badge bv">Voile</span>':'';
-    const hi=o.supp==='voile'&&o.haut?` ↕${o.haut}ml`:'';
-    const dim=o.larg&&o.long?`${o.larg}×${o.long}cm`:'—';
-    const cars=(o.carottages||[]).filter(c=>c.nb>0).map(c=>`${c.nb}×${dLbl(c.diam,c.diamCustom)}${c.ep?' ép.'+c.ep+'cm':''}`).join(' / ');
-    rows.push(`<div class="work-row"><span class="work-ico">🔲</span><div class="work-txt" style="color:var(--ov)"><b>Ouverture ${dim}</b>${hi} ${sup}<br><span style="color:var(--text);font-size:12px">${cars}</span>${optBadges(o)}</div></div>`);
+  (b.ouvertures||[]).forEach(function(o){
+    var sup=o.supp==='plancher'?'<span class="badge bp">Plancher</span>':o.supp==='voile'?'<span class="badge bv">Voile</span>':'';
+    var hi=o.supp==='voile'&&o.haut?' ↕'+o.haut+'ml':'';
+    var dim=o.larg&&o.long?o.larg+'×'+o.long+'cm':'—';
+    var cars=(o.carottages||[]).filter(function(c){return c.nb>0;}).map(function(c){return c.nb+'×'+dLbl(c.diam,c.diamCustom)+(c.ep?' ép.'+c.ep+'cm':'');}).join(' / ');
+    rows.push('<div class="work-row"><span class="work-ico">🔲</span><div class="work-txt" style="color:var(--ov)"><b>Ouverture '+dim+'</b>'+hi+' '+sup+protBadges(o)+'<br><span style="color:var(--text);font-size:12px">'+cars+'</span></div></div>');
   });
-  if(b.autres) rows.push(`<div class="work-row"><span class="work-ico">📝</span><div class="work-txt">${b.autres}</div></div>`);
-  if(b.obs)    rows.push(`<div class="work-row"><span class="work-ico">💬</span><div class="work-txt" style="color:var(--mut)">${b.obs}</div></div>`);
-  const total=(b.carottages||[]).length+(b.sciages||[]).length+(b.carbones||[]).length+(b.ouvertures||[]).length+(b.autres?1:0);
-  return`<div class="bloc">
-    <div class="bloc-hdr">
-      <span class="bloc-niv">📍 ${b.niveau||'—'}</span>
-      <span class="bloc-title">${total} travaux réalisé${total>1?'s':''}</span>
-      <button class="bloc-del" onclick="editBloc('${b.id}')" style="font-size:16px;margin-right:2px">✏️</button>
-      <button class="bloc-del" onclick="delBloc('${b.id}')">🗑</button>
-    </div>
-    <div class="bloc-body">${rows.join('')||'<p style="color:var(--mut);font-size:13px">Aucun travail</p>'}</div>
-  </div>`;
+  if(b.autres)rows.push('<div class="work-row"><span class="work-ico">📝</span><div class="work-txt">'+b.autres+'</div></div>');
+  if(b.obs)rows.push('<div class="work-row"><span class="work-ico">💬</span><div class="work-txt" style="color:var(--mut)">'+b.obs+'</div></div>');
+  var total=(b.carottages||[]).length+(b.sciages||[]).length+(b.carbones||[]).length+(b.ouvertures||[]).length+(b.autres?1:0);
+  return '<div class="bloc"><div class="bloc-hdr">'
+    +'<span class="bloc-niv">📍 '+(b.niveau||'—')+'</span>'
+    +'<span class="bloc-title">'+total+' travaux réalisé'+(total>1?'s':'')+'</span>'
+    +'<button class="bloc-del" onclick="editBloc(\''+b.id+'\')" style="font-size:16px;margin-right:2px">✏️</button>'
+    +'<button class="bloc-del" onclick="delBloc(\''+b.id+'\')">🗑</button>'
+    +'</div><div class="bloc-body">'+(rows.join('')||'<p style="color:var(--mut);font-size:13px">Aucun travail</p>')+'</div></div>';
 }
 
 function step3(){
-  const blocs=S.blocs;
-  let totCar=0,totSci=0,totCb=0,totOuv=0;
-  blocs.forEach(b=>{
-    (b.carottages||[]).forEach(l=>totCar+=parseInt(l.nb||0));
-    (b.sciages||[]).forEach(l=>totSci+=parseFloat(l.ml||0));
-    (b.carbones||[]).forEach(l=>totCb+=parseInt(l.nbl||0));
-    totOuv+=(b.ouvertures||[]).length;
+  var blocs=S.blocs,tCar=0,tSci=0,tCb=0,tOuv=0;
+  blocs.forEach(function(b){
+    (b.carottages||[]).forEach(function(l){tCar+=parseInt(l.nb||0);});
+    (b.sciages||[]).forEach(function(l){tSci+=parseFloat(l.ml||0);});
+    (b.carbones||[]).forEach(function(l){tCb+=parseInt(l.nbl||0);});
+    tOuv+=(b.ouvertures||[]).length;
   });
-  const rows=[];
-  if(totCar>0) rows.push(`🔩 Carottage — ${totCar} carottage(s)`);
-  if(totSci>0) rows.push(`🪚 Sciage — ${totSci} ml`);
-  if(totCb>0)  rows.push(`🏗️ ${totCb} lamelle(s) carbone`);
-  if(totOuv>0) rows.push(`🔲 ${totOuv} ouverture(s) par carottages`);
-  const recap=rows.length?`<p style="font-size:13px;color:var(--mut);margin-bottom:9px">${blocs.length} niveau(x)</p>`+rows.map(r=>`<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">${r}</div>`).join(''):'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
-  const respCards=EQUIPE.map(e=>`<div class="rc ${S.resp===e.id?'sel':''}" onclick="selResp('${e.id}')">
-    <div class="rc-av">${e.nom[0]}</div>
-    <div class="rc-info"><div class="rc-name">${e.nom}</div><div class="rc-sub">📱 WhatsApp</div></div>
-    ${S.resp===e.id?'<span style="font-size:20px">✅</span>':''}
-  </div>`).join('');
-  const photoGrid=S.photos.length?`<div class="photo-grid">${S.photos.map((p,i)=>`<div class="photo-item"><img src="${p.url}"><button class="ph-del" onclick="delPhoto(${i})">✕</button><div class="ph-cap"><input type="text" value="${p.caption||''}" placeholder="Légende..." oninput="S.photos[${i}].caption=this.value"></div></div>`).join('')}</div><p style="font-size:12px;color:var(--mut);margin-top:6px;text-align:center">${S.photos.length}/10 photo(s)</p>`:'';
-  return`<div class="card"><div class="ct">📊 Récapitulatif</div>${recap}</div>
-  <div class="card"><div class="ct">👷 Responsable du rapport</div><div class="rgrid">${respCards}</div></div>
-  <div class="card"><div class="ct">📸 Photos <span style="font-weight:400;text-transform:none;font-size:10px">(optionnel — max 10)</span></div>
-    ${photoGrid}
-    ${S.photos.length<10?`<label class="photo-upload"><input type="file" accept="image/*" multiple onchange="addPhotos(this)"><div style="font-size:32px;margin-bottom:6px">📷</div><div style="font-size:13px;color:var(--mut);font-weight:600">Ajouter des photos</div></label>`:''}
-  </div>
-  <div class="card"><div class="ct">✍️ Signature client</div>
-    <div class="f"><label>Nom du signataire</label><input type="text" id="f-signame" value="${S.sig.name}" placeholder="Prénom Nom"></div>
-    <div class="f"><label>Signature</label><canvas id="sigc" width="800" height="300"></canvas>
-      <button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button></div>
-  </div>
-  <div class="info-box">📱 Le PDF sera partagé via WhatsApp au responsable sélectionné</div>`;
+  var rows=[];
+  if(tCar>0)rows.push('🔩 Carottage — '+tCar+' carottage(s)');
+  if(tSci>0)rows.push('🪚 Sciage — '+tSci+' ml');
+  if(tCb>0)rows.push('🏗️ '+tCb+' lamelle(s) carbone');
+  if(tOuv>0)rows.push('🔲 '+tOuv+' ouverture(s)');
+  var recap=rows.length?'<p style="font-size:13px;color:var(--mut);margin-bottom:9px">'+blocs.length+' niveau(x)</p>'+rows.map(function(r){return '<div style="font-size:14px;padding:7px 0;border-bottom:1px solid var(--brd)">'+r+'</div>';}).join(''):'<p style="font-size:14px;color:var(--mut)">Aucune prestation</p>';
+  var respCards=EQUIPE.map(function(e){return '<div class="rc '+(S.resp===e.id?'sel':'')+'" onclick="selResp(\''+e.id+'\')">'
+    +'<div class="rc-av">'+e.nom[0]+'</div>'
+    +'<div class="rc-info"><div class="rc-name">'+e.nom+'</div><div class="rc-sub">📱 WhatsApp</div></div>'
+    +(S.resp===e.id?'<span style="font-size:20px">✅</span>':'')
+    +'</div>';}).join('');
+  var photoGrid=S.photos.length?'<div class="photo-grid">'+S.photos.map(function(p,i){return '<div class="photo-item"><img src="'+p.url+'"><button class="ph-del" onclick="delPhoto('+i+')">✕</button><div class="ph-cap"><input type="text" value="'+(p.caption||'')+'" placeholder="Légende..." oninput="S.photos['+i+'].caption=this.value"></div></div>';}).join('')+'</div><p style="font-size:12px;color:var(--mut);margin-top:6px;text-align:center">'+S.photos.length+'/10</p>':'';
+  return '<div class="card"><div class="ct">📊 Récapitulatif</div>'+recap+'</div>'
+    +'<div class="card"><div class="ct">👷 Responsable</div><div class="rgrid">'+respCards+'</div></div>'
+    +'<div class="card"><div class="ct">📸 Photos <span style="font-weight:400;text-transform:none;font-size:10px">(max 10)</span></div>'+photoGrid
+    +(S.photos.length<10?'<label class="photo-upload"><input type="file" accept="image/*" multiple onchange="addPhotos(this)"><div style="font-size:32px;margin-bottom:6px">📷</div><div style="font-size:13px;color:var(--mut);font-weight:600">Ajouter des photos</div></label>':'')
+    +'</div>'
+    +'<div class="card"><div class="ct">✍️ Signature client</div>'
+    +'<div class="f"><label>Nom du signataire</label><input type="text" id="f-signame" value="'+S.sig.name+'" placeholder="Prénom Nom"></div>'
+    +'<div class="f"><label>Signature</label><canvas id="sigc" width="800" height="300"></canvas>'
+    +'<button class="btn btn-o btn-sm" style="margin-top:8px" onclick="clearSig()">🗑 Effacer</button></div></div>'
+    +'<div class="info-box">📱 Le PDF sera partagé via WhatsApp au responsable sélectionné</div>';
 }
 
-function addPhotos(input){const files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem);let ld=0;toAdd.forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push({url:e.target.result,caption:''});if(++ld===toAdd.length)R();};r.readAsDataURL(f);});}
+function addPhotos(input){
+  var files=Array.from(input.files),rem=10-S.photos.length,toAdd=files.slice(0,rem),ld=0;
+  toAdd.forEach(function(f){var r=new FileReader();r.onload=function(e){S.photos.push({url:e.target.result,caption:''});if(++ld===toAdd.length)R();};r.readAsDataURL(f);});
+}
 function delPhoto(i){S.photos.splice(i,1);R();}
-function selResp(id){const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();S.resp=id;R();}
-function delBloc(id){if(!confirm('Supprimer ce niveau ?'))return;S.blocs=S.blocs.filter(x=>x.id!==id);R();}
+function selResp(id){var sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();S.resp=id;R();}
+function delBloc(id){if(!confirm('Supprimer ce niveau ?'))return;S.blocs=S.blocs.filter(function(x){return x.id!==id;});R();}
 
 function bot(){
-  if(S.step===1) return`<div class="bot"><button class="btn btn-p" style="flex:1" onclick="go(2)">Continuer → Saisir les travaux</button></div>`;
-  if(S.step===2) return`<div class="bot"><button class="btn btn-o btn-sm" onclick="go(1)">← Retour</button><button class="btn btn-y" style="flex:1" onclick="openM()">➕ Ajouter un niveau</button><button class="btn btn-p btn-sm" onclick="go(3)">Valider →</button></div>`;
-  return`<div class="bot"><button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button><button class="btn btn-wa" id="btn-gen" style="flex:1" onclick="generate()">📱 Générer & Envoyer WhatsApp</button></div>`;
-}
-
-// ── TOGGLE HELPERS ──
-function topt(label,on,fn,poly=false){
-  return`<div class="topt${on?' on':''}${poly?' poly':''}" onclick="${fn}"><div class="tck">${on?'✓':''}</div>${label}</div>`;
-}
-function plancherOpts(item,setFn){
-  if(item.supp!=='plancher') return '';
-  return`<div class="trow">
-    ${topt('🪵 Mise en place d\'un étai',item.etai,`${setFn}('etai')`)}
-    ${topt('🪵 Fermeture CP',item.cpferm,`${setFn}('cpferm')`)}
-  </div>`;
-}
-function voileHaut(item,i,setFn){
-  if(item.supp!=='voile') return '';
-  return`<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span>
-    <input type="number" placeholder="Ex:2.80" value="${item.haut||''}" step="0.1" min="0" onchange="${setFn}('haut',this.value)"></div>`;
-}
-function polyaneOpt(item,setFn){
-  return`<div class="trow">${topt('🛡️ Protection polyane',item.polyane,`${setFn}('polyane')`,true)}</div>`;
+  if(S.step===1)return '<div class="bot"><button class="btn btn-p" style="flex:1" onclick="go(2)">Continuer → Saisir les travaux</button></div>';
+  if(S.step===2)return '<div class="bot"><button class="btn btn-o btn-sm" onclick="go(1)">← Retour</button><button class="btn btn-y" style="flex:1" onclick="openM()">➕ Ajouter un niveau</button><button class="btn btn-p btn-sm" onclick="go(3)">Valider →</button></div>';
+  return '<div class="bot"><button class="btn btn-o btn-sm" onclick="go(2)">← Retour</button><button class="btn btn-wa" id="btn-gen" style="flex:1" onclick="generate()">📱 Générer & Envoyer WhatsApp</button></div>';
 }
 
 // ── MODAL ──
+function initModalEvents(){
+  var modal=document.getElementById('modal');
+  var ov=document.getElementById('ov');
+  ov.addEventListener('click',function(e){if(e.target===this)closeM();});
+  modal.addEventListener('click',function(e){
+    var el=e.target.closest('[data-c]');
+    if(!el)return;
+    e.stopPropagation();
+    saveModalFields();
+    var c=el.dataset.c;
+    var i=parseInt(el.dataset.i||0);
+    var j=parseInt(el.dataset.j||0);
+    var v=el.dataset.v||'';
+    if(c==='close'){closeM();return;}
+    if(c==='save'){saveBloc();return;}
+    if(c==='niv'){S.m.niveau=S.m.niveau===v?'':v;}
+    else if(c==='car-add')S.m.carottages.push(newCar());
+    else if(c==='car-del')S.m.carottages.splice(i,1);
+    else if(c==='car-nb+')S.m.carottages[i].nb=Math.max(1,(S.m.carottages[i].nb||1)+1);
+    else if(c==='car-nb-')S.m.carottages[i].nb=Math.max(1,(S.m.carottages[i].nb||1)-1);
+    else if(c==='car-supp')S.m.carottages[i].supp=v;
+    else if(c==='sci-add')S.m.sciages.push(newSci());
+    else if(c==='sci-del')S.m.sciages.splice(i,1);
+    else if(c==='sci-supp')S.m.sciages[i].supp=v;
+    else if(c==='cb-add')S.m.carbones.push(newCb());
+    else if(c==='cb-del')S.m.carbones.splice(i,1);
+    else if(c==='cb-ori')S.m.carbones[i].ori=v;
+    else if(c==='ouv-add')S.m.ouvertures.push(newOuv());
+    else if(c==='ouv-del')S.m.ouvertures.splice(i,1);
+    else if(c==='ouv-supp')S.m.ouvertures[i].supp=v;
+    else if(c==='ouvc-add')(S.m.ouvertures[i].carottages=S.m.ouvertures[i].carottages||[]).push({diam:200,nb:1,ep:'',diamCustom:''});
+    else if(c==='ouvc-del')S.m.ouvertures[i].carottages.splice(j,1);
+    else if(c==='ouvc-nb+')S.m.ouvertures[i].carottages[j].nb=Math.max(1,(S.m.ouvertures[i].carottages[j].nb||1)+1);
+    else if(c==='ouvc-nb-')S.m.ouvertures[i].carottages[j].nb=Math.max(1,(S.m.ouvertures[i].carottages[j].nb||1)-1);
+    // ── TOGGLES : mise à jour directe sans renderModal ──
+    else if(c==='car-etai'||c==='car-cp'||c==='car-poly'
+          ||c==='sci-poly'||c==='cb-poly'
+          ||c==='ouv-etai'||c==='ouv-cp'||c==='ouv-poly'){
+      var newOn,isGrn=(c.indexOf('poly')<0);
+      var tcol=isGrn?'#16a34a':'#0284c7';
+      var tbg=isGrn?'#f0fdf4':'#e0f2fe';
+      var tfg=isGrn?'#166534':'#0369a1';
+      if(c==='car-etai'  &&S.m.carottages[i]) {S.m.carottages[i].etai   =!S.m.carottages[i].etai;   newOn=S.m.carottages[i].etai;}
+      else if(c==='car-cp'   &&S.m.carottages[i]) {S.m.carottages[i].cp     =!S.m.carottages[i].cp;     newOn=S.m.carottages[i].cp;}
+      else if(c==='car-poly' &&S.m.carottages[i]) {S.m.carottages[i].polyane=!S.m.carottages[i].polyane;newOn=S.m.carottages[i].polyane;}
+      else if(c==='sci-poly' &&S.m.sciages[i])    {S.m.sciages[i].polyane   =!S.m.sciages[i].polyane;   newOn=S.m.sciages[i].polyane;}
+      else if(c==='cb-poly'  &&S.m.carbones[i])   {S.m.carbones[i].polyane  =!S.m.carbones[i].polyane;  newOn=S.m.carbones[i].polyane;}
+      else if(c==='ouv-etai' &&S.m.ouvertures[i]) {S.m.ouvertures[i].etai   =!S.m.ouvertures[i].etai;   newOn=S.m.ouvertures[i].etai;}
+      else if(c==='ouv-cp'   &&S.m.ouvertures[i]) {S.m.ouvertures[i].cp     =!S.m.ouvertures[i].cp;     newOn=S.m.ouvertures[i].cp;}
+      else if(c==='ouv-poly' &&S.m.ouvertures[i]) {S.m.ouvertures[i].polyane=!S.m.ouvertures[i].polyane;newOn=S.m.ouvertures[i].polyane;}
+      // Mise à jour visuelle directe du bouton
+      if(newOn!==undefined){
+        el.style.border='2px solid '+(newOn?tcol:'var(--brd)');
+        el.style.background=newOn?tbg:'#fff';
+        el.style.color=newOn?tfg:'var(--mut)';
+        var ico=el.querySelector('span');
+        if(ico)ico.textContent=newOn?'✅':'☐';
+      }
+      return; // Pas de renderModal pour les toggles
+    }
+    renderModal();
+  });
+  modal.addEventListener('change',function(e){
+    var el=e.target,ch=el.dataset.ch;
+    if(!ch)return;
+    saveModalFields();
+    var i=parseInt(el.dataset.i||0),j=parseInt(el.dataset.j||0);
+    if(ch==='car-diam'){S.m.carottages[i].diam=el.value;renderModal();}
+    else if(ch==='ouvc-diam'){S.m.ouvertures[i].carottages[j].diam=el.value;renderModal();}
+    else if(ch==='cb-type'){S.m.carbones[i].type=el.value;}
+  });
+}
+
 function openM(){S.m={open:true,editId:null,niveau:'',obs:'',carottages:[],sciages:[],carbones:[],ouvertures:[],autres:''};renderModal();}
 function editBloc(id){
-  const b=S.blocs.find(x=>x.id===id);if(!b)return;
+  var b=S.blocs.find(function(x){return x.id===id;});if(!b)return;
   S.m={open:true,editId:id,niveau:b.niveau,obs:b.obs||'',autres:b.autres||'',
     carottages:JSON.parse(JSON.stringify(b.carottages||[])),
     sciages:JSON.parse(JSON.stringify(b.sciages||[])),
     carbones:JSON.parse(JSON.stringify(b.carbones||[])),
-    ouvertures:JSON.parse(JSON.stringify(b.ouvertures||[]))
-  };
+    ouvertures:JSON.parse(JSON.stringify(b.ouvertures||[]))};
   renderModal();
 }
 function closeM(){S.m.open=false;renderModal();}
 
+function dimSelHtml(val,chAttr){
+  return '<select '+chAttr+' style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)">'
+    +DIAMS.map(function(d){return '<option value="'+d+'"'+(val==d?' selected':'')+'>'+(d==='Autre'?'Autre...':d+' mm')+'</option>';}).join('')
+    +'</select>';
+}
+
+function togBtns(items){
+  return '<div style="display:flex;flex-direction:column;gap:7px;margin-top:10px">'
+    +items.map(function(it){
+      var on=it.on;
+      return '<div data-c="'+it.cmd+'" data-i="'+it.i+'"'
+        +' style="padding:10px 14px;border:2px solid '+(on?it.col:'var(--brd)')+';border-radius:8px;background:'+(on?it.bg:'#fff')+';font-size:14px;font-weight:700;cursor:pointer;color:'+(on?it.fg:'var(--mut)')+';display:flex;align-items:center;gap:10px">'
+        +'<span style="font-size:18px;flex-shrink:0">'+(on?'✅':'☐')+'</span>'
+        +'<span>'+it.label+'</span>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+}
+
 function renderModal(){
-  const m=S.m,ov=document.getElementById('ov');
-  ov.className='ov'+(m.open?' show':'');
-  const modal=document.getElementById('modal');
+  var m=S.m,ov=document.getElementById('ov');
+  ov.className='ov-bg'+(m.open?' show':'');
+  var modal=document.getElementById('modal');
   if(!m.open){modal.innerHTML='';return;}
 
-  // ── Carottages ──
-  const carHtml=(m.carottages||[]).map((l,i)=>`
-    <div class="car-line">
-      <div class="car-line-top">
-        <select onchange="setCar(${i},'diam',this.value)">
-          ${DIAMS.map(d=>`<option value="${d}" ${l.diam==d?'selected':''}>${d==='Autre'?'Autre...':d+' mm'}</option>`).join('')}
-        </select>
-        ${l.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${l.diamCustom||''}" onchange="setCar(${i},'diamCustom',this.value)" style="width:72px;padding:8px;border:1.5px solid var(--y);border-radius:7px;font-size:13px;text-align:center;flex-shrink:0">`:''}
-        <div class="counter"><button type="button" onclick="chgCar(${i},-1)">−</button><input type="number" min="1" value="${l.nb||1}" onchange="setCar(${i},'nb',this.value)"><button type="button" onclick="chgCar(${i},1)">+</button></div>
-        <button class="del-btn" onclick="delCar(${i})">🗑</button>
-      </div>
-      <div class="car-bot">
-        <input class="ep-in" type="number" placeholder="ép. cm" value="${l.ep||''}" onchange="setCar(${i},'ep',this.value)">
-        <div class="mini-supp">
-          <div class="ms ${l.supp==='plancher'?'sel-p':''}" onclick="setCar(${i},'supp','plancher')">🟫 Plancher</div>
-          <div class="ms ${l.supp==='voile'?'sel-v':''}" onclick="setCar(${i},'supp','voile')">🧱 Voile</div>
-        </div>
-      </div>
-      ${voileHaut(l,i,'setCar')}
-      ${plancherOpts(l,i,0)}
-      ${polyaneOpt(l,i,0)}
-    </div>`).join('');
+  // Carottages
+  var carHtml=(m.carottages||[]).map(function(l,i){
+    var customInp=l.diam==='Autre'?'<input id="car-dc-'+i+'" type="number" placeholder="Ø mm" value="'+(l.diamCustom||'')+'" style="width:72px;padding:8px;border:1.5px solid var(--y);border-radius:7px;font-size:13px;text-align:center;flex-shrink:0">':'';
+    var hautRow=l.supp==='voile'?'<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span><input id="car-h-'+i+'" class="haut-inp" type="number" placeholder="2.80" value="'+(l.haut||'')+'" step="0.1" min="0"></div>':'';
+    return '<div class="work-line">'
+      +'<div class="line-row">'
+      +dimSelHtml(l.diam,'data-ch="car-diam" data-i="'+i+'" id="car-d-'+i+'"')
+      +customInp
+      +'<div class="counter"><button class="cbtn" data-c="car-nb-" data-i="'+i+'">−</button><input class="cinp" id="car-n-'+i+'" type="number" min="1" value="'+(l.nb||1)+'"><button class="cbtn" data-c="car-nb+" data-i="'+i+'">+</button></div>'
+      +'<button class="del-btn" data-c="car-del" data-i="'+i+'">🗑</button>'
+      +'</div>'
+      +'<div class="line-row">'
+      +'<input id="car-e-'+i+'" class="inp-sm" type="number" placeholder="ép. cm" value="'+(l.ep||'')+'" style="width:90px;flex-shrink:0">'
+      +'<div class="mini-supp" style="flex:1">'
+      +'<div class="ms '+(l.supp==='plancher'?'sel-p':'')+'" data-c="car-supp" data-i="'+i+'" data-v="plancher">🟫 Plancher</div>'
+      +'<div class="ms '+(l.supp==='voile'?'sel-v':'')+'" data-c="car-supp" data-i="'+i+'" data-v="voile">🧱 Voile</div>'
+      +'</div></div>'
+      +hautRow
+      +togBtns([
+        {cmd:'car-etai',i:i,on:l.etai,  label:'🪵 Mise en place d\'un étai',     col:'#16a34a',bg:'#f0fdf4',fg:'#166534'},
+        {cmd:'car-cp',  i:i,on:l.cp,    label:'🪵 Fermeture contreplaqué (CP)',  col:'#16a34a',bg:'#f0fdf4',fg:'#166534'},
+        {cmd:'car-poly',i:i,on:l.polyane,label:'🛡️ Protection polyane',          col:'#0284c7',bg:'#e0f2fe',fg:'#0369a1'}
+      ])
+      +'</div>';
+  }).join('');
 
-  // ── Sciages ──
-  const sciHtml=(m.sciages||[]).map((l,i)=>`
-    <div class="sci-line">
-      <div class="sci-row">
-        <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ml||''}" onchange="setSci(${i},'ml',this.value)" step="0.1" min="0">
-        <input class="sci-in" type="number" placeholder="Prof. cm" value="${l.prof||''}" onchange="setSci(${i},'prof',this.value)" step="0.5" min="0">
-        <button class="del-btn" onclick="delSci(${i})">🗑</button>
-      </div>
-      <div class="mini-supp">
-        <div class="ms ${l.supp==='plancher'?'sel-p':''}" onclick="setSci(${i},'supp','plancher')">🟫 Plancher</div>
-        <div class="ms ${l.supp==='voile'?'sel-v':''}" onclick="setSci(${i},'supp','voile')">🧱 Voile</div>
-      </div>
-      ${voileHaut(l,i,'setSci')}
-      ${polyaneOpt(l,i,1)}
-    </div>`).join('');
+  // Sciages
+  var sciHtml=(m.sciages||[]).map(function(l,i){
+    var hautRow=l.supp==='voile'?'<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span><input id="sci-h-'+i+'" class="haut-inp" type="number" placeholder="2.80" value="'+(l.haut||'')+'" step="0.1" min="0"></div>':'';
+    return '<div class="work-line">'
+      +'<div class="line-row">'
+      +'<input id="sci-ml-'+i+'" class="inp-sm" type="number" placeholder="Longueur ml" value="'+(l.ml||'')+'" step="0.1" min="0" style="flex:1">'
+      +'<input id="sci-pr-'+i+'" class="inp-sm" type="number" placeholder="Prof. cm" value="'+(l.prof||'')+'" step="0.5" min="0" style="flex:1">'
+      +'<button class="del-btn" data-c="sci-del" data-i="'+i+'">🗑</button>'
+      +'</div>'
+      +'<div class="mini-supp">'
+      +'<div class="ms '+(l.supp==='plancher'?'sel-p':'')+'" data-c="sci-supp" data-i="'+i+'" data-v="plancher">🟫 Plancher</div>'
+      +'<div class="ms '+(l.supp==='voile'?'sel-v':'')+'" data-c="sci-supp" data-i="'+i+'" data-v="voile">🧱 Voile</div>'
+      +'</div>'
+      +hautRow
+      +togBtns([{cmd:'sci-poly',i:i,on:l.polyane,label:'🛡️ Protection polyane',col:'#0284c7',bg:'#e0f2fe',fg:'#0369a1'}])
+      +'</div>';
+  }).join('');
 
-  // ── Carbones ──
-  const cbHtml=(m.carbones||[]).map((l,i)=>`
-    <div class="sci-line">
-      <div class="sci-row">
-        <select onchange="setCb(${i},'type',this.value)" style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)">
-          <option value="">— Type de lamelle —</option>
-          ${CB_TYPES.map(t=>`<option value="${t}" ${l.type===t?'selected':''}>${t}</option>`).join('')}
-        </select>
-        <button class="del-btn" onclick="delCb(${i})">🗑</button>
-      </div>
-      <div class="sci-row">
-        <input class="sci-in" type="number" placeholder="Nb lamelles" value="${l.nbl||''}" onchange="setCb(${i},'nbl',this.value)" min="1">
-        <input class="sci-in" type="number" placeholder="Longueur ml" value="${l.ll||''}" onchange="setCb(${i},'ll',this.value)" step="0.1">
-      </div>
-      <div style="display:flex;gap:7px;margin-bottom:4px">
-        <div class="sb ${l.ori==='horizontal'?'sel':''}" onclick="setCb(${i},'ori','horizontal')">↔ Horizontal</div>
-        <div class="sb ${l.ori==='vertical'?'sel':''}" onclick="setCb(${i},'ori','vertical')">↕ Vertical</div>
-      </div>
-      ${polyaneOpt(l,i,2)}
-    </div>`).join('');
+  // Carbones
+  var cbHtml=(m.carbones||[]).map(function(l,i){
+    return '<div class="work-line">'
+      +'<div class="line-row">'
+      +'<select id="cb-t-'+i+'" data-ch="cb-type" data-i="'+i+'" style="flex:1;padding:8px;font-size:14px;font-weight:700;border-radius:7px;border:1.5px solid var(--brd)">'
+      +'<option value="">— Type de lamelle —</option>'
+      +CB_TYPES.map(function(t){return '<option value="'+t+'"'+(l.type===t?' selected':'')+'> '+t+'</option>';}).join('')
+      +'</select>'
+      +'<button class="del-btn" data-c="cb-del" data-i="'+i+'">🗑</button>'
+      +'</div>'
+      +'<div class="line-row">'
+      +'<input id="cb-n-'+i+'" class="inp-sm" type="number" placeholder="Nb lamelles" value="'+(l.nbl||'')+'" min="1" style="flex:1">'
+      +'<input id="cb-l-'+i+'" class="inp-sm" type="number" placeholder="Longueur ml" value="'+(l.ll||'')+'" step="0.1" style="flex:1">'
+      +'</div>'
+      +'<div class="srow" style="margin-bottom:4px">'
+      +'<div class="sb '+(l.ori==='horizontal'?'sel':'')+'" data-c="cb-ori" data-i="'+i+'" data-v="horizontal">↔ Horizontal</div>'
+      +'<div class="sb '+(l.ori==='vertical'?'sel':'')+'" data-c="cb-ori" data-i="'+i+'" data-v="vertical">↕ Vertical</div>'
+      +'</div>'
+      +togBtns([{cmd:'cb-poly',i:i,on:l.polyane,label:'🛡️ Protection polyane',col:'#0284c7',bg:'#e0f2fe',fg:'#0369a1'}])
+      +'</div>';
+  }).join('');
 
-  // ── Ouvertures ──
-  const ouvHtml=(m.ouvertures||[]).map((o,i)=>`
-    <div class="ouv-line">
-      <div class="ouv-dim">
-        <span style="font-size:12px;font-weight:800;color:var(--ov);white-space:nowrap">📐 cm</span>
-        <input type="number" placeholder="Larg." value="${o.larg||''}" onchange="setOuv(${i},'larg',this.value)" style="width:72px">
-        <span style="font-weight:900;color:var(--mut);font-size:18px">×</span>
-        <input type="number" placeholder="Long." value="${o.long||''}" onchange="setOuv(${i},'long',this.value)" style="width:72px">
-        <button class="del-btn" style="margin-left:auto" onclick="delOuv(${i})">🗑</button>
-      </div>
-      <div class="mini-supp" style="margin-bottom:7px">
-        <div class="ms ${o.supp==='plancher'?'sel-p':''}" onclick="setOuv(${i},'supp','plancher')">🟫 Plancher</div>
-        <div class="ms ${o.supp==='voile'?'sel-v':''}" onclick="setOuv(${i},'supp','voile')">🧱 Voile</div>
-      </div>
-      ${o.supp==='voile'?`<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span><input type="number" placeholder="Ex:2.80" value="${o.haut||''}" step="0.1" min="0" onchange="setOuv(${i},'haut',this.value)"></div>`:''}
-      ${o.supp==='plancher'?`<div class="trow">${topt('🪵 Mise en place d\'un étai',o.etai,`3,${i},0`)}${topt('🪵 Fermeture CP',o.cpferm,`3,${i},1`)}</div>`:''}
-      ${polyaneOpt(o,i,3)}
-      <div class="ouv-cars">
-        <div style="font-size:11px;font-weight:800;color:var(--ov);text-transform:uppercase;margin-bottom:6px">Carottages réalisés</div>
-        ${(o.carottages||[]).map((c,ci)=>`
-          <div class="ouv-car-row">
-            <select onchange="setOuvCar(${i},${ci},'diam',this.value)">
-              ${DIAMS.map(d=>`<option value="${d}" ${c.diam==d?'selected':''}>${d==='Autre'?'Autre...':d+' mm'}</option>`).join('')}
-            </select>
-            ${c.diam==='Autre'?`<input type="number" placeholder="Ø mm" value="${c.diamCustom||''}" onchange="setOuvCar(${i},${ci},'diamCustom',this.value)" style="width:62px;padding:6px;border:1.5px solid var(--y);border-radius:7px;font-size:12px;text-align:center">`:''}
-            <div class="counter"><button type="button" onclick="chgOuvCar(${i},${ci},-1)">−</button><input type="number" min="1" value="${c.nb||1}" onchange="setOuvCar(${i},${ci},'nb',this.value)"><button type="button" onclick="chgOuvCar(${i},${ci},1)">+</button></div>
-            <input type="number" placeholder="ép.cm" value="${c.ep||''}" onchange="setOuvCar(${i},${ci},'ep',this.value)" class="ep-sm">
-            <button class="del-btn" onclick="delOuvCar(${i},${ci})">🗑</button>
-          </div>`).join('')}
-        <button class="ouv-add" onclick="addOuvCar(${i})">+ Carottage</button>
-      </div>
-    </div>`).join('');
+  // Ouvertures
+  var ouvHtml=(m.ouvertures||[]).map(function(o,i){
+    var hautRow=o.supp==='voile'?'<div class="haut-row"><span class="haut-lbl">↕ Hauteur (ml)</span><input id="ouv-h-'+i+'" class="haut-inp" type="number" placeholder="2.80" value="'+(o.haut||'')+'" step="0.1" min="0"></div>':'';
+    var carsHtml=(o.carottages||[]).map(function(c,ci){
+      var dcInp=c.diam==='Autre'?'<input id="ouvc-dc-'+i+'-'+ci+'" type="number" placeholder="Ø mm" value="'+(c.diamCustom||'')+'" style="width:58px;padding:6px;border:1.5px solid var(--y);border-radius:7px;font-size:12px;text-align:center">':'';
+      return '<div class="ouvc-row">'
+        +dimSelHtml(c.diam,'data-ch="ouvc-diam" data-i="'+i+'" data-j="'+ci+'" id="ouvc-d-'+i+'-'+ci+'"')
+        +dcInp
+        +'<div class="counter"><button class="cbtn" data-c="ouvc-nb-" data-i="'+i+'" data-j="'+ci+'">−</button><input class="cinp" id="ouvc-n-'+i+'-'+ci+'" type="number" min="1" value="'+(c.nb||1)+'"><button class="cbtn" data-c="ouvc-nb+" data-i="'+i+'" data-j="'+ci+'">+</button></div>'
+        +'<input id="ouvc-e-'+i+'-'+ci+'" class="inp-sm" type="number" placeholder="ép.cm" value="'+(c.ep||'')+'" style="width:60px;flex-shrink:0">'
+        +'<button class="del-btn" data-c="ouvc-del" data-i="'+i+'" data-j="'+ci+'">🗑</button>'
+        +'</div>';
+    }).join('');
+    return '<div class="ouv-line">'
+      +'<div class="line-row">'
+      +'<span style="font-size:12px;font-weight:800;color:var(--ov);white-space:nowrap">📐 cm</span>'
+      +'<input id="ouv-la-'+i+'" class="inp-sm" type="number" placeholder="Larg." value="'+(o.larg||'')+'" style="width:75px;flex-shrink:0">'
+      +'<span style="font-weight:900;color:var(--mut);font-size:18px">×</span>'
+      +'<input id="ouv-lo-'+i+'" class="inp-sm" type="number" placeholder="Long." value="'+(o.long||'')+'" style="width:75px;flex-shrink:0">'
+      +'<button class="del-btn" style="margin-left:auto" data-c="ouv-del" data-i="'+i+'">🗑</button>'
+      +'</div>'
+      +'<div class="mini-supp" style="margin-bottom:7px">'
+      +'<div class="ms '+(o.supp==='plancher'?'sel-p':'')+'" data-c="ouv-supp" data-i="'+i+'" data-v="plancher">🟫 Plancher</div>'
+      +'<div class="ms '+(o.supp==='voile'?'sel-v':'')+'" data-c="ouv-supp" data-i="'+i+'" data-v="voile">🧱 Voile</div>'
+      +'</div>'
+      +hautRow
+      +togBtns([
+        {cmd:'ouv-etai',i:i,on:o.etai,   label:'🪵 Mise en place d\'un étai',    col:'#16a34a',bg:'#f0fdf4',fg:'#166534'},
+        {cmd:'ouv-cp',  i:i,on:o.cp,     label:'🪵 Fermeture contreplaqué (CP)', col:'#16a34a',bg:'#f0fdf4',fg:'#166534'},
+        {cmd:'ouv-poly',i:i,on:o.polyane,label:'🛡️ Protection polyane',          col:'#0284c7',bg:'#e0f2fe',fg:'#0369a1'}
+      ])
+      +'<div style="margin-top:10px;border-top:1px dashed #ddd6fe;padding-top:8px">'
+      +'<div style="font-size:11px;font-weight:800;color:var(--ov);text-transform:uppercase;margin-bottom:6px">Carottages réalisés</div>'
+      +carsHtml
+      +'<button class="add-btn-ov" style="margin-top:3px" data-c="ouvc-add" data-i="'+i+'">+ Carottage</button>'
+      +'</div></div>';
+  }).join('');
 
-  const nGrid=`<div class="ngrid">${NIVEAUX.map(nv=>`<div class="nb ${m.niveau===nv?'sel':''}" onclick="selNiveau('${nv}')">${nv}</div>`).join('')}</div>`;
+  var nGrid='<div class="ngrid">'+NIVEAUX.map(function(nv){return '<div class="nb '+(m.niveau===nv?'sel':'')+'" data-c="niv" data-v="'+nv+'">'+nv+'</div>';}).join('')+'</div>';
 
-  modal.innerHTML=`<div class="mhandle"></div>
-    <div style="padding:0 14px 10px;border-bottom:2px solid var(--y)">
-      <div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">${m.editId?'✏️ Modifier':'📍 Niveau'}</div>
-      ${nGrid}
-    </div>
-    <div class="msection" style="margin-top:12px">
-      <div class="msection-hdr"><span class="msection-title">🔩 Carottages</span><button class="add-btn" onclick="addCar()">+ Ajouter</button></div>
-      ${carHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun carottage</p>`}
-    </div>
-    <div class="msection">
-      <div class="msection-hdr"><span class="msection-title">🪚 Sciages</span><button class="add-btn" onclick="addSci()">+ Ajouter</button></div>
-      ${sciHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun sciage</p>`}
-    </div>
-    <div class="msection">
-      <div class="msection-hdr"><span class="msection-title">🏗️ Lamelles carbone</span><button class="add-btn" onclick="addCb()">+ Ajouter</button></div>
-      ${cbHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune lamelle</p>`}
-    </div>
-    <div class="msection">
-      <div class="msection-hdr"><span class="msection-title" style="color:var(--ov)">🔲 Ouvertures par carottages</span><button class="add-btn-ov" onclick="addOuv()">+ Ajouter</button></div>
-      ${ouvHtml||`<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune ouverture</p>`}
-    </div>
-    <div class="msection">
-      <div class="msection-hdr"><span class="msection-title">📝 Autres travaux</span></div>
-      <textarea id="m-autres" placeholder="Description libre..." style="min-height:80px">${m.autres||''}</textarea>
-    </div>
-    <div class="msection" style="margin-top:10px">
-      <div class="f"><label>Observations</label><input type="text" id="m-obs" value="${m.obs||''}" placeholder="Remarques..."></div>
-    </div>
-    <div style="padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:10px">
-      <button class="btn btn-o btn-sm" onclick="closeM()">Annuler</button>
-      <button class="btn btn-p" style="flex:1" onclick="saveBloc()">${m.editId?'✅ Mettre à jour':'✅ Enregistrer ce niveau'}</button>
-    </div>`;
-  // Attacher les toggles via event delegation (évite les problèmes de portée)
-  modal.querySelectorAll('[data-tog]').forEach(el=>{
-    el.addEventListener('click',function(e){
-      e.stopPropagation();
-      saveModalFields();
-      const[t,i,k]=this.dataset.tog.split(',').map(Number);
-      const arr=[S.m.carottages,S.m.sciages,S.m.carbones,S.m.ouvertures][t];
-      if(arr&&arr[i]!=null) arr[i][TOGKEYS[k]]=!arr[i][TOGKEYS[k]];
-      renderModal();
-    });
-  });
-  ov.onclick=e=>{if(e.target===ov)closeM();};
+  modal.innerHTML='<div class="mhandle"></div>'
+    +'<div style="padding:0 14px 10px;border-bottom:2px solid var(--y)">'
+    +'<div style="font-size:17px;font-weight:900;color:var(--dk);margin-bottom:10px">'+(m.editId?'✏️ Modifier le niveau':'📍 Niveau')+'</div>'
+    +nGrid+'</div>'
+    +'<div class="msection" style="margin-top:12px"><div class="msec-hdr"><span class="msec-title">🔩 Carottages</span><button class="add-btn" data-c="car-add">+ Ajouter</button></div>'
+    +(carHtml||'<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun carottage</p>')+'</div>'
+    +'<div class="msection"><div class="msec-hdr"><span class="msec-title">🪚 Sciages</span><button class="add-btn" data-c="sci-add">+ Ajouter</button></div>'
+    +(sciHtml||'<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucun sciage</p>')+'</div>'
+    +'<div class="msection"><div class="msec-hdr"><span class="msec-title">🏗️ Lamelles carbone</span><button class="add-btn" data-c="cb-add">+ Ajouter</button></div>'
+    +(cbHtml||'<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune lamelle</p>')+'</div>'
+    +'<div class="msection"><div class="msec-hdr"><span class="msec-title" style="color:var(--ov)">🔲 Ouvertures par carottages</span><button class="add-btn-ov" data-c="ouv-add">+ Ajouter</button></div>'
+    +(ouvHtml||'<p style="font-size:13px;color:var(--mut);text-align:center;padding:6px 0 10px">Aucune ouverture</p>')+'</div>'
+    +'<div class="msection"><div class="msec-hdr"><span class="msec-title">📝 Autres travaux</span></div>'
+    +'<textarea id="m-autres" placeholder="Description libre..." style="min-height:80px">'+(m.autres||'')+'</textarea></div>'
+    +'<div class="msection" style="margin-top:10px"><div class="f"><label>Observations</label><input type="text" id="m-obs" value="'+(m.obs||'')+'" placeholder="Remarques..."></div></div>'
+    +'<div style="padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--brd);margin-top:10px">'
+    +'<button class="btn btn-o btn-sm" data-c="close">Annuler</button>'
+    +'<button class="btn btn-p" style="flex:1" data-c="save">'+(m.editId?'✅ Mettre à jour':'✅ Enregistrer ce niveau')+'</button>'
+    +'</div>';
 }
-
-function selNiveau(n){saveModalFields();S.m.niveau=(S.m.niveau===n?'':n);renderModal();}
 
 function saveModalFields(){
-  const m=S.m;
-  const g=id=>{const e=document.getElementById(id);return e?e.value:null};
-  if(g('m-obs')!==null) m.obs=g('m-obs');
-  if(g('m-autres')!==null) m.autres=g('m-autres');
-  (m.carottages||[]).forEach((l,i)=>{
-    const s=document.querySelector(`select[onchange*="setCar(${i},'diam'"]`);
-    const nb=document.querySelector(`input[onchange*="setCar(${i},'nb'"]`);
-    const ep=document.querySelector(`input[onchange*="setCar(${i},'ep'"]`);
-    const haut=document.querySelector(`input[onchange*="setCar(${i},'haut'"]`);
-    const dc=document.querySelector(`input[onchange*="setCar(${i},'diamCustom'"]`);
-    if(s)l.diam=s.value;if(nb)l.nb=Math.max(1,parseInt(nb.value)||1);if(ep)l.ep=ep.value;if(haut)l.haut=haut.value;if(dc)l.diamCustom=dc.value;
+  var m=S.m;
+  function gv(id){var e=document.getElementById(id);return e?e.value:null;}
+  function gc(id){var e=document.getElementById(id);return e?e.checked:false;}
+  var obs=document.getElementById('m-obs');if(obs)m.obs=obs.value;
+  var aut=document.getElementById('m-autres');if(aut)m.autres=aut.value;
+  (m.carottages||[]).forEach(function(l,i){
+    var d=gv('car-d-'+i);if(d)l.diam=d;
+    var dc=gv('car-dc-'+i);if(dc!==null)l.diamCustom=dc;
+    var n=gv('car-n-'+i);if(n)l.nb=Math.max(1,parseInt(n)||1);
+    var e=gv('car-e-'+i);if(e!==null)l.ep=e;
+    var h=gv('car-h-'+i);if(h!==null)l.haut=h;
   });
-  (m.sciages||[]).forEach((l,i)=>{
-    const ml=document.querySelector(`input[onchange*="setSci(${i},'ml'"]`);
-    const pr=document.querySelector(`input[onchange*="setSci(${i},'prof'"]`);
-    const hs=document.querySelector(`input[onchange*="setSci(${i},'haut'"]`);
-    if(ml)l.ml=ml.value;if(pr)l.prof=pr.value;if(hs)l.haut=hs.value;
+  (m.sciages||[]).forEach(function(l,i){
+    var ml=gv('sci-ml-'+i);if(ml)l.ml=ml;
+    var pr=gv('sci-pr-'+i);if(pr!==null)l.prof=pr;
+    var h=gv('sci-h-'+i);if(h!==null)l.haut=h;
   });
-  (m.carbones||[]).forEach((l,i)=>{
-    const nb=document.querySelector(`input[onchange*="setCb(${i},'nbl'"]`);
-    const ll=document.querySelector(`input[onchange*="setCb(${i},'ll'"]`);
-    const tp=document.querySelector(`select[onchange*="setCb(${i},'type'"]`);
-    if(nb)l.nbl=nb.value;if(ll)l.ll=ll.value;if(tp)l.type=tp.value;
+  (m.carbones||[]).forEach(function(l,i){
+    var t=gv('cb-t-'+i);if(t!==null)l.type=t;
+    var n=gv('cb-n-'+i);if(n)l.nbl=n;
+    var ll=gv('cb-l-'+i);if(ll)l.ll=ll;
   });
-  (m.ouvertures||[]).forEach((o,i)=>{
-    const larg=document.querySelector(`input[onchange*="setOuv(${i},'larg'"]`);
-    const long=document.querySelector(`input[onchange*="setOuv(${i},'long'"]`);
-    const haut=document.querySelector(`input[onchange*="setOuv(${i},'haut'"]`);
-    if(larg)o.larg=larg.value;if(long)o.long=long.value;if(haut)o.haut=haut.value;
-    (o.carottages||[]).forEach((c,ci)=>{
-      const s=document.querySelector(`select[onchange*="setOuvCar(${i},${ci},'diam'"]`);
-      const nb=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'nb'"]`);
-      const ep=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'ep'"]`);
-      const dc=document.querySelector(`input[onchange*="setOuvCar(${i},${ci},'diamCustom'"]`);
-      if(s)c.diam=s.value;if(nb)c.nb=Math.max(1,parseInt(nb.value)||1);if(ep)c.ep=ep.value;if(dc)c.diamCustom=dc.value;
+  (m.ouvertures||[]).forEach(function(o,i){
+    var la=gv('ouv-la-'+i);if(la)o.larg=la;
+    var lo=gv('ouv-lo-'+i);if(lo)o.long=lo;
+    var h=gv('ouv-h-'+i);if(h!==null)o.haut=h;
+    o.etai=gc('ouv-etai-'+i);
+    o.cp=gc('ouv-cp-'+i);
+    o.polyane=gc('ouv-poly-'+i);
+    (o.carottages||[]).forEach(function(c,ci){
+      var d=gv('ouvc-d-'+i+'-'+ci);if(d)c.diam=d;
+      var dc=gv('ouvc-dc-'+i+'-'+ci);if(dc!==null)c.diamCustom=dc;
+      var n=gv('ouvc-n-'+i+'-'+ci);if(n)c.nb=Math.max(1,parseInt(n)||1);
+      var e=gv('ouvc-e-'+i+'-'+ci);if(e!==null)c.ep=e;
     });
   });
 }
 
-function setCar(i,k,v){const l=S.m.carottages[i];if(!l)return;l[k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='supp'||k==='diam')renderModal();}
-function chgCar(i,d){saveModalFields();S.m.carottages[i].nb=Math.max(1,(S.m.carottages[i].nb||1)+d);renderModal();}
-function addCar(){saveModalFields();S.m.carottages.push(newCar());renderModal();}
-function delCar(i){saveModalFields();S.m.carottages.splice(i,1);renderModal();}
-
-function setSci(i,k,v){const l=S.m.sciages[i];if(!l)return;l[k]=v;if(k==='supp')renderModal();}
-function addSci(){saveModalFields();S.m.sciages.push(newSci());renderModal();}
-function delSci(i){saveModalFields();S.m.sciages.splice(i,1);renderModal();}
-
-function setCb(i,k,v){const l=S.m.carbones[i];if(!l)return;l[k]=v;if(k==='ori')renderModal();}
-function addCb(){saveModalFields();S.m.carbones.push(newCb());renderModal();}
-function delCb(i){saveModalFields();S.m.carbones.splice(i,1);renderModal();}
-
-function setOuv(i,k,v){const o=S.m.ouvertures[i];if(!o)return;o[k]=v;if(k==='supp')renderModal();}
-function addOuv(){saveModalFields();S.m.ouvertures.push(newOuv());renderModal();}
-function delOuv(i){saveModalFields();S.m.ouvertures.splice(i,1);renderModal();}
-function addOuvCar(i){saveModalFields();(S.m.ouvertures[i].carottages=S.m.ouvertures[i].carottages||[]).push({diam:200,nb:1,ep:'',diamCustom:''});renderModal();}
-function delOuvCar(i,ci){saveModalFields();S.m.ouvertures[i].carottages.splice(ci,1);renderModal();}
-function setOuvCar(i,ci,k,v){const c=S.m.ouvertures[i]?.carottages[ci];if(!c)return;c[k]=k==='nb'?Math.max(1,parseInt(v)||1):v;if(k==='diam')renderModal();}
-function chgOuvCar(i,ci,d){saveModalFields();const c=S.m.ouvertures[i]?.carottages[ci];if(c)c.nb=Math.max(1,(c.nb||1)+d);renderModal();}
-
 function saveBloc(){
-  saveModalFields();const m=S.m;
-  const hasWork=(m.carottages||[]).length>0||(m.sciages||[]).length>0||(m.carbones||[]).length>0||(m.ouvertures||[]).length>0||m.autres;
+  saveModalFields();
+  var m=S.m;
+  var hasWork=(m.carottages||[]).length>0||(m.sciages||[]).length>0||(m.carbones||[]).length>0||(m.ouvertures||[]).length>0||m.autres;
   if(!hasWork){alert('Ajoutez au moins un travail.');return;}
-  for(const l of m.carottages||[]){if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque carottage.');return;}}
-  for(const l of m.sciages||[]){if(!l.ml){alert('Saisissez la longueur pour chaque sciage.');return;}if(!l.supp){alert('Choisissez Plancher ou Voile pour chaque sciage.');return;}}
-  for(const l of m.carbones||[]){if(!l.nbl||!l.ll){alert('Renseignez nb et longueur pour chaque lamelle.');return;}}
-  for(const o of m.ouvertures||[]){if(!o.larg||!o.long){alert('Saisissez les dimensions de chaque ouverture.');return;}if(!o.supp){alert('Choisissez Plancher ou Voile pour chaque ouverture.');return;}}
-  const data={niveau:m.niveau||'Non précisé',obs:m.obs,autres:m.autres,
+  for(var i=0;i<(m.carottages||[]).length;i++){if(!m.carottages[i].supp){alert('Choisissez Plancher ou Voile pour chaque carottage.');return;}}
+  for(var i=0;i<(m.sciages||[]).length;i++){if(!m.sciages[i].ml){alert('Saisissez la longueur pour chaque sciage.');return;}if(!m.sciages[i].supp){alert('Choisissez Plancher ou Voile pour chaque sciage.');return;}}
+  for(var i=0;i<(m.carbones||[]).length;i++){if(!m.carbones[i].nbl||!m.carbones[i].ll){alert('Renseignez nb et longueur pour chaque lamelle.');return;}}
+  for(var i=0;i<(m.ouvertures||[]).length;i++){if(!m.ouvertures[i].larg||!m.ouvertures[i].long){alert('Saisissez les dimensions de chaque ouverture.');return;}if(!m.ouvertures[i].supp){alert('Choisissez Plancher ou Voile pour chaque ouverture.');return;}}
+  var data={niveau:m.niveau||'Non précisé',obs:m.obs,autres:m.autres,
     carottages:JSON.parse(JSON.stringify(m.carottages)),
     sciages:JSON.parse(JSON.stringify(m.sciages)),
     carbones:JSON.parse(JSON.stringify(m.carbones)),
-    ouvertures:JSON.parse(JSON.stringify(m.ouvertures))
-  };
-  if(m.editId){const idx=S.blocs.findIndex(x=>x.id===m.editId);if(idx>=0)S.blocs[idx]={...S.blocs[idx],...data};}
-  else S.blocs.push({id:String(uid++),...data});
+    ouvertures:JSON.parse(JSON.stringify(m.ouvertures))};
+  if(m.editId){var idx=S.blocs.findIndex(function(x){return x.id===m.editId;});if(idx>=0)S.blocs[idx]=Object.assign(S.blocs[idx],data);}
+  else S.blocs.push(Object.assign({id:String(uid++)},data));
   closeM();R();
 }
 
+// ── SIGNATURE ──
 function initSig(){
-  const c=document.getElementById('sigc');if(!c)return;
-  sc=c;sx=c.getContext('2d');sx.strokeStyle='#1E2D35';sx.lineWidth=3;sx.lineCap='round';sx.lineJoin='round';
-  if(S.sig.url){const img=new Image();img.onload=()=>sx.drawImage(img,0,0,c.width,c.height);img.src=S.sig.url;}
-  const pos=e=>{const r=c.getBoundingClientRect(),sw=c.width/r.width,sh=c.height/r.height,s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*sw,y:(s.clientY-r.top)*sh};};
-  c.addEventListener('mousedown',e=>{e.preventDefault();drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);});
-  c.addEventListener('mousemove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();});
-  c.addEventListener('mouseup',()=>{drawing=false;if(sc)S.sig.url=sc.toDataURL();});
-  c.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);},{passive:false});
-  c.addEventListener('touchmove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();},{passive:false});
-  c.addEventListener('touchend',()=>{drawing=false;if(sc)S.sig.url=sc.toDataURL();});
+  var cv=document.getElementById('sigc');if(!cv)return;
+  sc=cv;sx=cv.getContext('2d');sx.strokeStyle='#1E2D35';sx.lineWidth=3;sx.lineCap='round';sx.lineJoin='round';
+  if(S.sig.url){var img=new Image();img.onload=function(){sx.drawImage(img,0,0,cv.width,cv.height);};img.src=S.sig.url;}
+  function pos(e){var r=cv.getBoundingClientRect(),sw=cv.width/r.width,sh=cv.height/r.height,s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*sw,y:(s.clientY-r.top)*sh};}
+  cv.addEventListener('mousedown',function(e){e.preventDefault();drawing=true;var p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);});
+  cv.addEventListener('mousemove',function(e){if(!drawing)return;e.preventDefault();var p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();});
+  cv.addEventListener('mouseup',function(){drawing=false;if(sc)S.sig.url=sc.toDataURL();});
+  cv.addEventListener('touchstart',function(e){e.preventDefault();drawing=true;var p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);},{passive:false});
+  cv.addEventListener('touchmove',function(e){if(!drawing)return;e.preventDefault();var p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();},{passive:false});
+  cv.addEventListener('touchend',function(){drawing=false;if(sc)S.sig.url=sc.toDataURL();});
 }
 function clearSig(){if(sc&&sx){sx.clearRect(0,0,sc.width,sc.height);S.sig.url='';}}
 
 function events(){
-  if(S.step===1){[['date','date'],['num','num'],['addr','addr'],['client','client'],['tech','tech'],['date-debut','date_debut'],['date-fin','date_fin']].forEach(([id,k])=>{const e=document.getElementById('f-'+id);if(e)e.addEventListener('input',ev=>S.info[k]=ev.target.value);});}
-  if(S.step===3){const sn=document.getElementById('f-signame');if(sn)sn.addEventListener('input',e=>S.sig.name=e.target.value);setTimeout(initSig,50);}
+  if(S.step===1){
+    [['date','date'],['num','num'],['addr','addr'],['client','client'],['tech','tech'],['date-debut','date_debut'],['date-fin','date_fin']].forEach(function(pair){
+      var el=document.getElementById('f-'+pair[0]);if(el)el.addEventListener('input',function(ev){S.info[pair[1]]=ev.target.value;});
+    });
+  }
+  if(S.step===3){
+    var sn=document.getElementById('f-signame');if(sn)sn.addEventListener('input',function(e){S.sig.name=e.target.value;});
+    setTimeout(initSig,50);
+  }
 }
-function go(step){if(S.step===3){const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();}S.step=step;R();window.scrollTo(0,0);}
+function go(step){if(S.step===3){var sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();}S.step=step;R();window.scrollTo(0,0);}
 
+// ── GENERATE ──
 async function generate(){
   if(!S.resp){alert('Veuillez sélectionner le responsable du rapport.');return;}
-  const sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();
-  const btn=document.getElementById('btn-gen');if(btn){btn.textContent='⏳ Génération PDF...';btn.disabled=true;}
+  var sn=document.getElementById('f-signame');if(sn)S.sig.name=sn.value;if(sc)S.sig.url=sc.toDataURL();
+  var btn=document.getElementById('btn-gen');if(btn){btn.textContent='⏳ Génération PDF...';btn.disabled=true;}
   try{await buildAndSharePDF();}catch(e){alert('Erreur : '+e.message);}
   finally{if(btn){btn.textContent='📱 Générer & Envoyer WhatsApp';btn.disabled=false;}}
 }
 
 async function buildAndSharePDF(){
-  const {jsPDF}=window.jspdf;const doc=new jsPDF('p','mm','a4');
-  const PW=210,PH=297,M=14;let y=0;
-  const c=S.info,sig=S.sig,resp=EQUIPE.find(x=>x.id===S.resp)||{nom:'—',tel:''};
-  const fd=d=>{if(!d)return'—';const[yy,mm,dd]=d.split('-');return`${dd}/${mm}/${yy}`;};
-  const YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],OV=[124,58,237],GRN=[22,163,74],BLU=[3,105,161];
-  const set=(fill,draw,tc)=>{if(fill)doc.setFillColor(...fill);if(draw)doc.setDrawColor(...draw);if(tc)doc.setTextColor(...tc);};
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF('p','mm','a4');
+  var PW=210,PH=297,M=14,y=0;
+  var c=S.info,sig=S.sig,resp=EQUIPE.find(function(x){return x.id===S.resp;})||{nom:'—',tel:''};
+  function fd(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+  var YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],OV=[124,58,237];
+  function set(fill,draw,tc){if(fill)doc.setFillColor(fill[0],fill[1],fill[2]);if(draw)doc.setDrawColor(draw[0],draw[1],draw[2]);if(tc)doc.setTextColor(tc[0],tc[1],tc[2]);}
 
   set(DRK);doc.rect(0,0,PW,30,'F');set(YEL);doc.rect(0,28,PW,2,'F');set(null,null,WHT);
   doc.setFontSize(18);doc.setFont('helvetica','bold');doc.text("CHOK'BETON",M,12);
-  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('Découpe béton · Sciage · Renforcement structures',M,18);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('Decoupe beton - Sciage - Renforcement structures',M,18);
   doc.setFontSize(14);doc.setFont('helvetica','bold');doc.text('RAPPORT DE CHANTIER',PW-M,12,{align:'right'});
-  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text(`N° ${c.num||'—'}`,PW-M,18,{align:'right'});
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.text('N deg '+( c.num||'—'),PW-M,18,{align:'right'});
   y=35;
-
-  const iw=(PW-2*M-3)/2;
+  var iw=(PW-2*M-3)/2;
   [[{l:'DATE RAPPORT',v:fd(c.date)},{l:'RESPONSABLE',v:resp.nom}],
    [{l:'DEBUT CHANTIER',v:fd(c.date_debut)},{l:'FIN CHANTIER',v:fd(c.date_fin)}],
    [{l:'TECHNICIEN',v:c.tech||'—'},{l:'CLIENT',v:c.client||'—'}],
    [{l:'CHANTIER / ADRESSE',v:c.addr||'—',full:true}]
-  ].forEach(row=>{
-    row.forEach((item,i)=>{
-      const x=M+i*(iw+3),w=item.full?(PW-2*M):iw;
+  ].forEach(function(row){
+    row.forEach(function(item,i){
+      var x=M+i*(iw+3),w=item.full?(PW-2*M):iw;
       set(LGT,BRD);doc.roundedRect(x,y,w,12,.5,.5,'FD');
       doc.setFontSize(6.5);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(item.l,x+3,y+4.5);
       doc.setFontSize(9);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(String(item.v||'—').substring(0,55),x+3,y+9.5);
-    });y+=13.5;
-  });y+=4;
-
-  const secTitle=title=>{if(y>PH-30){doc.addPage();y=15;}set(null,null,DRK);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(title,M,y);set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;};
-
-  const pdfOpts=(item)=>{const o=[];if(item.etai)o.push('Étai');if(item.cpferm)o.push('Fermeture CP');if(item.polyane)o.push('Protection polyane');return o.length?' ['+o.join(' · ')+']':'';};
-
-  secTitle('TRAVAUX RÉALISÉS PAR NIVEAU');
-  if(!S.blocs.length){set(null,null,GRY);doc.setFontSize(9);doc.setFont('helvetica','italic');doc.text('Aucune prestation enregistrée',M,y+5);y+=12;}
-
-  S.blocs.forEach((b,bi)=>{
-    const lines=[];
-    (b.carottages||[]).forEach(l=>{
-      const dl=l.diam==='Autre'?(l.diamCustom?`Ø ${l.diamCustom} mm`:'Ø?mm'):`Ø ${l.diam} mm`;
-      if(l.nb>0) lines.push({t:`${l.nb} carottage${l.nb>1?'s':''} — ${dl}${l.ep?' — Ép.'+l.ep+'cm':''}${l.supp==='voile'&&l.haut?' — H.'+l.haut+'ml':''}${pdfOpts(l)}`,sup:l.supp});
     });
-    (b.sciages||[]).forEach(l=>{lines.push({t:`Sciage — ${l.ml}ml${l.prof?' — Prof.'+l.prof+'cm':''}${l.supp==='voile'&&l.haut?' — H.'+l.haut+'ml':''}${pdfOpts(l)}`,sup:l.supp});});
-    (b.carbones||[]).forEach(l=>{lines.push({t:`${l.nbl} lamelle(s) × ${l.ll}ml${l.type?' — '+l.type:''} — ${l.ori}${pdfOpts(l)}`});});
-    (b.ouvertures||[]).forEach(o=>{
-      const dim=`${o.larg||'?'}×${o.long||'?'}cm`;
-      lines.push({t:`OUVERTURE ${dim}${o.supp==='voile'&&o.haut?' — H.'+o.haut+'ml':''}${pdfOpts(o)}`,ouv:true,sup:o.supp});
-      (o.carottages||[]).filter(c=>c.nb>0).forEach(c=>{const dl=c.diam==='Autre'?(c.diamCustom?`Ø ${c.diamCustom}mm`:'Ø?mm'):`Ø ${c.diam}mm`;lines.push({t:`   ↳ ${c.nb}× ${dl}${c.ep?' ép.'+c.ep+'cm':''}`,sub:true});});
+    y+=13.5;
+  });
+  y+=4;
+
+  function secTitle(title){if(y>PH-30){doc.addPage();y=15;}set(null,null,DRK);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(title,M,y);set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;}
+  function pdfOpts(item){var o=[];if(item.etai)o.push('Etai');if(item.cp)o.push('Ferm.CP');if(item.polyane)o.push('Polyane');return o.length?' ['+o.join(', ')+']':'';}
+
+  secTitle('TRAVAUX REALISES PAR NIVEAU');
+  if(!S.blocs.length){set(null,null,GRY);doc.setFontSize(9);doc.setFont('helvetica','italic');doc.text('Aucune prestation enregistree',M,y+5);y+=12;}
+
+  S.blocs.forEach(function(b,bi){
+    var lines=[];
+    (b.carottages||[]).forEach(function(l){
+      var dl=l.diam==='Autre'?(l.diamCustom?'O '+l.diamCustom+' mm':'O?mm'):'O '+l.diam+' mm';
+      if(l.nb>0)lines.push({t:l.nb+' carottage'+(l.nb>1?'s':'')+' - '+dl+(l.ep?' - Ep.'+l.ep+'cm':'')+(l.supp==='voile'&&l.haut?' - H.'+l.haut+'ml':'')+pdfOpts(l),sup:l.supp});
     });
-    if(b.autres) doc.splitTextToSize(b.autres,PW-2*M-16).forEach(t=>lines.push({t}));
-    if(b.obs) lines.push({t:`Obs.: ${b.obs}`,obs:true});
-    const boxH=9+lines.length*6+3;
+    (b.sciages||[]).forEach(function(l){lines.push({t:'Sciage - '+l.ml+'ml'+(l.prof?' - Prof.'+l.prof+'cm':'')+(l.supp==='voile'&&l.haut?' - H.'+l.haut+'ml':'')+pdfOpts(l),sup:l.supp});});
+    (b.carbones||[]).forEach(function(l){lines.push({t:l.nbl+' lamelle(s) x '+l.ll+'ml'+(l.type?' - '+l.type:'')+' - '+l.ori+pdfOpts(l)});});
+    (b.ouvertures||[]).forEach(function(o){
+      lines.push({t:'OUVERTURE '+(o.larg||'?')+'x'+(o.long||'?')+'cm'+(o.supp==='voile'&&o.haut?' - H.'+o.haut+'ml':'')+pdfOpts(o),ouv:true,sup:o.supp});
+      (o.carottages||[]).filter(function(c){return c.nb>0;}).forEach(function(c){var dl=c.diam==='Autre'?(c.diamCustom?'O '+c.diamCustom+'mm':'O?mm'):'O '+c.diam+'mm';lines.push({t:'   > '+c.nb+'x '+dl+(c.ep?' ep.'+c.ep+'cm':''),sub:true});});
+    });
+    if(b.autres)doc.splitTextToSize(b.autres,PW-2*M-16).forEach(function(t){lines.push({t:t});});
+    if(b.obs)lines.push({t:'Obs.: '+b.obs,obs:true});
+    var boxH=9+lines.length*6+3;
     if(y+boxH>PH-20){doc.addPage();y=15;}
     set(DRK);doc.roundedRect(M,y,PW-2*M,9,1,1,'F');
     set(YEL);doc.roundedRect(M+2,y+1.5,22,6,1,1,'F');
     doc.setFontSize(8);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(b.niveau||'—',M+13,y+6,{align:'center'});
-    set(null,null,WHT);doc.text(`${bi+1}. Niveau ${b.niveau||'—'}`,M+27,y+6);
+    set(null,null,WHT);doc.text((bi+1)+'. Niveau '+(b.niveau||'—'),M+27,y+6);
     y+=9;set(WHT,BRD);doc.rect(M,y,PW-2*M,lines.length*6+3,'FD');
-    lines.forEach((l,li)=>{
-      const tx=y+3+li*6+4;
-      if(l.sup){const bg=l.sup==='plancher'?[254,243,199]:[224,242,254];const tc=l.sup==='plancher'?[146,64,14]:[3,105,161];set(bg,null);doc.roundedRect(PW-M-22,tx-3.5,20,5,.5,.5,'F');doc.setFontSize(6);doc.setFont('helvetica','bold');set(null,null,tc);doc.text(l.sup==='plancher'?'Plancher':'Voile',PW-M-12,tx,{align:'center'});}
+    lines.forEach(function(l,li){
+      var tx=y+3+li*6+4;
+      if(l.sup){var bg=l.sup==='plancher'?[254,243,199]:[224,242,254];var tc2=l.sup==='plancher'?[146,64,14]:[3,105,161];set(bg,null);doc.roundedRect(PW-M-22,tx-3.5,20,5,.5,.5,'F');doc.setFontSize(6);doc.setFont('helvetica','bold');set(null,null,tc2);doc.text(l.sup==='plancher'?'Plancher':'Voile',PW-M-12,tx,{align:'center'});}
       if(l.ouv){set(null,null,OV);doc.setFont('helvetica','bold');}else if(l.sub){set(null,null,GRY);doc.setFont('helvetica','normal');}else if(l.obs){set(null,null,GRY);doc.setFont('helvetica','italic');}else{set(null,null,[40,40,40]);doc.setFont('helvetica','normal');}
       doc.setFontSize(8);doc.text(l.t,M+4,tx);
     });
     y+=lines.length*6+3+4;
-  });y+=3;
+  });
+  y+=3;
 
-  secTitle('RÉCAPITULATIF');
-  let totCar=0,totSci=0,totCb=0,totOuv=0;
-  S.blocs.forEach(b=>{(b.carottages||[]).forEach(l=>totCar+=parseInt(l.nb||0));(b.sciages||[]).forEach(l=>totSci+=parseFloat(l.ml||0));(b.carbones||[]).forEach(l=>totCb+=parseInt(l.nbl||0));totOuv+=(b.ouvertures||[]).length;});
-  const rr=[];
-  if(totCar>0) rr.push(['Carottage',`${S.blocs.filter(b=>(b.carottages||[]).length>0).length} niveau(x)`,`${totCar} carottage(s)`]);
-  if(totSci>0) rr.push(['Sciage',`${S.blocs.filter(b=>(b.sciages||[]).length>0).length} niveau(x)`,`${totSci} ml`]);
-  if(totCb>0)  rr.push(['Lamelles carbone',`${S.blocs.filter(b=>(b.carbones||[]).length>0).length} niveau(x)`,`${totCb} lamelle(s)`]);
-  if(totOuv>0) rr.push(['Ouvertures carottages',`${S.blocs.filter(b=>(b.ouvertures||[]).length>0).length} niveau(x)`,`${totOuv} ouverture(s)`]);
+  secTitle('RECAPITULATIF');
+  var tCar=0,tSci=0,tCb=0,tOuv=0;
+  S.blocs.forEach(function(b){
+    (b.carottages||[]).forEach(function(l){tCar+=parseInt(l.nb||0);});
+    (b.sciages||[]).forEach(function(l){tSci+=parseFloat(l.ml||0);});
+    (b.carbones||[]).forEach(function(l){tCb+=parseInt(l.nbl||0);});
+    tOuv+=(b.ouvertures||[]).length;
+  });
+  var rr=[];
+  if(tCar>0)rr.push(['Carottage',S.blocs.filter(function(b){return (b.carottages||[]).length>0;}).length+' niveau(x)',tCar+' carottage(s)']);
+  if(tSci>0)rr.push(['Sciage',S.blocs.filter(function(b){return (b.sciages||[]).length>0;}).length+' niveau(x)',tSci+' ml']);
+  if(tCb>0)rr.push(['Lamelles carbone',S.blocs.filter(function(b){return (b.carbones||[]).length>0;}).length+' niveau(x)',tCb+' lamelle(s)']);
+  if(tOuv>0)rr.push(['Ouvertures carottages',S.blocs.filter(function(b){return (b.ouvertures||[]).length>0;}).length+' niveau(x)',tOuv+' ouverture(s)']);
   if(rr.length){
-    const cx=[M,M+80,M+155];set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
-    ['Prestation','Niveaux','Total'].forEach((h,i)=>{doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});y+=7;
-    rr.forEach(row=>{if(y>PH-25){doc.addPage();y=15;}set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');row.forEach((cell,i)=>{doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});y+=8;});y+=5;
+    var cx=[M,M+80,M+155];
+    set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');
+    ['Prestation','Niveaux','Total'].forEach(function(h,i){doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});
+    y+=7;
+    rr.forEach(function(row){if(y>PH-25){doc.addPage();y=15;}set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');row.forEach(function(cell,i){doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});y+=8;});
+    y+=5;
   }
 
   if(S.photos.length>0){
     doc.addPage();y=15;secTitle('PHOTOS DU CHANTIER');
-    const iw2=(PW-2*M-5)/2,ih=iw2*0.7;let col=0;
-    for(let i=0;i<S.photos.length;i++){
+    var iw2=(PW-2*M-5)/2,ih=iw2*0.7,col=0;
+    for(var pi=0;pi<S.photos.length;pi++){
       if(y+ih+10>PH-20){doc.addPage();y=15;}
-      const x=M+col*(iw2+5);
-      try{doc.addImage(S.photos[i].url,'JPEG',x,y,iw2,ih);set(null,BRD);doc.rect(x,y,iw2,ih,'S');if(S.photos[i].caption){set(LGT);doc.rect(x,y+ih-6,iw2,6,'F');doc.setFontSize(7);set(null,null,DRK);doc.text(S.photos[i].caption.substring(0,40),x+2,y+ih-1.5);}}catch(e){}
+      var px=M+col*(iw2+5);
+      try{doc.addImage(S.photos[pi].url,'JPEG',px,y,iw2,ih);set(null,BRD);doc.rect(px,y,iw2,ih,'S');if(S.photos[pi].caption){set(LGT);doc.rect(px,y+ih-6,iw2,6,'F');doc.setFontSize(7);set(null,null,DRK);doc.text(S.photos[pi].caption.substring(0,40),px+2,y+ih-1.5);}}catch(e){}
       col++;if(col>=2){col=0;y+=ih+8;}
-    }if(col>0)y+=ih+8;y+=4;
+    }
+    if(col>0)y+=ih+8;y+=4;
   }
 
   if(y>PH-65){doc.addPage();y=15;}
-  secTitle('VALIDATION CLIENT — BON POUR ACCORD');
+  secTitle('VALIDATION CLIENT - BON POUR ACCORD');
   set(WHT,BRD);doc.roundedRect(M,y,PW-2*M,52,1,1,'FD');
-  doc.setFontSize(10);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text(`Signataire : ${sig.name||'—'}`,PW/2,y+8,{align:'center'});
-  doc.setFontSize(8);doc.setFont('helvetica','normal');set(null,null,GRY);doc.text('Lu et approuvé — Bon pour accord des travaux réalisés',PW/2,y+14,{align:'center'});
+  doc.setFontSize(10);doc.setFont('helvetica','bold');set(null,null,DRK);doc.text('Signataire : '+(sig.name||'—'),PW/2,y+8,{align:'center'});
+  doc.setFontSize(8);doc.setFont('helvetica','normal');set(null,null,GRY);doc.text('Lu et approuve - Bon pour accord des travaux realises',PW/2,y+14,{align:'center'});
   if(sig.url){try{doc.addImage(sig.url,'PNG',PW/2-30,y+17,60,25);}catch(e){}}
-  else{set(null,BRD);doc.setLineDashPattern([2,2],0);doc.rect(PW/2-35,y+17,70,25,'S');doc.setLineDashPattern([],0);set(null,null,GRY);doc.setFontSize(8);doc.text('Signature non renseignée',PW/2,y+31,{align:'center'});}
-  set(null,null,GRY);doc.setFontSize(8);doc.text(`Date : ${fd(c.date)}`,PW/2,y+46,{align:'center'});
+  else{set(null,BRD);doc.setLineDashPattern([2,2],0);doc.rect(PW/2-35,y+17,70,25,'S');doc.setLineDashPattern([],0);set(null,null,GRY);doc.setFontSize(8);doc.text('Signature non renseignee',PW/2,y+31,{align:'center'});}
+  set(null,null,GRY);doc.setFontSize(8);doc.text('Date : '+fd(c.date),PW/2,y+46,{align:'center'});
 
-  const total=doc.getNumberOfPages();const now=new Date();
-  for(let p=1;p<=total;p++){doc.setPage(p);set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);doc.text(`Rapport généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})} · CHOK'BETON · Responsable : ${resp.nom} · N°${c.num||'—'} · Page ${p}/${total}`,PW/2,PH-8,{align:'center'});}
+  var total=doc.getNumberOfPages();var now=new Date();
+  for(var p=1;p<=total;p++){
+    doc.setPage(p);set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');
+    doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);
+    doc.text('Rapport genere le '+now.toLocaleDateString('fr-FR')+' - CHOK\'BETON - Responsable : '+resp.nom+' - N '+( c.num||'—')+' - Page '+p+'/'+total,PW/2,PH-8,{align:'center'});
+  }
 
-  const filename=`rapport-chokbeton-${c.date||'chantier'}-${(c.num||'001').replace(/[^a-zA-Z0-9]/g,'_')}.pdf`;
-  const blob=doc.output('blob');const file=new File([blob],filename,{type:'application/pdf'});
-  const msg=`Rapport CHOK'BETON\nChantier : ${c.addr||'—'}\nDate : ${fd(c.date)}\nN° : ${c.num||'—'}\nTechnicien : ${c.tech||'—'}`;
+  var filename='rapport-chokbeton-'+(c.date||'chantier')+'-'+(c.num||'001').replace(/[^a-zA-Z0-9]/g,'_')+'.pdf';
+  var blob=doc.output('blob');
+  var file=new File([blob],filename,{type:'application/pdf'});
+  var msg="Rapport CHOK'BETON\nChantier : "+(c.addr||'—')+'\nDate : '+fd(c.date)+'\nN : '+(c.num||'—')+'\nTechnicien : '+(c.tech||'—');
   if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"Rapport CHOK'BETON",text:msg});return;}
   doc.save(filename);
-  const waUrl=resp.tel&&resp.tel!=='33XXXXXXXXX'?`https://wa.me/${resp.tel}?text=${encodeURIComponent(msg+'\n\n(PDF téléchargé)')}`:`https://wa.me/?text=${encodeURIComponent(msg)}`;
-  setTimeout(()=>window.open(waUrl,'_blank'),800);
-  alert(`✅ PDF téléchargé !\nWhatsApp va s'ouvrir.\nJoignez le fichier "${filename}".`);
+  var waUrl=resp.tel&&resp.tel!=='33XXXXXXXXX'?'https://wa.me/'+resp.tel+'?text='+encodeURIComponent(msg+'\n\n(PDF telecharge)'):'https://wa.me/?text='+encodeURIComponent(msg);
+  setTimeout(function(){window.open(waUrl,'_blank');},800);
+  alert('PDF telecharge !\nWhatsApp va s\'ouvrir.\nJoignez le fichier "'+filename+'".');
 }
 
 loadState();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+initModalEvents();
 R();
 </script>
 </body></html>

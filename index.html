@@ -140,7 +140,119 @@ function saveState(){try{localStorage.setItem('cb_rapport',JSON.stringify({info:
 function loadState(){try{var d=localStorage.getItem('cb_rapport');if(!d)return;var p=JSON.parse(d);if(p.info)Object.assign(S.info,p.info);if(p.blocs)S.blocs=p.blocs;if(p.resp)S.resp=p.resp;if(p.sig&&p.sig.name)S.sig.name=p.sig.name;if(p.step)S.step=p.step;var mx=S.blocs.reduce(function(a,b){return Math.max(a,parseInt(b.id)||0);},0);uid=mx+1;}catch(e){}}
 function resetState(){if(!confirm('Démarrer un nouveau rapport ?\nLe rapport actuel sera effacé.'))return;localStorage.removeItem('cb_rapport');location.reload();}
 
-// ── TOGGLE FUNCTIONS (onclick direct — fonctionne partout) ──
+// ── HISTORIQUE DES RAPPORTS ──
+function saveToHistory(filename,c,resp,blocs,sig,photos){
+  try{
+    var hist=JSON.parse(localStorage.getItem('cb_historique')||'[]');
+    hist.unshift({
+      id:Date.now(),
+      filename:filename,
+      date:c.date,
+      num:c.num||'—',
+      addr:c.addr||'—',
+      client:c.client||'—',
+      tech:c.tech||'—',
+      resp:resp.nom||'—',
+      niveaux:blocs.length,
+      createdAt:new Date().toISOString(),
+      // Données complètes pour régénération
+      fullData:{
+        info:JSON.parse(JSON.stringify(c)),
+        blocs:JSON.parse(JSON.stringify(blocs)),
+        sig:{name:sig.name,url:sig.url||''},
+        photos:JSON.parse(JSON.stringify(photos||[]))
+      }
+    });
+    if(hist.length>30)hist=hist.slice(0,30);
+    localStorage.setItem('cb_historique',JSON.stringify(hist));
+  }catch(e){console.warn('Historique trop volumineux, sauvegarde sans photos:',e);
+    // Fallback sans photos si trop volumineux
+    try{
+      var hist2=JSON.parse(localStorage.getItem('cb_historique')||'[]');
+      hist2.unshift({id:Date.now(),filename:filename,date:c.date,num:c.num||'—',addr:c.addr||'—',client:c.client||'—',tech:c.tech||'—',resp:resp.nom||'—',niveaux:blocs.length,createdAt:new Date().toISOString(),
+        fullData:{info:JSON.parse(JSON.stringify(c)),blocs:JSON.parse(JSON.stringify(blocs)),sig:{name:sig.name,url:''},photos:[]}
+      });
+      if(hist2.length>30)hist2=hist2.slice(0,30);
+      localStorage.setItem('cb_historique',JSON.stringify(hist2));
+    }catch(e2){}
+  }
+}
+function loadHistory(){
+  try{return JSON.parse(localStorage.getItem('cb_historique')||'[]');}catch(e){return [];}
+}
+function deleteHistory(id){
+  try{var hist=loadHistory().filter(function(r){return r.id!==id;});localStorage.setItem('cb_historique',JSON.stringify(hist));}catch(e){}
+}
+function clearHistory(){
+  if(!confirm('Supprimer tout l\'historique ?'))return;
+  localStorage.removeItem('cb_historique');
+  showHistory();
+}
+
+var histOpen=false;
+function toggleHistory(){histOpen=!histOpen;showHistory();}
+
+function showHistory(){
+  var el=document.getElementById('hist-panel');
+  if(!el)return;
+  if(!histOpen){el.style.display='none';return;}
+  el.style.display='block';
+  var hist=loadHistory();
+  if(!hist.length){el.innerHTML='<div style="text-align:center;padding:24px;color:var(--mut);font-size:14px">Aucun rapport enregistré</div>';return;}
+  function fd(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+  el.innerHTML='<div style="padding:12px 14px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center">'
+    +'<span style="font-size:13px;font-weight:800;color:var(--dk)">'+hist.length+' rapport(s)</span>'
+    +'<button onclick="clearHistory()" style="background:none;border:none;color:#ef4444;font-size:12px;font-weight:700;cursor:pointer">🗑 Tout effacer</button>'
+    +'</div>'
+    +hist.map(function(r){
+      return '<div style="padding:12px 14px;border-bottom:1px solid var(--brd)">'
+        +'<div style="display:flex;align-items:flex-start;gap:10px">'
+        +'<div style="flex:1;min-width:0">'
+        +'<div style="font-size:13px;font-weight:800;color:var(--dk);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">N°'+r.num+' — '+r.addr+'</div>'
+        +'<div style="font-size:12px;color:var(--mut);margin-top:2px">'+fd(r.date)+' · '+r.client+' · '+r.resp+'</div>'
+        +'<div style="font-size:11px;color:var(--mut);margin-top:1px">'+r.niveaux+' niveau(x) · '+r.tech+'</div>'
+        +'</div>'
+        +'<button onclick="deleteHistEntry('+r.id+')" style="background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer;flex-shrink:0;padding:2px">🗑</button>'
+        +'</div>'
+        +'<div style="display:flex;gap:8px;margin-top:9px">'
+        +'<button onclick="regenPDF('+r.id+')" style="flex:1;padding:8px;background:var(--dk);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">📄 Régénérer PDF</button>'
+        +'<button onclick="restoreReport('+r.id+')" style="flex:1;padding:8px;background:var(--y);color:var(--dk);border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">✏️ Modifier</button>'
+        +'</div>'
+        +'</div>';
+    }).join('');
+}
+
+function deleteHistEntry(id){deleteHistory(id);showHistory();}
+
+function restoreReport(id){
+  if(!confirm('Charger ce rapport ?\nLe rapport en cours sera remplacé.'))return;
+  var hist=loadHistory();
+  var r=hist.find(function(x){return x.id===id;});
+  if(!r||!r.fullData){alert('Données introuvables.');return;}
+  Object.assign(S.info,r.fullData.info);
+  S.blocs=JSON.parse(JSON.stringify(r.fullData.blocs));
+  S.sig={name:r.fullData.sig.name,url:r.fullData.sig.url||''};
+  S.photos=JSON.parse(JSON.stringify(r.fullData.photos||[]));
+  S.resp='';
+  S.step=1;
+  histOpen=false;
+  saveState();
+  R();
+  alert('Rapport chargé ! Vous pouvez le modifier et le régénérer.');
+}
+
+async function regenPDF(id){
+  var hist=loadHistory();
+  var r=hist.find(function(x){return x.id===id;});
+  if(!r||!r.fullData){alert('Données introuvables.');return;}
+  // Trouver le responsable
+  var respObj=EQUIPE.find(function(e){return e.nom===r.resp;})||{nom:r.resp,tel:''};
+  var btn=event.target;if(btn){btn.textContent='⏳...';btn.disabled=true;}
+  try{
+    await buildPDFFromData(r.fullData.info,r.fullData.blocs,r.fullData.sig,r.fullData.photos||[],respObj,r.filename);
+  }catch(e){alert('Erreur : '+e.message);}
+  finally{if(btn){btn.textContent='📄 Régénérer PDF';btn.disabled=false;}}
+}
 function togCarEtai(i){if(S.m.carottages[i]){saveModalFields();S.m.carottages[i].etai=!S.m.carottages[i].etai;renderModal();}}
 function togCarCp(i){if(S.m.carottages[i]){saveModalFields();S.m.carottages[i].cp=!S.m.carottages[i].cp;renderModal();}}
 function togCarPoly(i){if(S.m.carottages[i]){saveModalFields();S.m.carottages[i].polyane=!S.m.carottages[i].polyane;renderModal();}}
@@ -171,11 +283,16 @@ function hdr(){
     +'<div style="height:38px;display:flex;align-items:center">'+LOGO(38)+'</div>'
     +'<div class="hdr-info"><div style="display:flex;align-items:center;justify-content:space-between">'
     +'<div class="hdr-title">Rapport de Chantier</div>'
+    +'<div style="display:flex;gap:6px">'
+    +'<button onclick="toggleHistory()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">📋 Historique</button>'
     +'<button onclick="resetState()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer">✚ Nouveau</button>'
+    +'</div>'
     +'</div><div class="hdr-step">'+labs[S.step]+' — Étape '+S.step+'/3</div></div>'
     +'</div><div class="steps-bar">'
     +[1,2,3].map(function(i){return '<div class="sd '+(i<S.step?'was':'')+(i===S.step?' on':'')+'"></div>';}).join('')
-    +'</div></div>';
+    +'</div></div>'
+    // Panneau historique (caché par défaut)
+    +'<div id="hist-panel" style="display:none;background:#fff;border-bottom:2px solid var(--brd);max-height:50vh;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.15)"></div>';
 }
 function content(){return '<div class="body">'+(S.step===1?step1():S.step===2?step2():step3())+'</div>';}
 
@@ -541,12 +658,7 @@ async function generate(){
   finally{if(btn){btn.textContent='📱 Générer & Envoyer WhatsApp';btn.disabled=false;}}
 }
 
-async function buildAndSharePDF(){
-  var jsPDF=window.jspdf.jsPDF,doc=new jsPDF('p','mm','a4');
-  var PW=210,PH=297,M=14,y=0;
-  var c=S.info,sig=S.sig,resp=EQUIPE.find(function(x){return x.id===S.resp;})||{nom:'—',tel:''};
-  function fd(d){if(!d)return'—';var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-  var YEL=[245,196,0],DRK=[30,45,53],WHT=[255,255,255],GRY=[100,116,139],LGT=[248,250,252],BRD=[226,232,240],OV=[124,58,237];
+async function buildPDFFromData(c,blocs,sig,photos,resp,filename){
   function set(fill,draw,tc){if(fill)doc.setFillColor(fill[0],fill[1],fill[2]);if(draw)doc.setDrawColor(draw[0],draw[1],draw[2]);if(tc)doc.setTextColor(tc[0],tc[1],tc[2]);}
   set(DRK);doc.rect(0,0,PW,30,'F');set(YEL);doc.rect(0,28,PW,2,'F');set(null,null,WHT);
   doc.setFontSize(18);doc.setFont('helvetica','bold');doc.text("CHOK'BETON",M,12);
@@ -563,8 +675,8 @@ async function buildAndSharePDF(){
   function secTitle(title){if(y>PH-30){doc.addPage();y=15;}set(null,null,DRK);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(title,M,y);set(YEL);doc.rect(M,y+1,PW-2*M,1,'F');y+=7;}
   function pdfOpts(item){var o=[];if(item.etai)o.push('Etai');if(item.cp)o.push('Ferm.CP');if(item.polyane)o.push('Polyane');return o.length?' ['+o.join(', ')+']':'';}
   secTitle('TRAVAUX REALISES PAR NIVEAU');
-  if(!S.blocs.length){set(null,null,GRY);doc.setFontSize(9);doc.setFont('helvetica','italic');doc.text('Aucune prestation enregistree',M,y+5);y+=12;}
-  S.blocs.forEach(function(b,bi){
+  if(!blocs.length){set(null,null,GRY);doc.setFontSize(9);doc.setFont('helvetica','italic');doc.text('Aucune prestation enregistree',M,y+5);y+=12;}
+  blocs.forEach(function(b,bi){
     var lines=[];
     (b.carottages||[]).forEach(function(l){var dl=l.diam==='Autre'?(l.diamCustom?'O '+l.diamCustom+' mm':'O?mm'):'O '+l.diam+' mm';if(l.nb>0)lines.push({t:l.nb+' carottage'+(l.nb>1?'s':'')+' - '+dl+(l.ep?' - Ep.'+l.ep+'cm':'')+(l.supp==='voile'&&l.haut?' - H.'+l.haut+'ml':'')+pdfOpts(l),sup:l.supp});});
     (b.sciages||[]).forEach(function(l){lines.push({t:'Sciage - '+l.ml+'ml'+(l.prof?' - Prof.'+l.prof+'cm':'')+(l.supp==='voile'&&l.haut?' - H.'+l.haut+'ml':'')+pdfOpts(l),sup:l.supp});});
@@ -591,14 +703,14 @@ async function buildAndSharePDF(){
   });y+=3;
   secTitle('RECAPITULATIF');
   var tCar=0,tSci=0,tCb=0,tOuv=0;
-  S.blocs.forEach(function(b){(b.carottages||[]).forEach(function(l){tCar+=parseInt(l.nb||0);});(b.sciages||[]).forEach(function(l){tSci+=parseFloat(l.ml||0);});(b.carbones||[]).forEach(function(l){tCb+=parseInt(l.nbl||0);});tOuv+=(b.ouvertures||[]).length;});
+  blocs.forEach(function(b){(b.carottages||[]).forEach(function(l){tCar+=parseInt(l.nb||0);});(b.sciages||[]).forEach(function(l){tSci+=parseFloat(l.ml||0);});(b.carbones||[]).forEach(function(l){tCb+=parseInt(l.nbl||0);});tOuv+=(b.ouvertures||[]).length;});
   var rr=[];
-  if(tCar>0)rr.push(['Carottage',S.blocs.filter(function(b){return (b.carottages||[]).length>0;}).length+' niveau(x)',tCar+' carottage(s)']);
-  if(tSci>0)rr.push(['Sciage',S.blocs.filter(function(b){return (b.sciages||[]).length>0;}).length+' niveau(x)',tSci+' ml']);
-  if(tCb>0)rr.push(['Lamelles carbone',S.blocs.filter(function(b){return (b.carbones||[]).length>0;}).length+' niveau(x)',tCb+' lamelle(s)']);
-  if(tOuv>0)rr.push(['Ouvertures carottages',S.blocs.filter(function(b){return (b.ouvertures||[]).length>0;}).length+' niveau(x)',tOuv+' ouverture(s)']);
+  if(tCar>0)rr.push(['Carottage',blocs.filter(function(b){return (b.carottages||[]).length>0;}).length+' niveau(x)',tCar+' carottage(s)']);
+  if(tSci>0)rr.push(['Sciage',blocs.filter(function(b){return (b.sciages||[]).length>0;}).length+' niveau(x)',tSci+' ml']);
+  if(tCb>0)rr.push(['Lamelles carbone',blocs.filter(function(b){return (b.carbones||[]).length>0;}).length+' niveau(x)',tCb+' lamelle(s)']);
+  if(tOuv>0)rr.push(['Ouvertures carottages',blocs.filter(function(b){return (b.ouvertures||[]).length>0;}).length+' niveau(x)',tOuv+' ouverture(s)']);
   if(rr.length){var cx=[M,M+80,M+155];set(LGT,BRD);doc.rect(M,y,PW-2*M,7,'FD');['Prestation','Niveaux','Total'].forEach(function(h,i){doc.setFontSize(7);doc.setFont('helvetica','bold');set(null,null,GRY);doc.text(h.toUpperCase(),cx[i]+3,y+4.8);});y+=7;rr.forEach(function(row){if(y>PH-25){doc.addPage();y=15;}set(WHT,BRD);doc.rect(M,y,PW-2*M,8,'FD');row.forEach(function(cell,i){doc.setFontSize(9);doc.setFont('helvetica','normal');set(null,null,DRK);doc.text(cell,cx[i]+3,y+5.5);});y+=8;});y+=5;}
-  if(S.photos.length>0){doc.addPage();y=15;secTitle('PHOTOS DU CHANTIER');var iw2=(PW-2*M-5)/2,ih=iw2*0.7,col=0;for(var pi=0;pi<S.photos.length;pi++){if(y+ih+10>PH-20){doc.addPage();y=15;}var px=M+col*(iw2+5);try{doc.addImage(S.photos[pi].url,'JPEG',px,y,iw2,ih);set(null,BRD);doc.rect(px,y,iw2,ih,'S');if(S.photos[pi].caption){set(LGT);doc.rect(px,y+ih-6,iw2,6,'F');doc.setFontSize(7);set(null,null,DRK);doc.text(S.photos[pi].caption.substring(0,40),px+2,y+ih-1.5);}}catch(e){}col++;if(col>=2){col=0;y+=ih+8;}}if(col>0)y+=ih+8;y+=4;}
+  if(photos.length>0){doc.addPage();y=15;secTitle('PHOTOS DU CHANTIER');var iw2=(PW-2*M-5)/2,ih=iw2*0.7,col=0;for(var pi=0;pi<photos.length;pi++){if(y+ih+10>PH-20){doc.addPage();y=15;}var px=M+col*(iw2+5);try{doc.addImage(photos[pi].url,'JPEG',px,y,iw2,ih);set(null,BRD);doc.rect(px,y,iw2,ih,'S');if(photos[pi].caption){set(LGT);doc.rect(px,y+ih-6,iw2,6,'F');doc.setFontSize(7);set(null,null,DRK);doc.text(photos[pi].caption.substring(0,40),px+2,y+ih-1.5);}}catch(e){}col++;if(col>=2){col=0;y+=ih+8;}}if(col>0)y+=ih+8;y+=4;}
   if(y>PH-65){doc.addPage();y=15;}
   secTitle('VALIDATION CLIENT - BON POUR ACCORD');
   set(WHT,BRD);doc.roundedRect(M,y,PW-2*M,52,1,1,'FD');
@@ -610,6 +722,8 @@ async function buildAndSharePDF(){
   var total=doc.getNumberOfPages();var now=new Date();
   for(var p=1;p<=total;p++){doc.setPage(p);set(YEL);doc.rect(M,PH-13,PW-2*M,.8,'F');doc.setFontSize(7);doc.setFont('helvetica','normal');set(null,null,GRY);doc.text('Rapport genere le '+now.toLocaleDateString('fr-FR')+' - CHOK\'BETON - Responsable : '+resp.nom+' - N '+( c.num||'—')+' - Page '+p+'/'+total,PW/2,PH-8,{align:'center'});}
   var filename='rapport-chokbeton-'+(c.date||'chantier')+'-'+(c.num||'001').replace(/[^a-zA-Z0-9]/g,'_')+'.pdf';
+  // Enregistrement dans l'historique
+  saveToHistory(filename,c,resp,S.blocs);
   var blob=doc.output('blob'),file=new File([blob],filename,{type:'application/pdf'});
   var msg="Rapport CHOK'BETON\nChantier : "+(c.addr||'—')+'\nDate : '+fd(c.date)+'\nN : '+(c.num||'—')+'\nTechnicien : '+(c.tech||'—');
   if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"Rapport CHOK'BETON",text:msg});return;}
